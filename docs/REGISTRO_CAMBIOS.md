@@ -1,5 +1,14 @@
 # Registro de cambios — MarketHub AI
 
+## 2026-11-04 — v0.3.1 Seguridad local y navegación móvil
+
+- Añadida copia local conjunta de los cuatro módulos del prototipo y restauración explícita, sin borrar automáticamente módulos ausentes del archivo.
+- Rechazo de JSON desconocidos/inseguros, tamaños excesivos y estructuras desmesuradas; rollback de best effort al fallar el almacenamiento.
+- Corregida la barra móvil que usaba índices frágiles: botón «Más» y directorio completo de secciones.
+- Añadidas ocho pruebas de respaldo y cinco de navegación. Se conserva todo el código y las pantallas anteriores.
+- **PENDIENTE:** cifrado, sincronización en nube, pruebas nativas finales y publicación en tiendas.
+
+
 ## 2026-11-04 — v0.3.0 Growth Lab y marketing local
 
 - Se conserva el proyecto NEXUS + PULSE, sus pantallas, estudio gráfico, calendario, catálogo, FREE/PRO y Oficina.

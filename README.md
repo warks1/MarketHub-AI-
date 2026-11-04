@@ -21,7 +21,7 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.3.0 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.3.1 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 

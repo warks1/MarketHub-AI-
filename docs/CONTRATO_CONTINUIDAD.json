@@ -26,7 +26,8 @@
     "src/visual.css",
     "tests/visual.test.mjs",
     "src/backup.js",
-    "tests/backup.test.mjs"
+    "tests/backup.test.mjs",
+    "tests/navigation.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -473,6 +474,89 @@
         "validateBackup",
         "backupImport",
         "test("
+      ]
+    },
+    {
+      "id": "SAFE-01",
+      "label": "Copia conjunta de datos locales",
+      "file": "src/backup.js",
+      "tokens": [
+        "export function readBackup()",
+        "export function backupExport(ctx)",
+        "markethub-ai-demo-v1",
+        "markethub-ai-office-v1",
+        "markethub-ai-visual-v1",
+        "markethub-growth-local-v1"
+      ]
+    },
+    {
+      "id": "SAFE-02",
+      "label": "Importación validada con confirmación",
+      "file": "src/backup.js",
+      "tokens": [
+        "export function validateBackup(raw)",
+        "export async function backupImport(file,ctx)",
+        "window.confirm(warning)",
+        "snapshot"
+      ]
+    },
+    {
+      "id": "SAFE-01",
+      "label": "Copia y restauración en Ajustes",
+      "file": "src/app.js",
+      "tokens": [
+        "backupSettingsHTML()",
+        "backupExport({toast})",
+        "backupImport(e.target.files"
+      ]
+    },
+    {
+      "id": "SAFE-04",
+      "label": "Pruebas de copia de seguridad",
+      "file": "tests/backup.test.mjs",
+      "tokens": [
+        "test('Importación autorizada",
+        "test('Si falla escritura",
+        "test('Importación cancelada"
+      ]
+    },
+    {
+      "id": "MOB-01",
+      "label": "Menú móvil con IDs en lugar de índices",
+      "file": "src/app.js",
+      "tokens": [
+        "const quickIds=['inicio','estudio','diseño','crear','herramientas']",
+        "nav.find(n=>n[0]===id)",
+        "function mobileDrawer()",
+        "const links=nav.map(item=>"
+      ]
+    },
+    {
+      "id": "MOB-03",
+      "label": "Controles de apertura/cierre de menú",
+      "file": "src/app.js",
+      "tokens": [
+        "case 'show-mobile-menu':",
+        "case 'close-mobile-menu':",
+        "if(state.menuMore){state.menuMore=false;render()}"
+      ]
+    },
+    {
+      "id": "MOB-04",
+      "label": "Pruebas de acceso móvil",
+      "file": "tests/navigation.test.mjs",
+      "tokens": [
+        "test('La navegación principal",
+        "test('El menú Más"
+      ]
+    },
+    {
+      "id": "MOB-04",
+      "label": "Estilos de menú móvil",
+      "file": "src/style.css",
+      "tokens": [
+        ".mobile-menu-drawer",
+        ".mobile-drawer-grid"
       ]
     }
   ]

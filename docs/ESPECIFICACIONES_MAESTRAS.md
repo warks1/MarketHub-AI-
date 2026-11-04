@@ -182,3 +182,17 @@ Estas funciones son **utilizables localmente en navegador** y se añaden a las a
 - **GROW-08** Herramientas accesibles en FREE con límites de uso locales y PRO con cuotas superiores. El modo PRO sigue siendo demostración, sin pagos.
 - **GROW-09** Las URLs se validan en HTTPS, los textos mostrados se escapan, las eliminaciones requieren confirmación y hay pruebas automáticas; estas salvaguardas **no** convierten aún el sistema en una plataforma apta para datos sensibles.
 - **GROW-10** Las bibliotecas de Growth Lab, Oficina, Estudio Visual y borradores anteriores usan claves locales independientes para evitar borrar el trabajo previo. Una futura sincronización real exigirá migraciones seguras.
+
+
+## R. Protección de trabajos y navegación móvil completa (v0.3.1)
+
+- **SAFE-01:** pantalla de Ajustes con exportación conjunta de borradores, Oficina, Estudio Visual y Growth Lab a JSON local.
+- **SAFE-02:** importación JSON versionada, válida únicamente para módulos conocidos, comprobando tamaño, profundidad y tipos de dato.
+- **SAFE-03:** confirmar explícitamente la restauración e informar sobre cuántos módulos existentes se sobrescribirán; los módulos omitidos en la copia deben conservarse.
+- **SAFE-04:** ante un fallo de almacenamiento, intentar recuperar los valores anteriores en los módulos afectados; informar claramente de la limitación.
+- **SAFE-05:** la copia no está cifrada; advertir al usuario de que no almacene datos sensibles y de que proteja el archivo exportado.
+- **SAFE-06:** la exportación local nunca equivale a sincronización de cuenta ni a copias en servidores; requiere implementación adicional antes de uso empresarial.
+- **MOB-01:** no construir barras móviles con posiciones fijas de un listado que crece; acceso por identificadores estables.
+- **MOB-02:** mantener cinco accesos rápidos y el menú «Más» con **todas las secciones** (actualmente doce).
+- **MOB-03:** el menú «Más» debe funcionar con botón, cierre y tecla Escape, y ofrecer entrada a módulos aunque no aparezcan en la barra inferior.
+- **MOB-04:** añadir pruebas de regresión de navegación, conservar acceso desde móvil, tablet y PC y no degradar accesibilidad.

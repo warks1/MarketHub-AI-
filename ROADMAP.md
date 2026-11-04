@@ -94,3 +94,14 @@ Referencia: [MATRIZ_FREE_PRO.md](docs/MATRIZ_FREE_PRO.md).
 - [x] Pruebas unitarias y de seguridad básicas para Growth Lab.
 - [ ] Autenticación, API de redes, CRM seguro en la nube, envío legal de emails, lanzamiento de anuncios reales y facturación comercial.
 - [ ] Pruebas de interfaz en Android, iOS, tablets y lectores de pantalla; revisión de seguridad profesional.
+
+
+## v0.3.1 — Conservación de datos y acceso móvil completo
+
+- [x] Copia conjunta JSON de los cuatro espacios locales del prototipo desde Ajustes.
+- [x] Restauración manual versionada, con límite de tamaño, consentimiento y recuperación en fallo de escritura.
+- [x] Accesos móviles robustos: cinco destinos por ID y menú «Más» con todas las secciones.
+- [x] Pruebas Node para importación/rollback de copias y para los doce destinos de navegación.
+- [ ] Verificación manual en varios modelos de iPhone, iPad, Android y tablets Android.
+- [ ] Sincronización y copias remotas cifradas para datos reales, con auditoría y recuperación.
+- [ ] Accesibilidad del diálogo móvil comprobada con VoiceOver/TalkBack.

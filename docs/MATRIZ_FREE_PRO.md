@@ -159,3 +159,8 @@ Se suma a la Oficina de marketing (copys por plantillas, CRM de prueba, tareas, 
 | Anuncios en la aplicación | Espacios de demostración | Ausentes | No hay SDK conectado ni ingresos reales |
 
 **Seguridad y monetización**: el selector FREE/PRO es una prueba de interfaz. Debe reemplazarse por suscripciones y límites verificados en servidor. No introducir datos personales reales en las herramientas locales.
+
+
+### Copias y acceso a todos los módulos en móvil
+
+Los datos locales de FREE y PRO demo se pueden exportar juntos desde Ajustes. La restauración es opcional y requiere consentimiento. No hay almacenamiento remoto cifrado todavía. El menú móvil «Más» permite entrar a todas las secciones, no solo a los accesos de la barra inferior.
