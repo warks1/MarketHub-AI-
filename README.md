@@ -21,7 +21,7 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.2.0 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.3.0 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 
@@ -59,7 +59,7 @@ npm run ios:open
 
 Una vez creados los proyectos nativos, tras cambiar el código web usa `npm run mobile:sync`. Las carpetas nativas se generan con Capacitor y deben revisarse, probarse y versionarse una vez configuradas para las tiendas. **No se incluyen APK, AAB ni IPA firmados, ni apps publicadas.**
 
-## Funciones ya visibles en v0.1
+## Funciones visibles y operativas localmente en v0.3
 
 - Identidad NEXUS + PULSE: cian, magenta, violeta y neón.
 - Pantalla de carga animada, saltable y adaptable a movimiento reducido.

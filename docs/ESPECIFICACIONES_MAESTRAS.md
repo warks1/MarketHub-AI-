@@ -166,3 +166,19 @@
 - **FULL-08:** Ser de las más completas del mercado es la meta comercial, **no un hecho** hasta que la cobertura esté implementada, probada y comparada.
 
 Consultar [Matriz FREE/PRO](MATRIZ_FREE_PRO.md) y [Comparativa noviembre 2026](COMPARATIVA_COMPETIDORES_2026.md).
+
+
+## Q. Growth Lab local v0.3.0 — funcionalidades añadidas y conservadas
+
+Estas funciones son **utilizables localmente en navegador** y se añaden a las anteriores. No las presentar como IA generativa ni como conexiones reales a redes. Es importante que no se retire ninguno de los módulos anteriores.
+
+- **GROW-01** Laboratorio de marketing accesible desde inicio, menú y fichas del catálogo, adaptable a iPhone, Android, tablets y escritorio.
+- **GROW-02** Brief de campaña: guardar objetivo, marca, público, oferta, canal, presupuesto, fecha y CTA; biblioteca local y exportación a texto. No ejecuta campañas ni gasta presupuesto.
+- **GROW-03** Constructor de enlaces UTM sobre URL HTTPS, preservando los parámetros existentes y generando source/medium/campaign, content y term opcionales; biblioteca y copia del enlace. No implica analítica conectada.
+- **GROW-04** Revisión SEO social por heurísticas de redacción (palabra clave, CTA, longitud, hashtags), puntuación explícitamente orientativa; no equivale al algoritmo real de TikTok/Meta/Google/YouTube.
+- **GROW-05** Editor de email, asunto, preheader, contenido y CTA HTTPS con exportación HTML/texto. No envía mensajes, no conserva destinatarios y requiere consentimiento y mecanismos de baja antes del envío comercial.
+- **GROW-06** Reutilización de contenido mediante tres plantillas para Instagram, LinkedIn y Reels/TikTok. Contenido editable, copiable y transferible a borradores sin publicación.
+- **GROW-07** Micrositio «link en bio» HTML descargable: enlaces HTTPS, nombre, descripción y controles de cuota; sin dominio ni hosting.
+- **GROW-08** Herramientas accesibles en FREE con límites de uso locales y PRO con cuotas superiores. El modo PRO sigue siendo demostración, sin pagos.
+- **GROW-09** Las URLs se validan en HTTPS, los textos mostrados se escapan, las eliminaciones requieren confirmación y hay pruebas automáticas; estas salvaguardas **no** convierten aún el sistema en una plataforma apta para datos sensibles.
+- **GROW-10** Las bibliotecas de Growth Lab, Oficina, Estudio Visual y borradores anteriores usan claves locales independientes para evitar borrar el trabajo previo. Una futura sincronización real exigirá migraciones seguras.

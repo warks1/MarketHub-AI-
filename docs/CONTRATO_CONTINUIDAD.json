@@ -18,7 +18,10 @@
     "docs/COMPARATIVA_COMPETIDORES_2026.md",
     "src/office.js",
     "src/office.css",
-    "tests/office.test.mjs"
+    "tests/office.test.mjs",
+    "src/growth.js",
+    "src/growth.css",
+    "tests/growth.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -315,6 +318,88 @@
         "test('La landing",
         "test('Los contactos",
         "test('Generador de copys"
+      ]
+    },
+    {
+      "id": "GROW-01",
+      "label": "Growth Lab navegable y preservado",
+      "file": "src/app.js",
+      "tokens": [
+        "['laboratorio','Growth Lab','chart']",
+        "case 'laboratorio':return growthPage(state.plan)",
+        "growthClick(growthTarget"
+      ]
+    },
+    {
+      "id": "GROW-02",
+      "label": "Brief de campaña local",
+      "file": "src/growth.js",
+      "tokens": [
+        "function briefs(plan)",
+        "growth-brief",
+        "export-brief",
+        "delete-brief"
+      ]
+    },
+    {
+      "id": "GROW-03",
+      "label": "Enlaces UTM seguros",
+      "file": "src/growth.js",
+      "tokens": [
+        "function utms(plan)",
+        "growth-utm",
+        "searchParams.set",
+        "utm_source"
+      ]
+    },
+    {
+      "id": "GROW-04",
+      "label": "Revisión orientativa SEO para redes",
+      "file": "src/growth.js",
+      "tokens": [
+        "function calculateSEO(",
+        "growth-seo",
+        "Índice orientativo"
+      ]
+    },
+    {
+      "id": "GROW-05",
+      "label": "Editor de email HTML",
+      "file": "src/growth.js",
+      "tokens": [
+        "function mailHTML(",
+        "growth-email",
+        "export-email"
+      ]
+    },
+    {
+      "id": "GROW-06",
+      "label": "Reutilización de contenidos",
+      "file": "src/growth.js",
+      "tokens": [
+        "function repurposeTemplates(",
+        "growth-repurpose",
+        "post-rep"
+      ]
+    },
+    {
+      "id": "GROW-07",
+      "label": "Micrositio link en bio",
+      "file": "src/growth.js",
+      "tokens": [
+        "function bioHTML(",
+        "growth-bio",
+        "export-bio"
+      ]
+    },
+    {
+      "id": "GROW-09",
+      "label": "Pruebas de regresión Growth Lab",
+      "file": "tests/growth.test.mjs",
+      "tokens": [
+        "test('URL con parámetros UTM",
+        "test('Plantilla de email",
+        "test('Link en bio"
       ]
     }
   ]

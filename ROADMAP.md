@@ -80,3 +80,17 @@
 - [ ] Pruebas funcionales, de accesibilidad y experiencia en iPhone, Android, tablets y escritorio.
 
 Referencia: [MATRIZ_FREE_PRO.md](docs/MATRIZ_FREE_PRO.md).
+
+
+## v0.3.0 · Growth Lab, marketing de verdad en modo local
+
+- [x] Formularios y biblioteca local de briefs de campaña (sin lanzar anuncios).
+- [x] Constructor seguro HTTPS de enlaces UTM con persistencia en navegador.
+- [x] Comprobador SEO social con heurísticas claras, no algoritmos oficiales ni IA.
+- [x] Editor de correo exportable en HTML y texto (sin envío).
+- [x] Conversión por plantillas de una idea a Instagram, LinkedIn y vídeo corto.
+- [x] Página «link en bio» con varios enlaces y exportación HTML.
+- [x] Accesos a las herramientas desde el catálogo, sin eliminar módulos existentes.
+- [x] Pruebas unitarias y de seguridad básicas para Growth Lab.
+- [ ] Autenticación, API de redes, CRM seguro en la nube, envío legal de emails, lanzamiento de anuncios reales y facturación comercial.
+- [ ] Pruebas de interfaz en Android, iOS, tablets y lectores de pantalla; revisión de seguridad profesional.

@@ -142,3 +142,20 @@ Permitir al usuario realizar prácticamente todo el ciclo de marketing desde un 
 - No ejecutar campañas, enviar mensajes masivos ni gastar presupuestos sin permisos y confirmación.
 - La app no debe confundir demos con funciones reales; el estado se muestra en el catálogo.
 - Guardar todos los proyectos y capacidad de exportarlos; evitar pérdidas al cambiar de plan.
+
+
+## Nueva familia implementada en modo local: Growth Lab v0.3.0
+
+Se suma a la Oficina de marketing (copys por plantillas, CRM de prueba, tareas, marca, landing y calculadora) y al Estudio Visual. El catálogo ahora incluye también un constructor de enlaces UTM.
+
+| Herramienta local | FREE demo | PRO demo | Limitación actual |
+|---|---:|---:|---|
+| Briefs de campañas | 10 guardados | 100 | Sin lanzar publicidad |
+| Enlaces UTM | 20 guardados | 250 | Sin analítica del sitio destino |
+| Revisión SEO social | Incluida | Incluida | Reglas orientativas, no puntuación oficial |
+| Email HTML exportable | Incluido | Incluido | Sin envío ni base de suscriptores |
+| Reutilizar una idea por red | 3 formatos | 3 formatos | Plantillas, no IA externa |
+| Página link en bio | 3 enlaces | 8 enlaces | Descarga HTML; no alojada |
+| Anuncios en la aplicación | Espacios de demostración | Ausentes | No hay SDK conectado ni ingresos reales |
+
+**Seguridad y monetización**: el selector FREE/PRO es una prueba de interfaz. Debe reemplazarse por suscripciones y límites verificados en servidor. No introducir datos personales reales en las herramientas locales.

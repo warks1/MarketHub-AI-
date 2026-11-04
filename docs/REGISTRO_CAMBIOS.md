@@ -1,5 +1,15 @@
 # Registro de cambios — MarketHub AI
 
+## 2026-11-04 — v0.3.0 Growth Lab y marketing local
+
+- Se conserva el proyecto NEXUS + PULSE, sus pantallas, estudio gráfico, calendario, catálogo, FREE/PRO y Oficina.
+- Nuevo Growth Lab: briefs con biblioteca, enlaces UTM válidos, análisis SEO de redacción, plantillas email exportables, reutilización multired y «link en bio».
+- Las funciones nuevas usan almacenamiento local independiente: no se sobrescriben los borradores ni la Oficina.
+- Catálogo ampliado con generador UTM y accesos directos a los nuevos módulos, sin alterar los anteriores.
+- Pruebas automáticas para URLs HTTPS, parámetros UTM, salida HTML escapada, borrado confirmado, SEO y persistencia.
+- Límite actual: ninguna herramienta nueva conecta con redes, genera IA real, envía campañas o emails, ni se ha aprobado para gestionar datos personales reales.
+
+
 ## 2026-11-04 — Alcance máximo FREE/PRO y explorador de herramientas
 
 - Ampliado catálogo de producto a **78 capacidades previstas**, repartidas en 9 familias.
