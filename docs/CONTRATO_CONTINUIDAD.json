@@ -12,7 +12,10 @@
     "index.html",
     "capacitor.config.json",
     "public/manifest.webmanifest",
-    "public/logo.svg"
+    "public/logo.svg",
+    "src/catalogue.js",
+    "docs/MATRIZ_FREE_PRO.md",
+    "docs/COMPARATIVA_COMPETIDORES_2026.md"
   ],
   "requiredScreens": [
     {
@@ -185,6 +188,47 @@
         "android:init",
         "ios:init",
         "mobile:sync"
+      ]
+    },
+    {
+      "id": "FULL-04",
+      "label": "Centro de herramientas",
+      "file": "src/app.js",
+      "tokens": [
+        "function toolsCatalogue()",
+        "case 'herramientas':return toolsCatalogue()",
+        "['herramientas','Herramientas'",
+        "data-action=\"catalogue-tool\""
+      ]
+    },
+    {
+      "id": "FULL-05",
+      "label": "Inventario extensible",
+      "file": "src/catalogue.js",
+      "tokens": [
+        "catalogueSections",
+        "CAT-001",
+        "CAT-078"
+      ]
+    },
+    {
+      "id": "FULL-02",
+      "label": "Planes amplios",
+      "file": "docs/MATRIZ_FREE_PRO.md",
+      "tokens": [
+        "FREE",
+        "PRO",
+        "marketing"
+      ]
+    },
+    {
+      "id": "FULL-07",
+      "label": "Mercado comparado",
+      "file": "docs/COMPARATIVA_COMPETIDORES_2026.md",
+      "tokens": [
+        "Metricool",
+        "Hootsuite",
+        "HubSpot"
       ]
     }
   ]

@@ -1,4 +1,5 @@
 import './style.css';
+import { catalogueSections } from './catalogue.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -14,6 +15,7 @@ let state={
   posts:Array.isArray(saved.posts)?saved.posts:demoPosts,modal:null,creativeMode:'Video / Reels',
   videoFormat:'9:16',search:'',menuMore:false,consent: saved.consent || 'pending'
 };
+state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
 const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,consent:state.consent}))}catch{}};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
@@ -36,7 +38,7 @@ const icons={
 };
 function icon(name){return '<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[name]||icons.sparkles)+'</svg>'}
 const nav=[
- ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['crear','Crear / Programar','plus'],
+ ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['crear','Crear / Programar','plus'],['herramientas','Herramientas','bolt'],
  ['campanas','Campañas','megaphone'],['analitica','Analítica','chart'],
  ['bandeja','Bandeja','inbox'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
@@ -76,9 +78,21 @@ function rewardUnit(){
 function home(){
  const filtered=postsFiltered();
  return sectionHeader('Tu centro de marketing ✨','Crea, planifica y crece desde un solo lugar.',btn('Crear publicación '+icon('arrow'),'goto-crear','primary'))+
+ '<div class="catalogue-cta">'+btn('🧰 Explorar todas las herramientas','goto-herramientas','secondary')+'</div>'+
  '<div class="grid kpis">'+kpi('Alcance','2,84 M','34,7%','◉','#00dfee45')+kpi('Interacciones','328,4 K','28,1%','♡','#e13ade45')+kpi('Leads','56,7 K','41,2%','♧','#846bff45')+kpi('ROI','4,9×','62,3%','↗','#b5fa3645')+'</div>'+
  '<div class="dashboard-grid"><div class="section-stack"><div class="card"><div class="card-head"><h2>📈 Rendimiento de redes</h2><span class="tag">Últimos 30 días</span></div>'+lines()+'</div><div class="card"><div class="card-head"><h2>📚 Próximos contenidos</h2>'+btn('Ver todos','goto-crear','secondary small-btn')+'</div><div class="line-list">'+(filtered.length?filtered.slice(0,4).map(postRow).join(''):'<div class="empty">No hay publicaciones que coincidan.</div>')+'</div></div>'+adUnit('mobile')+'</div>'+
  '<div class="section-stack"><div class="card ai-card"><div class="card-head"><h2>✦ Copiloto de IA</h2><span class="tag pink">Vista previa</span></div><div class="ai-wave"></div><p class="muted">Ideas, textos y recomendaciones estratégicas en una sola experiencia.</p><div class="line-list" style="margin:15px 0">'+['5 ideas para la próxima semana','Reutilizar un vídeo en varios formatos','Planificar contenido para Instagram'].map(t=>'<div class="list-row"><b>✦ '+t+'</b></div>').join('')+'</div>'+btn('Abrir estudio creativo','goto-estudio','primary full')+'</div>'+calendar()+rewardUnit()+adUnit('desktop')+'</div></div>';
+}
+function toolsCatalogue(){
+ const term=state.toolsQuery.trim().toLocaleLowerCase('es');
+ const all=catalogueSections.flatMap(s=>s.tools);
+ const sections=catalogueSections.map(section=>({...section,tools:section.tools.filter(tool=>(state.toolsFilter==='all'||tool.tier===state.toolsFilter)&&(!term||(tool.name+' '+section.name).toLocaleLowerCase('es').includes(term)))})).filter(s=>s.tools.length);
+ const filterBar=[['all','Todas'],['free','FREE y PRO'],['pro','Avanzadas PRO']].map(([value,label])=>'<button class="secondary'+(state.toolsFilter===value?' selected':'')+'" aria-pressed="'+(state.toolsFilter===value)+'" data-filter="'+value+'">'+label+'</button>').join('');
+ const modules=sections.map(section=>'<section class="card catalogue-section"><div class="card-head"><h2>'+section.icon+' '+safe(section.name)+'</h2><span class="tag">'+section.tools.length+'</span></div><div class="catalogue-grid">'+section.tools.map(tool=>'<button type="button" class="catalogue-tool" data-action="catalogue-tool" data-tool="'+safe(tool.id)+'"><span class="tool-badges"><span class="tag '+(tool.tier==='pro'?'pink':'green')+'">'+(tool.tier==='pro'?'PRO':'FREE + PRO')+'</span><span class="tiny muted">'+(tool.status==='demo'?'Vista demo':'Pendiente')+'</span></span><strong>'+safe(tool.name)+'</strong><span class="catalogue-more">Ver detalles ↗</span></button>').join('')+'</div></section>').join('');
+ return sectionHeader('Centro de herramientas 🚀','Todo lo previsto para la suite, organizado por plan y estado real.',btn('Comparar planes','goto-planes','primary'))+
+ '<div class="notice"><strong>Catálogo de producto, no de funciones activas.</strong> «Vista demo» significa interfaz visual o trabajo local, no integración comercial. El resto está pendiente. FREE dispondrá de muchas funciones con cuotas y anuncios; PRO será más completo y sin publicidad.</div>'+
+ '<div class="catalogue-stats"><div><strong>'+all.length+'</strong><span>Herramientas planificadas</span></div><div><strong>'+all.filter(t=>t.tier==='free').length+'</strong><span>Previstas en FREE</span></div><div><strong>'+all.filter(t=>t.tier==='pro').length+'</strong><span>Avanzadas de PRO</span></div></div>'+
+ '<div class="card catalogue-controls"><label class="eyebrow" for="toolSearch">Buscar herramientas</label><input class="input catalogue-search" id="toolSearch" placeholder="IA, vídeo, SEO, CRM, anuncios..." value="'+safe(state.toolsQuery)+'"><div class="catalogue-filters" role="group" aria-label="Filtrar herramientas">'+filterBar+'</div></div><div class="section-stack">'+(modules||'<div class="card empty">Sin coincidencias</div>')+'</div>';
 }
 function studio(){
  return sectionHeader('Estudio creativo IA ✨','Crea contenido visual, vídeo y campañas. Editor ilustrativo; sin generación IA conectada.',btn('Programar este diseño','goto-crear','primary'))+
@@ -117,7 +131,7 @@ function settings(){
  '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>';
 }
 function content(){
- switch(state.page){case 'estudio':return studio();case 'crear':return create();case 'campanas':return campaigns();case 'analitica':return analytics();case 'bandeja':return inbox();case 'planes':return plans();case 'ajustes':return settings();default:return home();}
+ switch(state.page){case 'estudio':return studio();case 'crear':return create();case 'herramientas':return toolsCatalogue();case 'campanas':return campaigns();case 'analitica':return analytics();case 'bandeja':return inbox();case 'planes':return plans();case 'ajustes':return settings();default:return home();}
 }
 function navButton(item,kind='side'){
  const cur=state.page===item[0];
@@ -125,7 +139,7 @@ function navButton(item,kind='side'){
 }
 function render(){
  const side=nav.map(n=>navButton(n)).join('');
- const mob=[nav[0],nav[1],nav[2],nav[5],nav[7]].map(n=>navButton(n,'bottom')).join('');
+ const mob=[nav[0],nav[1],nav[2],nav.find(n=>n[0]==='herramientas'),nav[5],nav[7]].map(n=>navButton(n,'bottom')).join('');
  app.innerHTML='<div class="app-shell"><aside class="sidebar"><div class="brand"><img src="/logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><nav class="nav" aria-label="Navegación principal">'+side+'</nav><div class="sidebar-bottom"><div class="plan-widget"><span class="eyebrow">✦ TU PLAN '+state.plan.toUpperCase()+'</span><h3>'+ (state.plan==='free'?'Haz crecer tus ideas':'Sin anuncios, más enfoque')+'</h3><p>'+(state.plan==='free'?'Accede a las funciones PRO y elimina la publicidad.':'Experiencia PRO activada en la demostración.')+'</p><div style="margin-top:13px">'+btn('Ver suscripción '+icon('arrow'),'goto-planes','primary full')+'</div></div></div></aside>'+
  '<main id="main" class="workspace"><header class="topbar"><div class="brand"><img src="/logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones de demo..." value="'+safe(state.search)+'"><div class="topbar-right"><button class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · SIN ANUNCIOS':'FREE · CON ANUNCIOS')+'</button><div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div><nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+(state.modal?modalHTML():'');
 }
@@ -134,6 +148,7 @@ function modalHTML(){
  if(state.modal==='upgrade'){head='Activar PRO (demostración)';body='Esto solo cambiará el aspecto de la aplicación para probarla sin anuncios. No es una suscripción ni se realizará un pago.';foot=btn('Cancelar','close-modal')+btn('Activar PRO demo','confirm-pro','primary')}
  if(state.modal==='reward'){head='Publicidad recompensada · simulación';body='Aquí se integrará en el futuro un anuncio real con recompensa opcional. En esta demostración puedes recibir 5 créditos ficticios sin visualizar anuncios.';foot=btn('Cancelar','close-modal')+btn('Recibir 5 créditos demo','confirm-reward','primary')}
  if(state.modal==='tools'){head='Función prevista para próximas versiones';body='Esta herramienta todavía no está operativa. La interfaz muestra dónde se incorporará, pero no simula una acción completada.';foot=btn('Entendido','close-modal','primary')}
+ if(state.modal==='tool-detail'&&state.selectedTool){head=safe(state.selectedTool.name);body=(state.selectedTool.tier==='pro'?'Herramienta avanzada del plan PRO.':'Prevista en FREE y PRO, con distintos límites de uso.')+' Estado real: '+(state.selectedTool.status==='demo'?'interfaz de demostración':'pendiente de integración')+'.';foot=btn('Cerrar','close-modal','primary')}
  if(state.modal==='reset'){head='Borrar datos locales';body='Se eliminarán los borradores de ejemplo y tu selección de plan de este navegador.';foot=btn('Cancelar','close-modal')+btn('Sí, borrar','confirm-reset','primary')}
  return '<div class="modal-backdrop" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">'+head+'</h2><p>'+body+'</p><div class="modal-actions">'+foot+'</div></div></div>';
 }
@@ -147,6 +162,7 @@ function go(page){state.page=page;state.modal=null;state.search='';render();wind
 document.addEventListener('click',e=>{
  const page=e.target.closest('[data-page]');
  if(page){go(page.dataset.page);return}
+ const filter=e.target.closest('[data-filter]');if(filter){state.toolsFilter=filter.dataset.filter;render();return}
  const mode=e.target.closest('[data-mode]');
  if(mode){state.creativeMode=mode.dataset.mode;render();return}
  const target=e.target.closest('[data-action]');
@@ -154,6 +170,10 @@ document.addEventListener('click',e=>{
  const action=target.dataset.action;
  if(action.startsWith('goto-')){go(action.slice(5));return}
  switch(action){
+ case 'catalogue-tool':{
+ const tool=catalogueSections.flatMap(s=>s.tools).find(t=>t.id===target.dataset.tool);
+ if(tool){state.selectedTool=tool;state.modal='tool-detail';render()}break;
+ }
  case 'format':state.videoFormat=state.videoFormat==='9:16'?'16:9':'9:16';render();break;
  case 'draft-from-studio':{
   const input=document.querySelector('#creativePrompt'),val=input?.value.trim();
@@ -183,6 +203,9 @@ document.addEventListener('submit',e=>{
  save();render();toast('Publicación guardada localmente. No se ha publicado en ninguna red.');
 });
 document.addEventListener('input',e=>{
+ if(e.target.id==='toolSearch'){
+  state.toolsQuery=e.target.value;const pos=e.target.selectionStart;render();const input=document.querySelector('#toolSearch');if(input){input.focus();input.setSelectionRange(pos,pos)}return;
+ }
  if(e.target.id==='globalSearch'){
   const val=e.target.value;state.search=val;
   if(state.page==='inicio'||state.page==='crear'){const start=e.target.selectionStart;render();const input=document.querySelector('#globalSearch');if(input){input.focus();input.setSelectionRange(start,start)}}

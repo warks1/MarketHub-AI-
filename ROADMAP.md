@@ -68,3 +68,15 @@
 - Cada actualización debe conservar las funciones existentes, registrar IDs de requisitos, pasar controles de continuidad y compilar.
 - La cobertura actual de regresión es **estructural, no funcional**; crear pruebas reales de flujos de usuario y en smartphones/tablets antes del lanzamiento.
 - Prioridades sectoriales 2026: IA estratégica/agentes con aprobación humana, vídeos cortos, diseño editable en capas, social listening, búsqueda social, campañas guiadas por datos y colaboración con creadores; no sustituyen a módulos anteriores.
+
+## Ampliación de alcance 2026-11-04
+
+- [x] Registrar catálogo modular completo de 78 capacidades previstas y planes.
+- [x] Crear una pantalla de exploración de herramientas con filtros FREE/PRO y estados honestos, sin eliminar pantallas previas.
+- [ ] Convertir funciones ilustrativas en funcionalidades operativas y probadas.
+- [ ] Conectar redes con permisos oficiales; backend y cuentas; publicación fiable.
+- [ ] Implementar editor multimedia real, IA con costes limitados y todas las familias comerciales.
+- [ ] Validar precios, anuncios reales, consentimiento, suscripciones y seguridad.
+- [ ] Pruebas funcionales, de accesibilidad y experiencia en iPhone, Android, tablets y escritorio.
+
+Referencia: [MATRIZ_FREE_PRO.md](docs/MATRIZ_FREE_PRO.md).

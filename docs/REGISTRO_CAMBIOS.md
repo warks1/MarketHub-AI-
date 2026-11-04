@@ -1,5 +1,12 @@
 # Registro de cambios — MarketHub AI
 
+## 2026-11-04 — Alcance máximo FREE/PRO y explorador de herramientas
+
+- Ampliado catálogo de producto a **78 capacidades previstas**, repartidas en 9 familias.
+- Añadida pantalla navegable, búsquedas y filtros FREE/PRO, con indicador explícito «demo» o «pendiente».
+- Definidas cuotas comerciales **provisionales**, sujetas a costes y autorizaciones.
+- Se conservan todas las pantallas, módulos y decisiones previas.
+
 ## 2026-11-04 — Requisitos maestros + protección de continuidad
 - Reunidos los requisitos acumulativos desde la creación del proyecto sin retirar ninguna solicitud.
 - Fijada como regla de producto **no eliminar módulos ni capacidades previas**; mejorar, corregir, ampliar y verificar compatibilidad.

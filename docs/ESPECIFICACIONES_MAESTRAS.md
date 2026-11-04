@@ -153,3 +153,16 @@
 5. Se explica qué está probado de verdad y qué sigue siendo simulación.
 6. La nueva función es accesible en móvil, tablet y escritorio según corresponda.
 7. Se incorpora la entrada al registro de cambios antes de cerrar una versión.
+
+## O. Completar al máximo FREE y PRO — ampliación 2026-11-04
+
+- **FULL-01:** El usuario podrá cubrir toda la cadena de marketing (estrategia, producción, publicación, promoción, atención, captación, ventas, análisis y mejora).
+- **FULL-02:** FREE será útil y tendrá acceso a herramientas en casi todas las familias, con límites claros y anuncios identificados.
+- **FULL-03:** PRO tendrá todas las familias, funciones profesionales y mayor capacidad, sin anuncios, manteniendo cuotas viables de IA.
+- **FULL-04:** Incluir un catálogo navegable y con búsqueda que distinga FREE/PRO y el estado real (demo, pendiente, operativo).
+- **FULL-05:** Registrar herramientas por ID estable, aumentar sin borrar módulos y conservar navegación móvil/PC.
+- **FULL-06:** Incorporar link en bio, CRM, SEO social, email, landings, afiliados/UGC, social listening, agentes supervisados, automatización, edición audiovisual y publicidad.
+- **FULL-07:** Revisar alternativas líderes y capacidades de API periódicamente, adoptando mejoras útiles de forma segura.
+- **FULL-08:** Ser de las más completas del mercado es la meta comercial, **no un hecho** hasta que la cobertura esté implementada, probada y comparada.
+
+Consultar [Matriz FREE/PRO](MATRIZ_FREE_PRO.md) y [Comparativa noviembre 2026](COMPARATIVA_COMPETIDORES_2026.md).

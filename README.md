@@ -4,6 +4,8 @@
 
 - [ESPECIFICACIONES MAESTRAS — todos los requisitos acumulados](docs/ESPECIFICACIONES_MAESTRAS.md)
 - [Registro de cambios y política de continuidad](docs/REGISTRO_CAMBIOS.md)
+- [Matriz de funciones FREE y PRO](docs/MATRIZ_FREE_PRO.md)
+- [Comparativa competitiva 2026](docs/COMPARATIVA_COMPETIDORES_2026.md)
 - [Contrato automatizado de continuidad](docs/CONTRATO_CONTINUIDAD.json)
 - [Roadmap técnico](ROADMAP.md)
 
@@ -61,7 +63,7 @@ Una vez creados los proyectos nativos, tras cambiar el código web usa `npm run 
 
 - Identidad NEXUS + PULSE: cian, magenta, violeta y neón.
 - Pantalla de carga animada, saltable y adaptable a movimiento reducido.
-- Panel principal, estudio creativo ilustrativo, campañas, analítica, bandeja y ajustes.
+- Panel principal, estudio creativo ilustrativo, campañas, analítica, bandeja, ajustes y centro de herramientas planificadas por plan.
 - Crear y programar **borradores locales** con fecha; no publica en redes reales.
 - Editor conceptual de vídeo 9:16 y 16:9, sin exportación audiovisual.
 - Modo FREE con espacios publicitarios ficticios y créditos de ejemplo.
