@@ -11,6 +11,10 @@ on:
         required: false
         default: true
 
+concurrency:
+  group: market-hub-build-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -40,7 +44,7 @@ jobs:
 
   android:
     name: APK Android de prueba
-    if: github.event_name == 'workflow_dispatch' && inputs.build_android
+    if: (github.event_name == 'workflow_dispatch' && inputs.build_android) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[build-android]'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
