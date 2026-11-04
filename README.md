@@ -14,14 +14,14 @@
 Para comprobar que no han desaparecido módulos estructurales fundamentales:
 
 ```bash
-npm run check:continuity
+npm test
 ```
 
 Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionales.
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.1.0 · PROTOTIPO INTERACTIVO · NO PRODUCCIÓN.**
+**Estado: v0.2.0 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 
