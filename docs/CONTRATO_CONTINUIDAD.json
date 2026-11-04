@@ -1,0 +1,191 @@
+{
+  "title": "MarketHub AI — contrato mínimo de continuidad",
+  "version": "2026-11-04",
+  "note": "Este contrato solo detecta eliminaciones estructurales obvias; no sustituye pruebas funcionales ni E2E. Si hay refactor, modificar el contrato junto con pruebas equivalentes y documentar paridad.",
+  "mustExist": [
+    "README.md",
+    "ROADMAP.md",
+    "docs/ESPECIFICACIONES_MAESTRAS.md",
+    "docs/REGISTRO_CAMBIOS.md",
+    "src/app.js",
+    "src/style.css",
+    "index.html",
+    "capacitor.config.json",
+    "public/manifest.webmanifest",
+    "public/logo.svg"
+  ],
+  "requiredScreens": [
+    {
+      "id": "UX-04",
+      "label": "Pantalla de carga animada",
+      "file": "src/app.js",
+      "tokens": [
+        "function splash()",
+        "splash-orb",
+        "progress-fill",
+        "skipSplash"
+      ]
+    },
+    {
+      "id": "UX-01",
+      "label": "Pantalla principal",
+      "file": "src/app.js",
+      "tokens": [
+        "function home()",
+        "['inicio','Inicio'"
+      ]
+    },
+    {
+      "id": "CREA-03",
+      "label": "Estudio creativo",
+      "file": "src/app.js",
+      "tokens": [
+        "function studio()",
+        "['estudio','Estudio IA'",
+        "'9:16'",
+        "'16:9'"
+      ]
+    },
+    {
+      "id": "SOC-02",
+      "label": "Creación y planificación",
+      "file": "src/app.js",
+      "tokens": [
+        "function create()",
+        "function calendar()",
+        "['crear','Crear / Programar'"
+      ]
+    },
+    {
+      "id": "CAMP-01",
+      "label": "Campañas (demo)",
+      "file": "src/app.js",
+      "tokens": [
+        "function campaigns()",
+        "['campanas','Campañas'"
+      ]
+    },
+    {
+      "id": "AN-01",
+      "label": "Analítica (demo)",
+      "file": "src/app.js",
+      "tokens": [
+        "function analytics()",
+        "['analitica','Analítica'"
+      ]
+    },
+    {
+      "id": "BUS-01",
+      "label": "Bandeja (demo)",
+      "file": "src/app.js",
+      "tokens": [
+        "function inbox()",
+        "['bandeja','Bandeja'"
+      ]
+    },
+    {
+      "id": "MON-01",
+      "label": "Planes",
+      "file": "src/app.js",
+      "tokens": [
+        "function plans()",
+        "['planes','Suscripción'"
+      ]
+    },
+    {
+      "id": "SEC-01",
+      "label": "Ajustes (demo)",
+      "file": "src/app.js",
+      "tokens": [
+        "function settings()",
+        "['ajustes','Ajustes'"
+      ]
+    },
+    {
+      "id": "MON-02",
+      "label": "FREE con zonas publicitarias",
+      "file": "src/app.js",
+      "tokens": [
+        "function adUnit(",
+        "if(state.plan==='pro')return ''",
+        "Espacio publicitario · demo"
+      ]
+    },
+    {
+      "id": "MON-04",
+      "label": "Recompensas optativas simuladas",
+      "file": "src/app.js",
+      "tokens": [
+        "function rewardUnit()",
+        "confirm-reward"
+      ]
+    },
+    {
+      "id": "MON-05",
+      "label": "PRO sin anuncios",
+      "file": "src/app.js",
+      "tokens": [
+        "case 'confirm-pro':state.plan='pro'",
+        "PRO · SIN ANUNCIOS"
+      ]
+    },
+    {
+      "id": "SOC-02",
+      "label": "Conservación de borradores locales demo",
+      "file": "src/app.js",
+      "tokens": [
+        "localStorage.setItem",
+        "posts:state.posts",
+        "postForm"
+      ]
+    },
+    {
+      "id": "PLAT-04",
+      "label": "Navegación móvil",
+      "file": "src/style.css",
+      "tokens": [
+        ".mobile-bottom{display:grid",
+        "@media(max-width:680px)",
+        "env(safe-area-inset-bottom)"
+      ]
+    },
+    {
+      "id": "PLAT-02",
+      "label": "Responsive intermedio",
+      "file": "src/style.css",
+      "tokens": [
+        "@media(max-width:900px)",
+        "@media(max-width:1220px)"
+      ]
+    },
+    {
+      "id": "GOV-05",
+      "label": "Claridad de modo demo",
+      "file": "src/app.js",
+      "tokens": [
+        "Datos demo",
+        "No se ha publicado en ninguna red"
+      ]
+    },
+    {
+      "id": "PLAT-03",
+      "label": "Capacitor configurado",
+      "file": "capacitor.config.json",
+      "tokens": [
+        "appId",
+        "appName",
+        "webDir"
+      ]
+    },
+    {
+      "id": "PLAT-03",
+      "label": "Scripts móviles",
+      "file": "package.json",
+      "tokens": [
+        "android:init",
+        "ios:init",
+        "mobile:sync"
+      ]
+    }
+  ]
+}

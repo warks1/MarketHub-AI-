@@ -1,5 +1,22 @@
 # MarketHub AI · NEXUS × PULSE
 
+**Documentación maestra que debe consultarse antes de cualquier modificación:**
+
+- [ESPECIFICACIONES MAESTRAS — todos los requisitos acumulados](docs/ESPECIFICACIONES_MAESTRAS.md)
+- [Registro de cambios y política de continuidad](docs/REGISTRO_CAMBIOS.md)
+- [Contrato automatizado de continuidad](docs/CONTRATO_CONTINUIDAD.json)
+- [Roadmap técnico](ROADMAP.md)
+
+> **Regla del proyecto:** no eliminar funciones solicitadas; corregir, mejorar y ampliar conservando los módulos previos. No confundir prototipo con integración real.
+
+Para comprobar que no han desaparecido módulos estructurales fundamentales:
+
+\`\`\`bash
+npm run check:continuity
+\`\`\`
+
+Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionales.
+
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
 **Estado: v0.1.0 · PROTOTIPO INTERACTIVO · NO PRODUCCIÓN.**

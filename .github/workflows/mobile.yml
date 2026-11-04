@@ -1,4 +1,4 @@
-name: MarketHub AI · Web build y Android demo
+name: MarketHub AI · Continuidad, web y Android demo
 on:
   push:
     branches: [main]
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   web:
-    name: Validar versión web
+    name: Contrato de continuidad y compilación web
     runs-on: ubuntu-latest
     steps:
       - name: Obtener repositorio
@@ -27,6 +27,8 @@ jobs:
           node-version: '22'
       - name: Instalar dependencias
         run: npm install --no-audit --no-fund
+      - name: Verificar conservación estructural
+        run: npm run check:continuity
       - name: Compilar interfaz
         run: npm run build
       - name: Guardar web compilada
@@ -53,6 +55,8 @@ jobs:
         uses: android-actions/setup-android@v3
       - name: Instalar dependencias
         run: npm install --no-audit --no-fund
+      - name: Verificar conservación estructural
+        run: npm run check:continuity
       - name: Compilar y generar proyecto Android
         run: |
           npm run build

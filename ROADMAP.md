@@ -60,3 +60,11 @@
 - FREE: anuncios identificados + funciones limitadas.
 - PRO: sin anuncios, suscripción mensual con precio de referencia 29,90 € IVA incluido (pendiente de estudio).
 - La plataforma no es aún una solución lista para operar comercialmente.
+
+
+## Política de continuidad — añadida 2026-11-04
+
+- El alcance acumulativo y los estados reales se encuentran en [docs/ESPECIFICACIONES_MAESTRAS.md](docs/ESPECIFICACIONES_MAESTRAS.md).
+- Cada actualización debe conservar las funciones existentes, registrar IDs de requisitos, pasar controles de continuidad y compilar.
+- La cobertura actual de regresión es **estructural, no funcional**; crear pruebas reales de flujos de usuario y en smartphones/tablets antes del lanzamiento.
+- Prioridades sectoriales 2026: IA estratégica/agentes con aprobación humana, vídeos cortos, diseño editable en capas, social listening, búsqueda social, campañas guiadas por datos y colaboración con creadores; no sustituyen a módulos anteriores.
