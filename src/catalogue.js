@@ -69,7 +69,9 @@ export const catalogueSections = [
         "id": "CAT-010",
         "name": "Editor de imágenes y plantillas",
         "tier": "free",
-        "status": "demo"
+        "status": "local",
+        "localTab": "diseño",
+        "description": "Diseñador gráfico local funcional: plantillas, formatos y exportación PNG (sin edición por capas ni IA real)."
       },
       {
         "id": "CAT-011",
