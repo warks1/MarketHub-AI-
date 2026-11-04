@@ -15,7 +15,10 @@
     "public/logo.svg",
     "src/catalogue.js",
     "docs/MATRIZ_FREE_PRO.md",
-    "docs/COMPARATIVA_COMPETIDORES_2026.md"
+    "docs/COMPARATIVA_COMPETIDORES_2026.md",
+    "src/office.js",
+    "src/office.css",
+    "tests/office.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -229,6 +232,89 @@
         "Metricool",
         "Hootsuite",
         "HubSpot"
+      ]
+    },
+    {
+      "id": "OFF-01",
+      "label": "Oficina accesible desde menú",
+      "file": "src/app.js",
+      "tokens": [
+        "['oficina','Oficina de marketing'",
+        "case 'oficina':return officePage(state.plan)",
+        "officeClick(officeTarget"
+      ]
+    },
+    {
+      "id": "OFF-02",
+      "label": "Copys por plantillas",
+      "file": "src/office.js",
+      "tokens": [
+        "function copyTemplates(",
+        "office-copy-form",
+        "copys generados mediante plantillas locales"
+      ]
+    },
+    {
+      "id": "OFF-03",
+      "label": "CRM local y borrado seguro",
+      "file": "src/office.js",
+      "tokens": [
+        "function crmPage(",
+        "office-lead-form",
+        "window.confirm",
+        "lead-status"
+      ]
+    },
+    {
+      "id": "OFF-04",
+      "label": "Gestión de tareas",
+      "file": "src/office.js",
+      "tokens": [
+        "function tasksPage(",
+        "office-task-form",
+        "task-done"
+      ]
+    },
+    {
+      "id": "OFF-05",
+      "label": "Kit de marca",
+      "file": "src/office.js",
+      "tokens": [
+        "function brandPage(",
+        "office-brand-form",
+        "validHex"
+      ]
+    },
+    {
+      "id": "OFF-06",
+      "label": "Landing HTML exportable",
+      "file": "src/office.js",
+      "tokens": [
+        "function landingHTML(",
+        "office-landing-form",
+        "download-landing"
+      ]
+    },
+    {
+      "id": "OFF-07",
+      "label": "Calculadora de ROI y ROAS",
+      "file": "src/office.js",
+      "tokens": [
+        "function calculatorPage(",
+        "office-calc-form",
+        "ROAS",
+        "ROI"
+      ]
+    },
+    {
+      "id": "OFF-10",
+      "label": "Pruebas unitarias de oficina",
+      "file": "tests/office.test.mjs",
+      "tokens": [
+        "test('La calculadora",
+        "test('La landing",
+        "test('Los contactos",
+        "test('Generador de copys"
       ]
     }
   ]
