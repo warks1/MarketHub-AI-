@@ -11,9 +11,9 @@
 
 Para comprobar que no han desaparecido módulos estructurales fundamentales:
 
-\`\`\`bash
+```bash
 npm run check:continuity
-\`\`\`
+```
 
 Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionales.
 
