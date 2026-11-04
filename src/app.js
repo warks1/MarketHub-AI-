@@ -2,6 +2,8 @@ import './style.css';
 import { catalogueSections } from './catalogue.js';
 import './office.css';
 import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './office.js';
+import './growth.css';
+import {growthPage,growthOpenTab,growthClick,growthSubmit} from './growth.js';
 import './visual.css';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 
@@ -42,12 +44,12 @@ const icons={
 };
 function icon(name){return '<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[name]||icons.sparkles)+'</svg>'}
 const nav=[
- ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['diseño','Diseño gráfico','sparkles'],['crear','Crear / Programar','plus'],['oficina','Oficina de marketing','users'],['herramientas','Herramientas','bolt'],
+ ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['diseño','Diseño gráfico','sparkles'],['crear','Crear / Programar','plus'],['oficina','Oficina de marketing','users'],['laboratorio','Growth Lab','chart'],['herramientas','Herramientas','bolt'],
  ['campanas','Campañas','megaphone'],['analitica','Analítica','chart'],
  ['bandeja','Bandeja','inbox'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
 function sectionHeader(title,subtitle,action){
- return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.2.0</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
+ return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.3.0</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
 }
 function btn(text,action,klass='secondary',extra=''){return '<button class="'+klass+'" data-action="'+action+'" '+extra+'>'+text+'</button>'}
 function kpi(title,value,delta,symbol,glow){return '<div class="kpi" style="--glow:'+glow+'"><div class="kpi-label">'+safe(title)+'<span class="kpi-symbol">'+symbol+'</span></div><div class="kpi-value">'+safe(value)+'</div><div class="positive">↗ '+safe(delta)+' · ejemplo</div></div>'}
@@ -82,7 +84,7 @@ function rewardUnit(){
 function home(){
  const filtered=postsFiltered();
  return sectionHeader('Tu centro de marketing ✨','Crea, planifica y crece desde un solo lugar.',btn('Crear publicación '+icon('arrow'),'goto-crear','primary'))+
- '<div class="catalogue-cta">'+btn('🧰 Explorar todas las herramientas','goto-herramientas','secondary')+btn('✦ Abrir oficina de marketing','goto-oficina','primary')+btn('🎨 Crear diseño PNG','goto-diseño','secondary')+'</div>'+
+ '<div class="catalogue-cta">'+btn('🧰 Explorar todas las herramientas','goto-herramientas','secondary')+btn('✦ Abrir oficina de marketing','goto-oficina','primary') +btn('🚀 Growth Lab','goto-laboratorio','secondary')+btn('🎨 Crear diseño PNG','goto-diseño','secondary')+'</div>'+
  '<div class="grid kpis">'+kpi('Alcance','2,84 M','34,7%','◉','#00dfee45')+kpi('Interacciones','328,4 K','28,1%','♡','#e13ade45')+kpi('Leads','56,7 K','41,2%','♧','#846bff45')+kpi('ROI','4,9×','62,3%','↗','#b5fa3645')+'</div>'+
  '<div class="dashboard-grid"><div class="section-stack"><div class="card"><div class="card-head"><h2>📈 Rendimiento de redes</h2><span class="tag">Últimos 30 días</span></div>'+lines()+'</div><div class="card"><div class="card-head"><h2>📚 Próximos contenidos</h2>'+btn('Ver todos','goto-crear','secondary small-btn')+'</div><div class="line-list">'+(filtered.length?filtered.slice(0,4).map(postRow).join(''):'<div class="empty">No hay publicaciones que coincidan.</div>')+'</div></div>'+adUnit('mobile')+'</div>'+
  '<div class="section-stack"><div class="card ai-card"><div class="card-head"><h2>✦ Copiloto de IA</h2><span class="tag pink">Vista previa</span></div><div class="ai-wave"></div><p class="muted">Ideas, textos y recomendaciones estratégicas en una sola experiencia.</p><div class="line-list" style="margin:15px 0">'+['5 ideas para la próxima semana','Reutilizar un vídeo en varios formatos','Planificar contenido para Instagram'].map(t=>'<div class="list-row"><b>✦ '+t+'</b></div>').join('')+'</div>'+btn('Abrir estudio creativo','goto-estudio','primary full')+'</div>'+calendar()+rewardUnit()+adUnit('desktop')+'</div></div>';
@@ -135,7 +137,7 @@ function settings(){
  '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>';
 }
 function content(){
- switch(state.page){case 'estudio':return studio();case 'diseño':return visualPage();case 'crear':return create();case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');case 'herramientas':return toolsCatalogue();case 'campanas':return campaigns();case 'analitica':return analytics();case 'bandeja':return inbox();case 'planes':return plans();case 'ajustes':return settings();default:return home();}
+ switch(state.page){case 'estudio':return studio();case 'diseño':return visualPage();case 'crear':return create();case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');case 'laboratorio':return growthPage(state.plan)+adUnit('mobile')+adUnit('desktop');case 'herramientas':return toolsCatalogue();case 'campanas':return campaigns();case 'analitica':return analytics();case 'bandeja':return inbox();case 'planes':return plans();case 'ajustes':return settings();default:return home();}
 }
 function navButton(item,kind='side'){
  const cur=state.page===item[0];
@@ -165,6 +167,8 @@ function toast(msg){
 }
 function go(page){state.page=page;state.modal=null;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
+ const growthTarget=e.target.closest('[data-growth-action]');
+ if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=15){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
  const visualTarget=e.target.closest('[data-visual-action]');
  if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=15){toast('Límite de 15 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
  const officeTarget=e.target.closest('[data-office-action]');
@@ -206,6 +210,7 @@ document.addEventListener('click',e=>{
  }
 });
 document.addEventListener('submit',e=>{
+ if(e.target.id?.startsWith('growth-')){e.preventDefault();growthSubmit(e.target,state.plan,{refresh:render,toast});return}
  if(e.target.id?.startsWith('office-')){e.preventDefault();officeSubmit(e.target,state.plan,{refresh:render,toast});return}
  if(e.target.id!=='postForm')return;
  e.preventDefault();const form=new FormData(e.target);
@@ -229,7 +234,7 @@ document.addEventListener('input',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.modal){state.modal=null;render()}});
 function splash(){
  const overlay=document.createElement('div');overlay.className='splash';overlay.setAttribute('role','status');
- overlay.innerHTML='<div class="splash-content"><div class="eyebrow">NEXUS × PULSE · INICIANDO</div><div class="splash-orb"><img alt="" src="/logo.svg"></div><h1>MarketHub <span>AI</span></h1><p class="muted">Tu centro de marketing digital inteligente</p><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><p id="progressLabel" class="muted tiny">Preparando experiencia visual...</p><button class="splash-skip" id="skipSplash">Entrar ahora</button><div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI · Prototipo v0.2</div></div>';
+ overlay.innerHTML='<div class="splash-content"><div class="eyebrow">NEXUS × PULSE · INICIANDO</div><div class="splash-orb"><img alt="" src="/logo.svg"></div><h1>MarketHub <span>AI</span></h1><p class="muted">Tu centro de marketing digital inteligente</p><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><p id="progressLabel" class="muted tiny">Preparando experiencia visual...</p><button class="splash-skip" id="skipSplash">Entrar ahora</button><div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI · Prototipo v0.3</div></div>';
  document.body.append(overlay);
  let progress=0;const bar=overlay.querySelector('#progressFill'),label=overlay.querySelector('#progressLabel');
  const timer=setInterval(()=>{progress=Math.min(100,progress+10);bar.style.width=progress+'%';label.textContent='Cargando interfaz de demostración… '+progress+'%';if(progress===100)finish()},110);
