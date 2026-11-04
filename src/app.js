@@ -4,6 +4,7 @@ import './office.css';
 import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './office.js';
 import './growth.css';
 import {growthPage,growthOpenTab,growthClick,growthSubmit} from './growth.js';
+import {backupExport,backupImport,backupSettingsHTML} from './backup.js';
 import './visual.css';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 
@@ -134,7 +135,7 @@ function plans(){
 function settings(){
  return sectionHeader('Configuración','Personaliza la demostración de MarketHub AI.')+
  '<div class="two-cols"><div class="card"><div class="card-head"><h2>Cuenta y suscripción</h2></div><div class="switch-wrap"><div><b>Tu plan actual (demo)</b><p class="muted tiny">'+(state.plan==='pro'?'PRO · sin publicidad':'FREE · con publicidad')+'</p></div>'+btn('Ver planes','goto-planes','secondary small-btn')+'</div><div class="switch-wrap" style="margin-top:12px"><div><b>Créditos de ejemplo</b><p class="muted tiny">'+state.credits+' créditos guardados localmente</p></div><span class="tag">'+state.credits+'</span></div><div class="notice" style="margin-top:14px">Los datos se almacenan solo en este navegador. No hay cuenta, sincronización, publicidad real ni contratación activa.</div></div>'+
- '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>';
+ '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>'+backupSettingsHTML();
 }
 function content(){
  switch(state.page){case 'estudio':return studio();case 'diseño':return visualPage();case 'crear':return create();case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');case 'laboratorio':return growthPage(state.plan)+adUnit('mobile')+adUnit('desktop');case 'herramientas':return toolsCatalogue();case 'campanas':return campaigns();case 'analitica':return analytics();case 'bandeja':return inbox();case 'planes':return plans();case 'ajustes':return settings();default:return home();}
@@ -191,6 +192,7 @@ document.addEventListener('click',e=>{
  const tool=catalogueSections.flatMap(s=>s.tools).find(t=>t.id===target.dataset.tool);
  if(tool){state.selectedTool=tool;state.modal='tool-detail';render()}break;
  }
+ case 'backup-export':backupExport({toast});break;
  case 'format':state.videoFormat=state.videoFormat==='9:16'?'16:9':'9:16';render();break;
  case 'draft-from-studio':{
   const input=document.querySelector('#creativePrompt'),val=input?.value.trim();
@@ -221,7 +223,7 @@ document.addEventListener('submit',e=>{
  state.posts.unshift({id:Date.now(),title:title.slice(0,240),platform:String(form.get('platform')||'Instagram'),date:date,status:'Programada'});
  save();render();toast('Publicación guardada localmente. No se ha publicado en ninguna red.');
 });
-document.addEventListener('change',e=>{if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
+document.addEventListener('change',e=>{if(e.target.matches('[data-backup-import]')){backupImport(e.target.files?.[0],{toast}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
 document.addEventListener('input',e=>{
  if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}
  if(e.target.id==='toolSearch'){
