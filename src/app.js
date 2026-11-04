@@ -140,11 +140,16 @@ function navButton(item,kind='side'){
  const cur=state.page===item[0];
  return '<button class="'+(kind==='side'?'nav-btn':'')+'" data-page="'+item[0]+'" aria-label="'+safe(item[1])+'" '+(cur?'aria-current="page"':'')+'>'+icon(item[2])+'<span>'+safe(item[1])+'</span></button>';
 }
+function mobileDrawer(){
+ const links=nav.map(item=>'<button class="mobile-drawer-link" data-page="'+item[0]+'" '+(state.page===item[0]?'aria-current="page"':'')+'>'+icon(item[2])+'<span>'+safe(item[1])+'</span></button>').join('');
+ return '<div class="mobile-menu-backdrop" data-action="close-mobile-menu"></div><section class="mobile-menu-drawer" role="dialog" aria-modal="true" aria-label="Todas las secciones"><div class="mobile-menu-head"><h2>Todas las herramientas</h2>'+btn('Cerrar','close-mobile-menu','secondary small-btn')+'</div><nav class="mobile-drawer-grid" aria-label="Todas las secciones">'+links+'</nav></section>';
+}
 function render(){
  const side=nav.map(n=>navButton(n)).join('');
- const mob=[nav[0],nav[1],nav[2],nav.find(n=>n[0]==='herramientas'),nav[5],nav[7]].map(n=>navButton(n,'bottom')).join('');
+ const quickIds=['inicio','estudio','diseño','crear','herramientas'];
+ const mob=quickIds.map(id=>nav.find(n=>n[0]===id)).filter(Boolean).map(n=>navButton(n,'bottom')).join('')+'<button type="button" class="mobile-more-button" data-action="show-mobile-menu" aria-label="Abrir todas las herramientas" aria-expanded="'+state.menuMore+'">'+icon('plus')+'<span>Más</span></button>';
  app.innerHTML='<div class="app-shell"><aside class="sidebar"><div class="brand"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><nav class="nav" aria-label="Navegación principal">'+side+'</nav><div class="sidebar-bottom"><div class="plan-widget"><span class="eyebrow">✦ TU PLAN '+state.plan.toUpperCase()+'</span><h3>'+ (state.plan==='free'?'Haz crecer tus ideas':'Sin anuncios, más enfoque')+'</h3><p>'+(state.plan==='free'?'Accede a las funciones PRO y elimina la publicidad.':'Experiencia PRO activada en la demostración.')+'</p><div style="margin-top:13px">'+btn('Ver suscripción '+icon('arrow'),'goto-planes','primary full')+'</div></div></div></aside>'+
- '<main id="main" class="workspace"><header class="topbar"><div class="brand"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones de demo..." value="'+safe(state.search)+'"><div class="topbar-right"><button class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · SIN ANUNCIOS':'FREE · CON ANUNCIOS')+'</button><div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div><nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+(state.modal?modalHTML():'');
+ '<main id="main" class="workspace"><header class="topbar"><div class="brand"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones de demo..." value="'+safe(state.search)+'"><div class="topbar-right"><button class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · SIN ANUNCIOS':'FREE · CON ANUNCIOS')+'</button><div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div><nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+(state.modal?modalHTML():'')+(state.menuMore?mobileDrawer():'');
  if(state.page==='diseño')visualMount();
 }
 function modalHTML(){
@@ -162,7 +167,7 @@ function toast(msg){
  const elem=document.createElement('div');elem.className='toast';elem.setAttribute('role','status');elem.textContent=msg;document.body.append(elem);
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>elem.remove(),3300);
 }
-function go(page){state.page=page;state.modal=null;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
+function go(page){state.page=page;state.modal=null;state.menuMore=false;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
  const growthTarget=e.target.closest('[data-growth-action]');
  if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=15){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
@@ -188,6 +193,8 @@ document.addEventListener('click',e=>{
  const tool=catalogueSections.flatMap(s=>s.tools).find(t=>t.id===target.dataset.tool);
  if(tool){state.selectedTool=tool;state.modal='tool-detail';render()}break;
  }
+ case 'show-mobile-menu':state.menuMore=true;render();break;
+ case 'close-mobile-menu':state.menuMore=false;render();break;
  case 'backup-export':backupExport({toast});break;
  case 'format':state.videoFormat=state.videoFormat==='9:16'?'16:9':'9:16';render();break;
  case 'draft-from-studio':{
@@ -230,7 +237,7 @@ document.addEventListener('input',e=>{
   if(state.page==='inicio'||state.page==='crear'){const start=e.target.selectionStart;render();const input=document.querySelector('#globalSearch');if(input){input.focus();input.setSelectionRange(start,start)}}
  }
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.modal){state.modal=null;render()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(state.menuMore){state.menuMore=false;render()}else if(state.modal){state.modal=null;render()}}});
 function splash(){
  const overlay=document.createElement('div');overlay.className='splash';overlay.setAttribute('role','status');
  overlay.innerHTML='<div class="splash-content"><div class="eyebrow">NEXUS × PULSE · INICIANDO</div><div class="splash-orb"><img alt="" src="./logo.svg"></div><h1>MarketHub <span>AI</span></h1><p class="muted">Tu centro de marketing digital inteligente</p><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><p id="progressLabel" class="muted tiny">Preparando experiencia visual...</p><button class="splash-skip" id="skipSplash">Entrar ahora</button><div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI · Prototipo v0.3</div></div>';
