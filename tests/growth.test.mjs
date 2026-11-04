@@ -83,7 +83,7 @@ test('Una UTM con parámetros anteriores evita duplicados y borra opcionales aus
 
 test('La calculadora SEO es orientativa y produce hallazgos verificables',()=>{
  const r=analyzeCaption('Descubre nuestros nuevos productos para esta temporada. Reserva ahora. #marketing','productos','Instagram');
- assert.equal(r.charCount,77);
+ assert.equal(r.charCount,81);
  assert.equal(r.tagCount,1);
  assert.equal(r.score,100);
  assert.deepEqual(r.findings.length,1);
