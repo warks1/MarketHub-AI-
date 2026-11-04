@@ -14,7 +14,8 @@
     "android:open": "npm run mobile:sync && npx cap open android",
     "ios:open": "npm run mobile:sync && npx cap open ios",
     "test:office": "node --test tests/office.test.mjs",
-    "test": "npm run check:continuity && npm run test:office"
+    "test": "npm run check:continuity && node --test tests/*.test.mjs",
+    "test:visual": "node --test tests/visual.test.mjs"
   },
   "dependencies": {
     "@capacitor/core": "^8.5.0",
