@@ -27,8 +27,8 @@ jobs:
           node-version: '22'
       - name: Instalar dependencias
         run: npm install --no-audit --no-fund
-      - name: Verificar conservación estructural
-        run: npm run check:continuity
+      - name: Ejecutar pruebas funcionales y de continuidad
+        run: npm test
       - name: Compilar interfaz
         run: npm run build
       - name: Guardar web compilada
@@ -55,8 +55,8 @@ jobs:
         uses: android-actions/setup-android@v3
       - name: Instalar dependencias
         run: npm install --no-audit --no-fund
-      - name: Verificar conservación estructural
-        run: npm run check:continuity
+      - name: Ejecutar pruebas funcionales y de continuidad
+        run: npm test
       - name: Compilar y generar proyecto Android
         run: |
           npm run build
