@@ -21,7 +21,12 @@
     "tests/office.test.mjs",
     "src/growth.js",
     "src/growth.css",
-    "tests/growth.test.mjs"
+    "tests/growth.test.mjs",
+    "src/visual.js",
+    "src/visual.css",
+    "tests/visual.test.mjs",
+    "src/backup.js",
+    "tests/backup.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -400,6 +405,74 @@
         "test('URL con parámetros UTM",
         "test('Plantilla de email",
         "test('Link en bio"
+      ]
+    },
+    {
+      "id": "VIS-01",
+      "label": "Diseñador gráfico PNG y navegación preservados",
+      "file": "src/app.js",
+      "tokens": [
+        "['diseño','Diseño gráfico'",
+        "case 'diseño':return visualPage()",
+        "visualMount()"
+      ]
+    },
+    {
+      "id": "VIS-02",
+      "label": "Exportación PNG funcional y cuatro formatos",
+      "file": "src/visual.js",
+      "tokens": [
+        "export function visualPage()",
+        "export function drawVisual",
+        "export function visualClick",
+        "canvas.toBlob",
+        "'9:16'",
+        "'4:5'",
+        "'1:1'",
+        "'16:9'"
+      ]
+    },
+    {
+      "id": "VIS-03",
+      "label": "Pruebas del diseñador en Node",
+      "file": "tests/visual.test.mjs",
+      "tokens": [
+        "test('Dibuja un diseño",
+        "test('Cambiar formato",
+        "test('Escapa los valores"
+      ]
+    },
+    {
+      "id": "BACK-01",
+      "label": "Copia unificada de módulos sin nube",
+      "file": "src/backup.js",
+      "tokens": [
+        "markethub-ai-demo-v1",
+        "markethub-ai-office-v1",
+        "markethub-ai-visual-v1",
+        "markethub-growth-local-v1",
+        "export function validateBackup",
+        "export async function backupImport"
+      ]
+    },
+    {
+      "id": "BACK-02",
+      "label": "Copia integrada en ajustes",
+      "file": "src/app.js",
+      "tokens": [
+        "backupSettingsHTML",
+        "backupExport({toast})",
+        "backupImport(e.target.files"
+      ]
+    },
+    {
+      "id": "BACK-03",
+      "label": "Pruebas de copia, recuperación y seguridad",
+      "file": "tests/backup.test.mjs",
+      "tokens": [
+        "validateBackup",
+        "backupImport",
+        "test("
       ]
     }
   ]
