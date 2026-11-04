@@ -142,6 +142,7 @@ function brandPage(){
  '<button type="submit" class="primary full">Guardar kit de marca</button></form>')+
  card('Identidad visual','<div class="workspace-brand-preview" style="--brand-primary:'+validHex(b.primary)+';--brand-accent:'+validHex(b.accent)+'"><span class="eyebrow">TU IDENTIDAD</span><h2>'+esc(b.name||'Nueva marca')+'</h2><p>'+esc(b.tagline||'Tu próximo gran proyecto.')+'</p><div class="workspace-brand-swatches"><i style="background:'+validHex(b.primary)+'"></i><i style="background:'+validHex(b.accent)+'"></i><span>'+esc(b.tone)+'</span></div></div><p class="tiny muted" style="margin-top:12px">Este kit se guarda de forma local y sirve de referencia para tus copys y landings.</p>')+'</div>';
 }
+export function officeOpenTab(tab){if(tabs.some(t=>t[0]===tab))active=tab}
 export function officePage(plan){
  const nav='<div class="workspace-tabs" role="navigation" aria-label="Herramientas de oficina">'+tabs.map(t=>'<button type="button" aria-current="'+(active===t[0]?'page':'false')+'" data-office-action="tab-'+t[0]+'">'+t[2]+' '+t[1]+'</button>').join('')+'</div>';
  let content=active==='copys'?copiesPage():active==='crm'?crmPage(plan):active==='tareas'?tasksPage(plan):active==='landing'?landingPage():active==='calculadora'?calculatorPage():active==='marca'?brandPage():overview(plan);
