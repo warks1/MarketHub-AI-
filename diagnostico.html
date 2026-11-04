@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1332"><title>Diagnóstico MarketHub AI</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:15px system-ui,-apple-system,sans-serif;background:#090f2d;color:#f4f6ff}
+main{margin:0 auto;max-width:740px;padding:36px 20px 70px}
+h1{font-size:clamp(28px,6vw,44px);letter-spacing:-.03em;margin:15px 0}
+p{line-height:1.65;color:#c2d0e8}
+.card{border:1px solid #384c7f;border-radius:17px;background:#142144;padding:18px;margin-top:16px}
+.status{font-weight:700;margin:12px 0}.ok{color:#9bfdba}.bad{color:#ff9ca7}.pending{color:#ffda90}
+a,button{display:inline-block;border:1px solid #8666c5;background:#30255f;color:white;border-radius:12px;padding:13px 17px;text-decoration:none;font-weight:700;margin-top:14px;margin-right:7px}
+code{word-break:break-word;color:#adddec}
+small{color:#a9b8d5}
+</style>
+</head>
+<body><main>
+<span style="color:#8feeff;font-size:12px;letter-spacing:.15em">MARKETHUB AI · REPARACIÓN DE ARRANQUE</span>
+<h1>Diagnóstico de la aplicación</h1>
+<p>Esta página no depende del motor de la aplicación. Comprueba los archivos necesarios sin borrar borradores ni preferencias. Su aspecto oscuro permite confirmar que está cargando la versión nueva.</p>
+<div class="card"><strong>Estado de la publicación</strong><div class="status pending" id="overall">Revisando archivos…</div><small>Versión de diagnóstico 2026-11-04 · GitHub Pages</small></div>
+<div class="card"><strong>Comprobación de recursos</strong><div id="results"><p>Iniciando comprobación de conectividad…</p></div></div>
+<div class="card"><strong>Dirección verificada</strong><p><code id="address"></code></p><p id="tip">Si algún archivo aparece como no disponible, la versión publicada está incompleta o desactualizada.</p></div>
+<a href="./?reparacion=20261104" rel="nofollow">Abrir MarketHub AI</a><button onclick="location.reload()">Repetir comprobación</button>
+</main>
+<script>
+document.getElementById('address').textContent=location.href;
+const files=['./index.html','./src/app.js','./src/catalogue.js','./src/office.js','./src/growth.js','./src/visual.js','./src/backup.js','./src/style.css','./src/office.css','./src/growth.css','./src/visual.css','./logo.svg','./manifest.webmanifest'];
+const results=document.getElementById('results'),overall=document.getElementById('overall');
+Promise.all(files.map(async file=>{
+ try{
+  const response=await fetch(file+'?check=20261104',{cache:'no-store'});
+  const type=response.headers.get('content-type')||'desconocido';
+  const isJS=file.endsWith('.js'),isCSS=file.endsWith('.css');
+  const good=response.ok&&(!isJS||/javascript|ecmascript/.test(type))&&(!isCSS||/css/.test(type));
+  return {file,good,code:response.status,type};
+ }catch(err){return {file,good:false,code:'error',type:String(err).slice(0,120)}}
+})).then(items=>{
+ results.replaceChildren();
+ for(const r of items){
+  const p=document.createElement('p');p.className=r.good?'ok':'bad';
+  p.textContent=(r.good?'✓ ':'✕ ')+r.file+' — '+r.code+' ('+r.type+')';
+  results.appendChild(p);
+ }
+ const failures=items.filter(x=>!x.good);
+ if(failures.length){overall.className='status bad';overall.textContent=failures.length+' recurso(s) no disponible(s) o con formato incorrecto';}
+ else{overall.className='status ok';overall.textContent='Todos los recursos principales responden correctamente';}
+}).catch(err=>{overall.className='status bad';overall.textContent='No se pudo completar el diagnóstico: '+err.message});
+</script></body></html>
