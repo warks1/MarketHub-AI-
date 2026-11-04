@@ -61,7 +61,9 @@ export const catalogueSections = [
         "id": "CAT-009",
         "name": "Generador de ideas y copys",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "localTab": "copys",
+        "description": "Genera tres propuestas de texto mediante plantillas sin usar IA externa."
       },
       {
         "id": "CAT-010",
@@ -73,7 +75,9 @@ export const catalogueSections = [
         "id": "CAT-011",
         "name": "Kit de marca",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "localTab": "marca",
+        "description": "Guarda colores, nombre, eslogan y tono de una marca en el navegador."
       },
       {
         "id": "CAT-012",
@@ -331,7 +335,9 @@ export const catalogueSections = [
         "id": "CAT-050",
         "name": "ROI y ROAS",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "localTab": "calculadora",
+        "description": "Calcula ROI, ROAS y costes usando cifras introducidas manualmente."
       },
       {
         "id": "CAT-051",
@@ -367,7 +373,9 @@ export const catalogueSections = [
         "id": "CAT-055",
         "name": "CRM de contactos",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "localTab": "crm",
+        "description": "Contactos de prueba guardados en este dispositivo, con estados editables."
       },
       {
         "id": "CAT-056",
@@ -379,7 +387,9 @@ export const catalogueSections = [
         "id": "CAT-057",
         "name": "Landing pages",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "localTab": "landing",
+        "description": "Diseña y descarga una página HTML estática de captación."
       },
       {
         "id": "CAT-058",
@@ -499,7 +509,9 @@ export const catalogueSections = [
         "id": "CAT-075",
         "name": "Tareas y proyectos",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "localTab": "tareas",
+        "description": "Lista local de tareas con fechas, prioridades y seguimiento."
       },
       {
         "id": "CAT-076",
