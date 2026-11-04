@@ -196,3 +196,17 @@ Estas funciones son **utilizables localmente en navegador** y se añaden a las a
 - **MOB-02:** mantener cinco accesos rápidos y el menú «Más» con **todas las secciones** (actualmente doce).
 - **MOB-03:** el menú «Más» debe funcionar con botón, cierre y tecla Escape, y ofrecer entrada a módulos aunque no aparezcan en la barra inferior.
 - **MOB-04:** añadir pruebas de regresión de navegación, conservar acceso desde móvil, tablet y PC y no degradar accesibilidad.
+
+
+## Q. Innovación continua y nuevas capacidades · noviembre 2026
+
+- **VIS-01** Editor gráfico real de navegador: cuatro formatos, textos, estilos, colores, foto de sesión y exportación PNG; preservarlo en cada refactor. La herramienta sigue siendo simple, no un editor por capas ni IA generativa.
+- **BACK-01** Copias JSON versionadas de los cuatro almacenes locales (borradores, oficina, diseño y Growth Lab); restauración con confirmación previa y validación básica, con advertencia de sobrescritura y de ausencia de cifrado.
+- **RADAR-01** Copiloto y agentes de marketing conscientes del contexto del CRM, con explicaciones, datos de origen, control de créditos y aprobación humana antes de actuar.
+- **RADAR-02** AEO (optimización para motores de respuesta de IA), además del SEO tradicional y social.
+- **RADAR-03** Imagen a vídeo y edición de animación, timeline multicapa, doblaje, subtítulos y exportación de calidad.
+- **RADAR-04** Escucha social avanzada y alertas de reputación con datos realmente autorizados.
+- **RADAR-05** Flujos conectados a CRM, publicidad, contenido y email, con consentimiento, roles y simulación de costes.
+- **RADAR-06** Evaluación trimestral de plataformas, tendencias y SDKs sin retirar funciones anteriores.
+
+Referencias y fechas: [RADAR_TECNOLOGICO_2026.md](RADAR_TECNOLOGICO_2026.md).

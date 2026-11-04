@@ -1,5 +1,13 @@
 # Registro de cambios — MarketHub AI
 
+## 2026-11-04 — Integración visual, backup e innovación sectorial
+- Diseñador PNG local de formatos sociales y acceso móvil a todos los módulos.
+- Copia JSON versionada unificada con validación y restauración confirmada.
+- Pruebas automatizadas de Oficina, Growth Lab, diseño gráfico, navegación y backup; la compilación nativa queda pendiente de verificación.
+- Investigación verificada de IA contextual, AEO, imagen a vídeo, social listening y nuevas integraciones autorizadas.
+- Sin borrar funcionalidades previas; integraciones comerciales aún pendientes.
+
+
 ## 2026-11-04 — v0.3.1 Seguridad local y navegación móvil
 
 - Añadida copia local conjunta de los cuatro módulos del prototipo y restauración explícita, sin borrar automáticamente módulos ausentes del archivo.

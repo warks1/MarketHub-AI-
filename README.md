@@ -1,5 +1,7 @@
 # MarketHub AI · NEXUS × PULSE
 
+**Estado actual: prototipo v0.3.0. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
 - [ESPECIFICACIONES MAESTRAS — todos los requisitos acumulados](docs/ESPECIFICACIONES_MAESTRAS.md)

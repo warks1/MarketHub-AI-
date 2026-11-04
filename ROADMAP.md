@@ -105,3 +105,16 @@ Referencia: [MATRIZ_FREE_PRO.md](docs/MATRIZ_FREE_PRO.md).
 - [ ] Verificación manual en varios modelos de iPhone, iPad, Android y tablets Android.
 - [ ] Sincronización y copias remotas cifradas para datos reales, con auditoría y recuperación.
 - [ ] Accesibilidad del diálogo móvil comprobada con VoiceOver/TalkBack.
+
+
+## Radar de innovación 2026 — ampliación sin eliminar módulos
+
+Se mantiene como referencia el estudio [RADAR_TECNOLOGICO_2026.md](docs/RADAR_TECNOLOGICO_2026.md), verificado el 4-11-2026.
+
+- [x] Prototipo móvil, Oficina local, Growth Lab, PNG y backups locales con pruebas Node.
+- [ ] Conexión segura de perfiles sociales, permisos y publicación autorizada de contenido.
+- [ ] IA contextual con CRM, confirmaciones, referencias y coste de créditos visible.
+- [ ] AEO, SEO social, escucha/sentimiento y análisis de competidores con datos legítimos.
+- [ ] Imagen→vídeo y editor audiovisual real por capas, con derechos y cuotas.
+- [ ] Agentes supervisados para campañas, CRM y automatizaciones, sin gasto autónomo no aprobado.
+- [ ] Apps Android/iOS probadas en dispositivos físicos y suscripciones/anuncios reales aprobados.
