@@ -2,6 +2,8 @@ import './style.css';
 import { catalogueSections } from './catalogue.js';
 import './office.css';
 import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './office.js';
+import './visual.css';
+import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -40,7 +42,7 @@ const icons={
 };
 function icon(name){return '<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[name]||icons.sparkles)+'</svg>'}
 const nav=[
- ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['crear','Crear / Programar','plus'],['oficina','Oficina de marketing','users'],['herramientas','Herramientas','bolt'],
+ ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['diseño','Diseño gráfico','sparkles'],['crear','Crear / Programar','plus'],['oficina','Oficina de marketing','users'],['herramientas','Herramientas','bolt'],
  ['campanas','Campañas','megaphone'],['analitica','Analítica','chart'],
  ['bandeja','Bandeja','inbox'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
@@ -80,7 +82,7 @@ function rewardUnit(){
 function home(){
  const filtered=postsFiltered();
  return sectionHeader('Tu centro de marketing ✨','Crea, planifica y crece desde un solo lugar.',btn('Crear publicación '+icon('arrow'),'goto-crear','primary'))+
- '<div class="catalogue-cta">'+btn('🧰 Explorar todas las herramientas','goto-herramientas','secondary')+btn('✦ Abrir oficina de marketing','goto-oficina','primary')+'</div>'+
+ '<div class="catalogue-cta">'+btn('🧰 Explorar todas las herramientas','goto-herramientas','secondary')+btn('✦ Abrir oficina de marketing','goto-oficina','primary')+btn('🎨 Crear diseño PNG','goto-diseño','secondary')+'</div>'+
  '<div class="grid kpis">'+kpi('Alcance','2,84 M','34,7%','◉','#00dfee45')+kpi('Interacciones','328,4 K','28,1%','♡','#e13ade45')+kpi('Leads','56,7 K','41,2%','♧','#846bff45')+kpi('ROI','4,9×','62,3%','↗','#b5fa3645')+'</div>'+
  '<div class="dashboard-grid"><div class="section-stack"><div class="card"><div class="card-head"><h2>📈 Rendimiento de redes</h2><span class="tag">Últimos 30 días</span></div>'+lines()+'</div><div class="card"><div class="card-head"><h2>📚 Próximos contenidos</h2>'+btn('Ver todos','goto-crear','secondary small-btn')+'</div><div class="line-list">'+(filtered.length?filtered.slice(0,4).map(postRow).join(''):'<div class="empty">No hay publicaciones que coincidan.</div>')+'</div></div>'+adUnit('mobile')+'</div>'+
  '<div class="section-stack"><div class="card ai-card"><div class="card-head"><h2>✦ Copiloto de IA</h2><span class="tag pink">Vista previa</span></div><div class="ai-wave"></div><p class="muted">Ideas, textos y recomendaciones estratégicas en una sola experiencia.</p><div class="line-list" style="margin:15px 0">'+['5 ideas para la próxima semana','Reutilizar un vídeo en varios formatos','Planificar contenido para Instagram'].map(t=>'<div class="list-row"><b>✦ '+t+'</b></div>').join('')+'</div>'+btn('Abrir estudio creativo','goto-estudio','primary full')+'</div>'+calendar()+rewardUnit()+adUnit('desktop')+'</div></div>';
@@ -97,7 +99,7 @@ function toolsCatalogue(){
  '<div class="card catalogue-controls"><label class="eyebrow" for="toolSearch">Buscar herramientas</label><input class="input catalogue-search" id="toolSearch" placeholder="IA, vídeo, SEO, CRM, anuncios..." value="'+safe(state.toolsQuery)+'"><div class="catalogue-filters" role="group" aria-label="Filtrar herramientas">'+filterBar+'</div></div><div class="section-stack">'+(modules||'<div class="card empty">Sin coincidencias</div>')+'</div>';
 }
 function studio(){
- return sectionHeader('Estudio creativo IA ✨','Crea contenido visual, vídeo y campañas. Editor ilustrativo; sin generación IA conectada.',btn('Programar este diseño','goto-crear','primary'))+
+ return sectionHeader('Estudio creativo IA ✨','Crea contenido visual, vídeo y campañas. Editor ilustrativo; sin generación IA conectada.',btn('🎨 Abrir diseñador PNG real','goto-diseño','primary'))+
  '<div class="studio-grid"><div class="card"><div class="card-head"><h2>Herramientas</h2></div><div class="tool-list studio-toolbox">'+['Video / Reels','Imagen','Diseño','Texto / Copy','Voz IA','Plantillas'].map(t=>'<button data-mode="'+safe(t)+'" aria-pressed="'+(state.creativeMode===t)+'">'+(t==='Video / Reels'?'▶ ':t==='Imagen'?'▧ ':'✦ ')+t+'</button>').join('')+'</div><div class="tip" style="margin-top:15px">Una misma campaña, múltiples formatos. La generación real será una integración posterior.</div></div>'+
  '<div class="card"><div class="card-head"><h2>🎬 Vista previa · '+safe(state.creativeMode)+'</h2><div>'+btn(state.videoFormat==='9:16'?'Horizontal 16:9':'Vertical 9:16','format','secondary small-btn')+'</div></div><div class="preview-wrap"><div class="video-preview '+(state.videoFormat==='16:9'?'horizontal':'')+'"><div class="preview-badge">'+safe(state.videoFormat)+' · DEMO</div><div class="video-play">'+icon('play')+'</div><div class="video-label">TU PRÓXIMO<br>GRAN LANZAMIENTO</div></div></div><div class="timeline"><div class="card-head"><h2>Línea de tiempo</h2><span class="tiny muted">00:00 / 00:28 · demo</span></div><div class="timeline-bar"></div><div class="audio-track"></div></div></div>'+
  '<div class="card studio-aside"><div class="card-head"><h2>✦ IA Creativa</h2><span class="tag pink">Prototipo</span></div><div class="form-field"><label for="creativePrompt">Describe tu contenido</label><textarea class="input" id="creativePrompt" placeholder="Ej.: Anuncio dinámico de un lanzamiento para Instagram..."></textarea></div>'+btn('Crear borrador con mi idea','draft-from-studio','primary full')+'<p class="tiny muted" style="margin-top:10px">Crea un borrador local a partir de tu texto. No envía datos ni llama a una IA.</p><div class="card-head" style="margin-top:24px"><h2>Opciones del estudio</h2></div><div class="studio-tools-grid">'+['Subtítulos IA','Voz en off','Recortar','Redimensionar','Estilos','Exportar'].map(t=>'<button data-action="studio-unavailable">'+t+'</button>').join('')+'</div></div></div>';
@@ -133,7 +135,7 @@ function settings(){
  '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>';
 }
 function content(){
- switch(state.page){case 'estudio':return studio();case 'crear':return create();case 'oficina':return officePage(state.plan);case 'herramientas':return toolsCatalogue();case 'campanas':return campaigns();case 'analitica':return analytics();case 'bandeja':return inbox();case 'planes':return plans();case 'ajustes':return settings();default:return home();}
+ switch(state.page){case 'estudio':return studio();case 'diseño':return visualPage();case 'crear':return create();case 'oficina':return officePage(state.plan);case 'herramientas':return toolsCatalogue();case 'campanas':return campaigns();case 'analitica':return analytics();case 'bandeja':return inbox();case 'planes':return plans();case 'ajustes':return settings();default:return home();}
 }
 function navButton(item,kind='side'){
  const cur=state.page===item[0];
@@ -144,6 +146,7 @@ function render(){
  const mob=[nav[0],nav[1],nav[2],nav.find(n=>n[0]==='herramientas'),nav[5],nav[7]].map(n=>navButton(n,'bottom')).join('');
  app.innerHTML='<div class="app-shell"><aside class="sidebar"><div class="brand"><img src="/logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><nav class="nav" aria-label="Navegación principal">'+side+'</nav><div class="sidebar-bottom"><div class="plan-widget"><span class="eyebrow">✦ TU PLAN '+state.plan.toUpperCase()+'</span><h3>'+ (state.plan==='free'?'Haz crecer tus ideas':'Sin anuncios, más enfoque')+'</h3><p>'+(state.plan==='free'?'Accede a las funciones PRO y elimina la publicidad.':'Experiencia PRO activada en la demostración.')+'</p><div style="margin-top:13px">'+btn('Ver suscripción '+icon('arrow'),'goto-planes','primary full')+'</div></div></div></aside>'+
  '<main id="main" class="workspace"><header class="topbar"><div class="brand"><img src="/logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones de demo..." value="'+safe(state.search)+'"><div class="topbar-right"><button class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · SIN ANUNCIOS':'FREE · CON ANUNCIOS')+'</button><div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div><nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+(state.modal?modalHTML():'');
+ if(state.page==='diseño')visualMount();
 }
 function modalHTML(){
  let head='',body='',foot='';
@@ -162,6 +165,8 @@ function toast(msg){
 }
 function go(page){state.page=page;state.modal=null;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
+ const visualTarget=e.target.closest('[data-visual-action]');
+ if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=15){toast('Límite de 15 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
  const officeTarget=e.target.closest('[data-office-action]');
  if(officeTarget&&officeClick(officeTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=15){toast('Límite de 15 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a los borradores locales.')}}))return;
  const page=e.target.closest('[data-page]');
@@ -175,7 +180,7 @@ document.addEventListener('click',e=>{
  if(action.startsWith('goto-')){go(action.slice(5));return}
  switch(action){
  case 'catalogue-open-local':{
-  if(state.selectedTool?.localTab){officeOpenTab(state.selectedTool.localTab);go('oficina')}break;
+  if(state.selectedTool?.localTab){if(state.selectedTool.localTab==='diseño')go('diseño');else{officeOpenTab(state.selectedTool.localTab);go('oficina')}}break;
  }
  case 'catalogue-tool':{
  const tool=catalogueSections.flatMap(s=>s.tools).find(t=>t.id===target.dataset.tool);
@@ -210,8 +215,9 @@ document.addEventListener('submit',e=>{
  state.posts.unshift({id:Date.now(),title:title.slice(0,240),platform:String(form.get('platform')||'Instagram'),date:date,status:'Programada'});
  save();render();toast('Publicación guardada localmente. No se ha publicado en ninguna red.');
 });
-document.addEventListener('change',e=>{if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
+document.addEventListener('change',e=>{if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
 document.addEventListener('input',e=>{
+ if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}
  if(e.target.id==='toolSearch'){
   state.toolsQuery=e.target.value;const pos=e.target.selectionStart;render();const input=document.querySelector('#toolSearch');if(input){input.focus();input.setSelectionRange(pos,pos)}return;
  }
