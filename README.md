@@ -1,49 +1,67 @@
 # MarketHub AI · NEXUS × PULSE
 
-Prototipo interactivo para la aplicación de marketing digital y redes sociales **MarketHub AI**.
+Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-## Estado del proyecto
+**Estado: v0.1.0 · PROTOTIPO INTERACTIVO · NO PRODUCCIÓN.**
 
-**Versión 0.1.0 · Prototipo visual interactivo (no producción)**
+## Inicio rápido
 
-El objetivo es construir una plataforma multiplataforma (web, iPhone y Android) para creación de contenido, planificación y publicación en redes, marketing digital, analítica, automatizaciones y asistencia por IA.
+Necesitas Node.js 22 o posterior (y sus herramientas de desarrollo para Android/iOS si compilas una app nativa).
 
-## Arrancar
+```bash
+npm install
+npm run dev
+```
 
-Abrir `index.html` en cualquier navegador actual. Sin dependencias ni claves privadas. El diseño se adapta a escritorio y móvil.
+Abre la dirección local que indique Vite. Para generar una versión web distribuible:
 
-## Qué incluye la v0.1
+```bash
+npm run build
+npm run preview
+```
 
-- Identidad NEXUS × PULSE: interfaz oscura, neón cian/magenta/violeta, tarjetas de analítica.
-- Pantalla de entrada animada y accesible (se puede saltar).
-- Panel de control, estudio creativo, calendario, campañas, analítica, bandeja y ajustes.
-- Crear borradores y programar contenidos **de demostración**, guardados localmente en el navegador.
-- Modos FREE y PRO de demostración, con anuncios de ejemplo **solo en FREE**.
-- Pantalla de suscripciones con precio **provisional de 29,90 €/mes**.
-- Vista responsive para ordenador, tableta y móvil.
+### Android (requiere Android Studio + SDK)
 
-## Límites importantes
+```bash
+npm install
+npm run build
+npm run android:init
+npm run android:open
+```
 
-**La aplicación todavía NO conecta servicios externos.** No publica en redes reales, no genera contenido mediante modelos de IA, no vende suscripciones, no muestra anuncios de pago y no ingresa dinero. Todos los gráficos y cifras son datos ficticios marcados como demostración. Las recompensas publicitarias y el cambio de plan son simulados y no están protegidos por un servidor.
+### iPhone / iPad (requiere un Mac con Xcode)
 
-Para operar comercialmente: backend seguro y autenticación, OAuth y APIs de plataformas sociales, control de cuotas de IA en servidor, suscripciones con verificación de recibos, red publicitaria aprobada, CMP/privacidad conforme a RGPD, analítica real, facturación y pruebas.
+```bash
+npm install
+npm run build
+npm run ios:init
+npm run ios:open
+```
 
-## Monetización prevista
+Una vez creados los proyectos nativos, tras cambiar el código web usa `npm run mobile:sync`. Las carpetas nativas se generan con Capacitor y deben revisarse, probarse y versionarse una vez configuradas para las tiendas. **No se incluyen APK, AAB ni IPA firmados, ni apps publicadas.**
 
-- **FREE**: acceso básico, publicidad identificada y anuncios recompensados voluntarios.
-- **PRO**: suscripción mensual, sin anuncios, herramientas avanzadas, límites justos y transparentes.
-- Web: investigar AdSense u otra red autorizada.
-- iOS/Android: AdMob con integraciones nativas y consentimiento previo cuando corresponda.
-- No colocar anuncios durante la edición ni engañar al usuario con falsos contenidos patrocinados.
+## Funciones ya visibles en v0.1
 
-## Próximas etapas
+- Identidad NEXUS + PULSE: cian, magenta, violeta y neón.
+- Pantalla de carga animada, saltable y adaptable a movimiento reducido.
+- Panel principal, estudio creativo ilustrativo, campañas, analítica, bandeja y ajustes.
+- Crear y programar **borradores locales** con fecha; no publica en redes reales.
+- Editor conceptual de vídeo 9:16 y 16:9, sin exportación audiovisual.
+- Modo FREE con espacios publicitarios ficticios y créditos de ejemplo.
+- Modo PRO activable sin pagar en demo; desaparecen los espacios de anuncios.
+- Responsive para smartphones, tablets y escritorios; shell de Capacitor preparado.
 
-1. Persistencia y autenticación seguras + separación multiusuario.
-2. Integraciones y publicación reales vía OAuth/API oficiales.
-3. Estudio de IA y cuotas verificadas en backend.
-4. Suscripción real y anuncios de prueba con cumplimiento de privacidad.
-5. Tests, accesibilidad, rendimiento y apps móviles.
+**Los números, campañas, mensajes y gráficas del prototipo son inventados y se etiquetan como demostración.** No existen cuentas reales conectadas ni generación de IA activa. Las recompensas son ficticias y no se cargan anuncios.
+
+## Monetización futura
+
+FREE con anuncios aprobados e identificados, recompensas opcionales; PRO con suscripción mensual y sin publicidad. **Precio provisional: 29,90 €/mes IVA incluido**. Hay que validar los costes de IA, permisos de APIs, métodos de pago, verificación en backend, privacidad y anuncios reales antes de comercializar.
+
+## Seguridad y privacidad
+
+La versión demo no requiere usuario ni servidor: preferencias y borradores se guardan en `localStorage`. No es una solución segura para almacenar datos empresariales reales. No incluye claves ni redes publicitarias. Antes del lanzamiento se necesita autenticación real, cifrado y permisos por usuario, consentimientos y revisión legal.
 
 Consulta [ROADMAP.md](ROADMAP.md).
 
-> Nombre, tarifas, contenido y métricas sujetos a validación antes del lanzamiento.
+---
+MarketHub AI es un nombre de trabajo, no implica que se haya registrado una marca.
