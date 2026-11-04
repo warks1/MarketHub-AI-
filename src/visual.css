@@ -1,0 +1,12 @@
+
+.visual-layout{display:grid;grid-template-columns:minmax(270px,.75fr) minmax(350px,1.25fr);gap:15px}
+.visual-layout .card{align-self:start}.visual-presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.visual-color-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.visual-color-row input[type=color]{height:48px;padding:5px}
+.visual-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.visual-buttons button{flex:1;min-width:140px}
+.visual-preview-card{display:grid;gap:10px}
+.visual-frame{min-height:480px;max-height:min(75vh,900px);padding:16px;border-radius:16px;border:1px solid #434782;background:radial-gradient(ellipse at 50% 30%,#261d51,#0b1127 70%);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.visual-frame canvas{width:auto;height:auto;max-width:100%;max-height:min(70vh,820px);border-radius:12px;box-shadow:0 15px 35px #0008;display:block}
+@media(max-width:1150px){.visual-layout{grid-template-columns:1fr}.visual-frame{min-height:350px}}
+@media(max-width:680px){.visual-layout{grid-template-columns:1fr;gap:12px}.visual-frame{min-height:320px;max-height:66vh}.visual-frame canvas{max-height:61vh}.visual-buttons{display:grid}.visual-buttons button{width:100%}}
