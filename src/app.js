@@ -155,7 +155,7 @@ function modalHTML(){
  if(state.modal==='upgrade'){head='Activar PRO (demostración)';body='Esto solo cambiará el aspecto de la aplicación para probarla sin anuncios. No es una suscripción ni se realizará un pago.';foot=btn('Cancelar','close-modal')+btn('Activar PRO demo','confirm-pro','primary')}
  if(state.modal==='reward'){head='Publicidad recompensada · simulación';body='Aquí se integrará en el futuro un anuncio real con recompensa opcional. En esta demostración puedes recibir 5 créditos ficticios sin visualizar anuncios.';foot=btn('Cancelar','close-modal')+btn('Recibir 5 créditos demo','confirm-reward','primary')}
  if(state.modal==='tools'){head='Función prevista para próximas versiones';body='Esta herramienta todavía no está operativa. La interfaz muestra dónde se incorporará, pero no simula una acción completada.';foot=btn('Entendido','close-modal','primary')}
- if(state.modal==='tool-detail'&&state.selectedTool){head=safe(state.selectedTool.name);body=(state.selectedTool.tier==='pro'?'Herramienta avanzada del plan PRO.':'Prevista en FREE y PRO, con distintos límites de uso.')+' Estado real: '+(state.selectedTool.status==='local'?'funciona localmente en el navegador':state.selectedTool.status==='demo'?'interfaz de demostración':'pendiente de integración')+'.'+(state.selectedTool.description?' '+safe(state.selectedTool.description):'');foot=btn('Cerrar','close-modal')+(state.selectedTool.localTab?btn('Abrir herramienta local','catalogue-open-local','primary'):'')}
+ if(state.modal==='tool-detail'&&state.selectedTool){head=safe(state.selectedTool.name);body=(state.selectedTool.tier==='pro'?'Herramienta avanzada del plan PRO.':'Prevista en FREE y PRO, con distintos límites de uso.')+' Estado real: '+(state.selectedTool.status==='local'?'funciona localmente en el navegador':state.selectedTool.status==='demo'?'interfaz de demostración':'pendiente de integración')+'.'+(state.selectedTool.description?' '+safe(state.selectedTool.description):'');foot=btn('Cerrar','close-modal')+(state.selectedTool.localTab?btn('Abrir herramienta local','catalogue-open-local','primary'):'')+(state.selectedTool.growthTab?btn('Abrir Growth Lab','catalogue-open-growth','primary'):'')}
  if(state.modal==='reset'){head='Borrar datos locales';body='Se eliminarán los borradores de ejemplo y tu selección de plan de este navegador.';foot=btn('Cancelar','close-modal')+btn('Sí, borrar','confirm-reset','primary')}
  return '<div class="modal-backdrop" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">'+head+'</h2><p>'+body+'</p><div class="modal-actions">'+foot+'</div></div></div>';
 }
@@ -183,6 +183,7 @@ document.addEventListener('click',e=>{
  const action=target.dataset.action;
  if(action.startsWith('goto-')){go(action.slice(5));return}
  switch(action){
+ case 'catalogue-open-growth':{if(state.selectedTool?.growthTab){growthOpenTab(state.selectedTool.growthTab);go('laboratorio')}break}
  case 'catalogue-open-local':{
   if(state.selectedTool?.localTab){if(state.selectedTool.localTab==='diseño')go('diseño');else{officeOpenTab(state.selectedTool.localTab);go('oficina')}}break;
  }
