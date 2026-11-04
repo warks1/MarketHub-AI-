@@ -1,11 +1,7 @@
-import './style.css';
 import { catalogueSections } from './catalogue.js';
-import './office.css';
 import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './office.js';
-import './growth.css';
 import {growthPage,growthOpenTab,growthClick,growthSubmit} from './growth.js';
 import {backupExport,backupImport,backupSettingsHTML} from './backup.js';
-import './visual.css';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 
 const app=document.querySelector('#app');
@@ -147,8 +143,8 @@ function navButton(item,kind='side'){
 function render(){
  const side=nav.map(n=>navButton(n)).join('');
  const mob=[nav[0],nav[1],nav[2],nav.find(n=>n[0]==='herramientas'),nav[5],nav[7]].map(n=>navButton(n,'bottom')).join('');
- app.innerHTML='<div class="app-shell"><aside class="sidebar"><div class="brand"><img src="/logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><nav class="nav" aria-label="Navegación principal">'+side+'</nav><div class="sidebar-bottom"><div class="plan-widget"><span class="eyebrow">✦ TU PLAN '+state.plan.toUpperCase()+'</span><h3>'+ (state.plan==='free'?'Haz crecer tus ideas':'Sin anuncios, más enfoque')+'</h3><p>'+(state.plan==='free'?'Accede a las funciones PRO y elimina la publicidad.':'Experiencia PRO activada en la demostración.')+'</p><div style="margin-top:13px">'+btn('Ver suscripción '+icon('arrow'),'goto-planes','primary full')+'</div></div></div></aside>'+
- '<main id="main" class="workspace"><header class="topbar"><div class="brand"><img src="/logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones de demo..." value="'+safe(state.search)+'"><div class="topbar-right"><button class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · SIN ANUNCIOS':'FREE · CON ANUNCIOS')+'</button><div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div><nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+(state.modal?modalHTML():'');
+ app.innerHTML='<div class="app-shell"><aside class="sidebar"><div class="brand"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><nav class="nav" aria-label="Navegación principal">'+side+'</nav><div class="sidebar-bottom"><div class="plan-widget"><span class="eyebrow">✦ TU PLAN '+state.plan.toUpperCase()+'</span><h3>'+ (state.plan==='free'?'Haz crecer tus ideas':'Sin anuncios, más enfoque')+'</h3><p>'+(state.plan==='free'?'Accede a las funciones PRO y elimina la publicidad.':'Experiencia PRO activada en la demostración.')+'</p><div style="margin-top:13px">'+btn('Ver suscripción '+icon('arrow'),'goto-planes','primary full')+'</div></div></div></aside>'+
+ '<main id="main" class="workspace"><header class="topbar"><div class="brand"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones de demo..." value="'+safe(state.search)+'"><div class="topbar-right"><button class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · SIN ANUNCIOS':'FREE · CON ANUNCIOS')+'</button><div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div><nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+(state.modal?modalHTML():'');
  if(state.page==='diseño')visualMount();
 }
 function modalHTML(){
@@ -237,7 +233,7 @@ document.addEventListener('input',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.modal){state.modal=null;render()}});
 function splash(){
  const overlay=document.createElement('div');overlay.className='splash';overlay.setAttribute('role','status');
- overlay.innerHTML='<div class="splash-content"><div class="eyebrow">NEXUS × PULSE · INICIANDO</div><div class="splash-orb"><img alt="" src="/logo.svg"></div><h1>MarketHub <span>AI</span></h1><p class="muted">Tu centro de marketing digital inteligente</p><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><p id="progressLabel" class="muted tiny">Preparando experiencia visual...</p><button class="splash-skip" id="skipSplash">Entrar ahora</button><div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI · Prototipo v0.3</div></div>';
+ overlay.innerHTML='<div class="splash-content"><div class="eyebrow">NEXUS × PULSE · INICIANDO</div><div class="splash-orb"><img alt="" src="./logo.svg"></div><h1>MarketHub <span>AI</span></h1><p class="muted">Tu centro de marketing digital inteligente</p><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><p id="progressLabel" class="muted tiny">Preparando experiencia visual...</p><button class="splash-skip" id="skipSplash">Entrar ahora</button><div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI · Prototipo v0.3</div></div>';
  document.body.append(overlay);
  let progress=0;const bar=overlay.querySelector('#progressFill'),label=overlay.querySelector('#progressLabel');
  const timer=setInterval(()=>{progress=Math.min(100,progress+10);bar.style.width=progress+'%';label.textContent='Cargando interfaz de demostración… '+progress+'%';if(progress===100)finish()},110);
