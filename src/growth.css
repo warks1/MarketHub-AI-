@@ -1,0 +1,22 @@
+/* MarketHub AI Growth Lab · additive mobile-first styles, no overrides to core shell */
+.growth-entry{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border:1px solid #34507a;background:#152448;border-radius:14px;padding:14px}
+.growth-entry>div:first-child{min-width:0;flex:1}
+.growth-entry p{font-size:12px;color:#9bb2d8;line-height:1.5;margin-top:5px;overflow-wrap:anywhere}
+.growth-clip p{word-break:break-all}
+.growth-score{display:grid;justify-items:center;gap:6px;padding:21px 12px;background:radial-gradient(circle at center,#2c387b 0,#121d41 75%);border:1px solid #516b9d;border-radius:18px}
+.growth-score strong{font:800 43px 'Space Grotesk',sans-serif;color:#24dded}
+.growth-score span{font-size:12px;color:#adbedf}
+.growth-indicators{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.growth-email-preview{background:#fafaff;color:#172346;padding:27px 22px;border-radius:16px;display:flex;flex-direction:column;gap:12px}
+.growth-email-preview h2{font-size:clamp(23px,3vw,33px)}
+.growth-email-preview p{font-size:12px;color:#43587e}
+.growth-email-preview .eyebrow{color:#543eca}
+.growth-email-body{white-space:pre-wrap;line-height:1.6;color:#28354e;overflow-wrap:anywhere;border-top:1px solid #e1e5f0;padding-top:14px}
+.growth-email-preview .landing-preview-button{color:white}
+.growth-bio-preview{background:radial-gradient(circle at 50% 0,#54318b,#101d42 73%);border:1px solid #7558bc;border-radius:18px;padding:27px 18px;text-align:center;display:grid;gap:12px;justify-items:stretch}
+.growth-bio-preview h2{font-size:clamp(23px,3vw,35px)}
+.growth-bio-preview p{color:#cbd4ea}
+.growth-bio-button{padding:11px 15px;background:#2c2967;border:1px solid #808dd0;border-radius:11px;color:#fff;font-weight:700;font-size:12px}
+.growth-link-row{border:1px solid #334a78;border-radius:14px;padding:11px;margin-bottom:9px;display:grid;grid-template-columns:1fr 1fr;gap:9px;background:#101e42}
+.growth-link-row .form-field{margin-bottom:0}
+@media(max-width:700px){.growth-link-row{grid-template-columns:1fr}.growth-score strong{font-size:35px}.growth-entry{align-items:stretch}.growth-entry .workspace-actions{width:100%}}
