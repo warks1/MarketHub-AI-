@@ -170,11 +170,11 @@ function toast(msg){
 function go(page){state.page=page;state.modal=null;state.menuMore=false;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
  const growthTarget=e.target.closest('[data-growth-action]');
- if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=15){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
+ if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
  const visualTarget=e.target.closest('[data-visual-action]');
- if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=15){toast('Límite de 15 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
+ if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
  const officeTarget=e.target.closest('[data-office-action]');
- if(officeTarget&&officeClick(officeTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=15){toast('Límite de 15 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a los borradores locales.')}}))return;
+ if(officeTarget&&officeClick(officeTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a los borradores locales.')}}))return;
  const page=e.target.closest('[data-page]');
  if(page){go(page.dataset.page);return}
  const filter=e.target.closest('[data-filter]');if(filter){state.toolsFilter=filter.dataset.filter;render();return}
@@ -222,7 +222,7 @@ document.addEventListener('submit',e=>{
  e.preventDefault();const form=new FormData(e.target);
  const title=String(form.get('title')||'').trim(),date=String(form.get('date')||'');
  if(!title||!date){toast('Completa el título y la fecha.');return}
- if(state.plan==='free'&&state.posts.length>=15){toast('Límite de 15 borradores del modo FREE demo.');return}
+ if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores del modo FREE demo.');return}
  state.posts.unshift({id:Date.now(),title:title.slice(0,240),platform:String(form.get('platform')||'Instagram'),date:date,status:'Programada'});
  save();render();toast('Publicación guardada localmente. No se ha publicado en ninguna red.');
 });
