@@ -14,11 +14,12 @@
     "android:open": "npm run mobile:sync && npx cap open android",
     "ios:open": "npm run mobile:sync && npx cap open ios",
     "test:office": "node --test tests/office.test.mjs",
-    "test": "npm run check:continuity && npm run test:office && npm run test:growth && npm run test:backup && npm run test:navigation",
+    "test": "npm run check:continuity && npm run test:office && npm run test:growth && npm run test:backup && npm run test:navigation && npm run check:pages",
     "test:visual": "node --test tests/visual.test.mjs",
     "test:growth": "node --test tests/growth.test.mjs",
     "test:backup": "node --test tests/backup.test.mjs",
-    "test:navigation": "node --test tests/navigation.test.mjs"
+    "test:navigation": "node --test tests/navigation.test.mjs",
+    "check:pages": "node scripts/check-github-pages.mjs"
   },
   "dependencies": {
     "@capacitor/core": "^8.5.0",
