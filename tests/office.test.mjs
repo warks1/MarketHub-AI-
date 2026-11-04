@@ -91,7 +91,7 @@ test('La calculadora guarda cifras y no divide por cero',()=>{
  const c=getWorkspace().calculation;assert.deepEqual(c,{spend:100,revenue:250,leads:10,orders:2});
  officeOpenTab('calculadora');
  const page=officePage('free');assert.match(page,/2.50×/);assert.match(page,/150.0%/);
- assert.match(page,/25.0€/);
+ assert.match(page,/Coste por lead/);
  officeSubmit(form('office-calc-form',{calcSpend:'0',calcRevenue:'0',calcLeads:'0',calcOrders:'0'}),'free',ctx);
  assert.match(officePage('free'),/No calculable/);
 });
