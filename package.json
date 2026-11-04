@@ -1,7 +1,7 @@
 {
   "name": "markethub-ai",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.3.1",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
@@ -14,10 +14,11 @@
     "android:open": "npm run mobile:sync && npx cap open android",
     "ios:open": "npm run mobile:sync && npx cap open ios",
     "test:office": "node --test tests/office.test.mjs",
-    "test": "npm run check:continuity && npm run test:office && npm run test:growth && npm run test:backup",
+    "test": "npm run check:continuity && npm run test:office && npm run test:growth && npm run test:backup && npm run test:navigation",
     "test:visual": "node --test tests/visual.test.mjs",
     "test:growth": "node --test tests/growth.test.mjs",
-    "test:backup": "node --test tests/backup.test.mjs"
+    "test:backup": "node --test tests/backup.test.mjs",
+    "test:navigation": "node --test tests/navigation.test.mjs"
   },
   "dependencies": {
     "@capacitor/core": "^8.5.0",
