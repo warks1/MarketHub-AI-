@@ -13,7 +13,9 @@ export const catalogueSections = [
         "id": "CAT-002",
         "name": "Brief de campaña inteligente",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "growthTab": "campanas",
+        "description": "Brief de campaña manual y biblioteca local; no utiliza IA externa."
       },
       {
         "id": "CAT-003",
@@ -223,7 +225,9 @@ export const catalogueSections = [
         "id": "CAT-033",
         "name": "Link en bio",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "growthTab": "bio",
+        "description": "Micrositio de enlaces exportable a HTML; no alojado en internet."
       },
       {
         "id": "CAT-034",
@@ -283,7 +287,9 @@ export const catalogueSections = [
         "id": "CAT-042",
         "name": "SEO social y búsqueda IA",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "growthTab": "seo",
+        "description": "Revisión orientativa con reglas explícitas; no representa el algoritmo real de plataformas."
       },
       {
         "id": "CAT-043",
@@ -358,6 +364,14 @@ export const catalogueSections = [
         "name": "Campañas multicanal avanzadas",
         "tier": "pro",
         "status": "planned"
+      },
+      {
+        "id": "CAT-079",
+        "name": "Generador de enlaces UTM",
+        "tier": "free",
+        "status": "local",
+        "growthTab": "utm",
+        "description": "Crea URLs de seguimiento HTTPS con parámetros utm_source, utm_medium, utm_campaign y opcionales, almacenadas localmente."
       }
     ]
   },
@@ -383,7 +397,9 @@ export const catalogueSections = [
         "id": "CAT-056",
         "name": "Email marketing",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "growthTab": "emails",
+        "description": "Diseño HTML y exportación; no permite enviar correo."
       },
       {
         "id": "CAT-057",
@@ -463,7 +479,9 @@ export const catalogueSections = [
         "id": "CAT-068",
         "name": "Reciclado de contenido",
         "tier": "free",
-        "status": "planned"
+        "status": "local",
+        "growthTab": "reutilizar",
+        "description": "Adaptación de contenido por plantillas editables; sin IA externa."
       },
       {
         "id": "CAT-069",
