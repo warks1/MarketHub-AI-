@@ -21,3 +21,18 @@
 
 .catalogue-cta{display:flex;gap:9px;flex-wrap:wrap}
 .catalogue-cta button{flex:0 1 auto}
+
+
+/* Navegación móvil estable: jamás depender de índices al añadir módulos. */
+.mobile-menu-backdrop{position:fixed;inset:0;z-index:65;background:#020616b5;backdrop-filter:blur(9px)}
+.mobile-menu-drawer{position:fixed;z-index:70;bottom:calc(82px + env(safe-area-inset-bottom));left:12px;right:12px;max-height:calc(100dvh - 120px);overflow:auto;padding:18px;background:linear-gradient(150deg,#192248,#251746);border:1px solid #7663b5;border-radius:22px;box-shadow:0 16px 50px #000a}
+.mobile-menu-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+.mobile-menu-head h2{font-size:19px}
+.mobile-drawer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.mobile-drawer-link{padding:13px 10px;background:#152954;border:1px solid #455b8d;border-radius:13px;display:flex;gap:10px;align-items:center;text-align:left;min-width:0}
+.mobile-drawer-link svg{flex:none;width:20px;height:20px;color:#8bf0ff}
+.mobile-drawer-link span{font-size:12px;overflow-wrap:anywhere}
+.mobile-drawer-link[aria-current=page]{background:linear-gradient(125deg,#275cc8,#893cbd);border-color:#ac83fa}
+.mobile-more-button{color:#c5d3ef}
+.mobile-more-button[aria-expanded=true]{background:linear-gradient(135deg,#325dbe,#a033c6);color:white}
+@media(min-width:681px){.mobile-menu-backdrop,.mobile-menu-drawer{display:none}}
