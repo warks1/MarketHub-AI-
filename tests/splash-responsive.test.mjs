@@ -52,3 +52,20 @@ test('La animación respeta el boceto y es accesible',()=>{
  assert.match(css,/animation:none!important/);
  assert.match(css,/min-height:44px;touch-action:manipulation/);
 });
+
+test('El relleno de progreso tiene altura real y el conjunto se centra en tablet',()=>{
+ assert.match(css,/\.mh-splash-track > \.progress-fill/);
+ assert.match(css,/height:calc\(100% - 8px\)!important/);
+ assert.match(css,/@media\(min-width:700px\) and \(max-width:1199px\)/);
+ assert.match(css,/min-height:100dvh;justify-content:center/);
+});
+
+test('La vista previa no corta palabras y los indicadores no duplican ejemplo',()=>{
+ const growth=read('src/growth.css'),office=read('src/office.css');
+ assert.doesNotMatch(growth,/word-break:break-all/);
+ assert.match(growth,/word-break:normal/);
+ assert.match(office,/workspace-landing-preview h2/);
+ const snippet=app.match(/function kpi\([\s\S]*?\n}/)?.[0];
+ assert.ok(snippet,'No se encontró el indicador de campañas');
+ assert.match(snippet,/detail\.toLowerCase\(\)==='ejemplo'/);
+});
