@@ -48,3 +48,12 @@
  .post-actions{justify-content:flex-start;width:100%}
  .post-actions button{flex:1 1 auto}
 }
+
+/* Sidebar con acceso a todas las herramientas añadidas, sin perder opciones en pantallas bajas. */
+@media(min-width:681px){
+ .sidebar{min-height:0}
+ .sidebar>.nav{min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;overscroll-behavior:contain}
+ .sidebar>.nav::-webkit-scrollbar{width:6px}
+ .sidebar>.nav::-webkit-scrollbar-thumb{background:#6b55ac;border-radius:8px}
+ .sidebar>.nav .nav-btn{min-height:43px}
+}
