@@ -78,3 +78,11 @@ La carga de la galería se serializa por versión de solicitud para que un lista
 obsoleto no sobrescriba un guardado reciente. Los flujos de prueba esperan a
 que IndexedDB confirme el guardado y luego verifican reapertura tras recarga.
 La versión de prueba Android debe regenerarse a partir del último código.
+
+### Persistencia multimedia compatible con WebKit (noviembre 2026)
+Para guardar medios en la biblioteca, el navegador transforma los Blobs a ArrayBuffer
+antes de IndexedDB. Al abrirlos, se reconstruye el Blob del mismo tipo. Se conservan
+lecturas de registros anteriores con Blob sin borrarlos. Esta estrategia evita una
+incompatibilidad observada en pruebas WebKit de almacenamiento de archivos.
+Las pruebas de navegador deben seguir verificando persistencia tras recargar en
+Chromium y Safari WebKit. La compatibilidad física aún requiere instalación y prueba.
