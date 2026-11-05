@@ -107,3 +107,15 @@ test('Las pantallas funcionan tanto en FREE como PRO sin habilitar pagos',()=>{
  assert.match(officePage('pro'),/PRO/);
  assert.match(officePage('pro'),/En FREE se permiten/);
 });
+
+test('La calculadora rechaza NaN, cantidades inválidas y no modifica la última operación',()=>{
+ officeOpenTab('calculadora');
+ const before=JSON.stringify(getWorkspace().calculation);
+ officeSubmit(form('office-calc-form',{calcSpend:'NaN',calcRevenue:'250',calcLeads:'10',calcOrders:'2'}),'free',ctx);
+ assert.equal(JSON.stringify(getWorkspace().calculation),before);
+ assert.match(notices.at(-1),/numéricos válidos/i);
+ officeSubmit(form('office-calc-form',{calcSpend:'100',calcRevenue:'250',calcLeads:'3.5',calcOrders:'2'}),'free',ctx);
+ assert.equal(JSON.stringify(getWorkspace().calculation),before);
+ assert.match(notices.at(-1),/enteros/i);
+ assert.doesNotMatch(officePage('free'),/NaN|Infinity|\[object Object\]/);
+});
