@@ -2,7 +2,7 @@
 // Sin subida de archivos a servidores, ni dependencias de servicios externos.
 const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:''};
 export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9':[1920,1080],'3:2':[1500,1000]};
-export const MASKS=['orbita','circulo','redondeada','estrella','hexagono','completa'];
+export const MASKS=['orbita','circulo','ovalada','redondeada','estrella','hexagono','pentagono','octagono','triangulo','diamante','corazon','banda-horizontal','banda-vertical','ventana','completa'];
 const looks={neon:['contrast(1.1) saturate(1.3)','#26e9fb','#eb4df5'],editorial:['contrast(1.06) saturate(.85)','#ffcfa2','#ef9bcd'],noir:['grayscale(1) contrast(1.25)','#f0f4ff','#8190dd'],natural:['none','#ffffff','#8acde9']};
 const tabNames={photo:'Foto y máscaras',audio:'Audio y WAV',video:'Vídeo y fotogramas',pdf:'Visor PDF'};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -50,9 +50,21 @@ function maskShape(ctx,w,h,mask){
  const r=Math.min(w,h)*.43,cx=w/2,cy=h/2;
  if(mask==='completa'){ctx.rect(0,0,w,h);return}
  if(mask==='circulo'){ctx.arc(cx,cy,r,0,Math.PI*2);return}
+ if(mask==='ovalada'){ctx.ellipse(cx,cy,w*.43,h*.36,0,0,Math.PI*2);return}
  if(mask==='redondeada'){ctx.roundRect(w*.06,h*.06,w*.88,h*.88,Math.min(w,h)*.11);return}
+ if(mask==='ventana'){ctx.roundRect(w*.12,h*.06,w*.76,h*.88,Math.min(w,h)*.32);return}
+ if(mask==='banda-horizontal'){ctx.roundRect(w*.04,h*.32,w*.92,h*.36,Math.min(w,h)*.08);return}
+ if(mask==='banda-vertical'){ctx.roundRect(w*.28,h*.04,w*.44,h*.92,Math.min(w,h)*.1);return}
  if(mask==='orbita'){ctx.ellipse(cx,cy,r*.93,r*1.08,-.24,0,Math.PI*2);return}
- const n=mask==='hexagono'?6:10;
+ if(mask==='corazon'){
+  ctx.moveTo(cx,cy+r*.78);
+  ctx.bezierCurveTo(cx-r*.3,cy+r*.44,cx-r*1.15,cy-r*.18,cx-r*.76,cy-r*.7);
+  ctx.bezierCurveTo(cx-r*.52,cy-r*1.06,cx-r*.15,cy-r*.86,cx,cy-r*.55);
+  ctx.bezierCurveTo(cx+r*.15,cy-r*.86,cx+r*.52,cy-r*1.06,cx+r*.76,cy-r*.7);
+  ctx.bezierCurveTo(cx+r*1.15,cy-r*.18,cx+r*.3,cy+r*.44,cx,cy+r*.78);
+  ctx.closePath();return;
+ }
+ const n=mask==='hexagono'?6:mask==='pentagono'?5:mask==='octagono'?8:mask==='triangulo'?3:mask==='diamante'?4:10;
  for(let i=0;i<n;i++){const angle=i*Math.PI*2/n-Math.PI/2,rr=mask==='estrella'&&i%2?r*.46:r,x=cx+Math.cos(angle)*rr,y=cy+Math.sin(angle)*rr;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}
  ctx.closePath();
 }
