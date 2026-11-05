@@ -257,6 +257,7 @@ function modalHTML(){
  if(state.modal==='tool-detail'&&state.selectedTool){head=safe(state.selectedTool.name);body=(state.selectedTool.tier==='pro'?'Herramienta avanzada del plan PRO.':'Prevista en FREE y PRO, con distintos límites de uso.')+' Estado real: '+(state.selectedTool.status==='local'?'funciona localmente en el navegador':state.selectedTool.status==='demo'?'interfaz de demostración':'pendiente de integración')+'.'+(state.selectedTool.description?' '+safe(state.selectedTool.description):'');foot=btn('Cerrar','close-modal')+(state.selectedTool.localTab?btn('Abrir herramienta local','catalogue-open-local','primary'):'')+(state.selectedTool.growthTab?btn('Abrir Growth Lab','catalogue-open-growth','primary'):'')}
  if(state.modal==='reset'){head='Borrar datos locales';body='Se eliminarán los borradores y campañas locales, y tu selección de plan de este navegador.';foot=btn('Cancelar','close-modal')+btn('Sí, borrar','confirm-reset','primary')}
  if(state.modal==='delete-post'){head='Eliminar borrador local';body='La publicación seleccionada desaparecerá de la biblioteca de este dispositivo. Puedes exportar una copia antes de eliminar.';foot=btn('Cancelar','close-modal')+btn('Eliminar publicación','confirm-delete-post','primary')}
+ if(state.modal==='storyboard-delete'){head='Eliminar esta escena';body='Se borrará la escena seleccionada del storyboard local. Exporta una copia antes si deseas conservarla.';foot=btn('Cancelar','close-modal')+btn('Eliminar escena','confirm-storyboard-delete','primary')}
  if(state.modal==='delete-campaign'){head='Eliminar campaña local';body='Se borrará esta planificación del dispositivo. No afecta a anuncios reales: no hay cuentas conectadas.';foot=btn('Cancelar','close-modal')+btn('Eliminar campaña','confirm-delete-campaign','primary')}
  if(state.modal==='clear-analytics'){head='Eliminar métricas importadas';body='Se eliminarán las filas CSV guardadas localmente. No afecta a tus cuentas externas.';foot=btn('Cancelar','close-modal')+btn('Borrar métricas locales','confirm-clear-analytics','primary')}
  return '<div class="modal-backdrop" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">'+head+'</h2><p>'+body+'</p><div class="modal-actions">'+foot+'</div></div></div>';
@@ -375,6 +376,60 @@ case 'campaign-export':{
    document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
    toast('Archivo CSV generado en este dispositivo.');break;
   }
+ case 'storyboard-add':{
+  if(state.storyboard.length>=80){toast('Máximo de 80 escenas por proyecto local.');break}
+  state.storyboard.push(createScene('Escena '+(state.storyboard.length+1)));state.storyboardCurrent=state.storyboard.length-1;
+  save();render();toast('Escena añadida.');break;
+ }
+ case 'storyboard-select':state.storyboardCurrent=Math.max(0,Math.min(state.storyboard.length-1,Number(target.dataset.index)||0));render();break;
+ case 'storyboard-next':state.storyboardCurrent=Math.min(state.storyboard.length-1,state.storyboardCurrent+1);render();break;
+ case 'storyboard-prev':state.storyboardCurrent=Math.max(0,state.storyboardCurrent-1);render();break;
+ case 'storyboard-move-left':case 'storyboard-move-right':{
+  const a=state.storyboardCurrent,b=a+(action==='storyboard-move-left'?-1:1);
+  if(b<0||b>=state.storyboard.length){toast('La escena ya está en el extremo de la secuencia.');break}
+  [state.storyboard[a],state.storyboard[b]]=[state.storyboard[b],state.storyboard[a]];
+  state.storyboardCurrent=b;save();render();break;
+ }
+ case 'storyboard-duplicate':{
+  const scene=state.storyboard[state.storyboardCurrent];
+  if(!scene){toast('Añade una escena primero.');break}
+  if(state.storyboard.length>=80){toast('Máximo de 80 escenas por proyecto.');break}
+  state.storyboard.splice(state.storyboardCurrent+1,0,{...scene,id:Date.now()+'-'+Math.random().toString(36).slice(2,8),title:String(scene.title||'Escena').slice(0,78)+' copia'});
+  state.storyboardCurrent++;save();render();toast('Escena duplicada.');break;
+ }
+ case 'storyboard-remove':{
+  if(!state.storyboard.length){toast('No hay escenas que eliminar.');break}
+  state.modal='storyboard-delete';render();break;
+ }
+ case 'confirm-storyboard-delete':{
+  if(state.storyboard.length)state.storyboard.splice(state.storyboardCurrent,1);
+  state.storyboardCurrent=Math.max(0,Math.min(state.storyboardCurrent,state.storyboard.length-1));
+  state.modal=null;save();render();toast('Escena eliminada del proyecto local.');break;
+ }
+ case 'storyboard-export':{
+  const data={app:'MarketHub AI',format:state.videoFormat,kind:'Storyboard local (no vídeo exportado)',scenes:state.storyboard};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download='markethub-storyboard-'+todayLocal()+'.json';
+  document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Storyboard JSON exportado.');break;
+ }
+ case 'studio-focus-title':case 'studio-focus-duration':
+  document.querySelector(action==='studio-focus-title'?'#live-scene-title':'#live-scene-duration')?.focus();break;
+ case 'studio-theme':{
+  const scene=state.storyboard[state.storyboardCurrent];
+  if(scene){const i=STUDIO_THEMES.indexOf(scene.theme);scene.theme=STUDIO_THEMES[(i+1)%STUDIO_THEMES.length];save();render()}break;
+ }
+ case 'live-message-toggle':{
+  const m=state.localMessages.find(m=>String(m.id)===String(target.dataset.id));
+  if(m){m.status=m.status==='Resuelto'?'Pendiente':'Resuelto';save();render()}break;
+ }
+ case 'live-message-delete':{
+  state.localMessages=state.localMessages.filter(m=>String(m.id)!==String(target.dataset.id));save();render();toast('Conversación local eliminada.');break;
+ }
+ case 'live-mention-delete':{
+  state.localMentions=state.localMentions.filter(m=>String(m.id)!==String(target.dataset.id));save();render();toast('Mención local eliminada.');break;
+ }
  case 'format':state.videoFormat=state.videoFormat==='9:16'?'16:9':'9:16';render();break;
  case 'draft-from-studio':{
   const input=document.querySelector('#creativePrompt'),val=input?.value.trim();
@@ -390,7 +445,7 @@ case 'campaign-export':{
  case 'confirm-reward':state.credits+=5;state.modal=null;save();render();toast('+5 créditos ficticios. No se ha visto ningún anuncio.');break;
  case 'close-modal':state.modal=null;render();break;
  case 'reset-data':state.modal='reset';render();break;
- case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.campaigns=[];state.analyticsRows=[];state.editPostId=null;state.pendingDeleteId=null;state.editCampaignId=null;state.pendingDeleteCampaignId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
+ case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.campaigns=[];state.analyticsRows=[];state.localMessages=[];state.localMentions=[];state.storyboard=[createScene()];state.storyboardCurrent=0;state.editPostId=null;state.pendingDeleteId=null;state.editCampaignId=null;state.pendingDeleteCampaignId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
  case 'no-op':break;
  }
 });
