@@ -161,3 +161,12 @@ Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalida
 - Pruebas unitarias y E2E añadidas: guardar, reabrir, formato 1:1, máscara, texto, exportación, eliminación e importación portable tras recargar, en Chromium y WebKit.
 - Corregido el paso CI de instalación de Playwright a una versión estable publicada: 1.64.1; el instalador anterior intentaba instalar una versión de playwright-core todavía inexistente.
 - Se conserva la composición de pantalla de carga aprobada, PULSE PACK, la biblioteca, los otros conversores, Estudio y las funciones anteriores. La sincronización automática en nube y las publicaciones comerciales siguen pendientes.
+
+## 2026-11-05 · Copia total de proyectos editables (.mhubpack)
+- La pestaña Proyectos editables de Media Forge incluye **Respaldar TODOS los proyectos · ZIP** y **Restaurar copia completa .mhubpack**.
+- El formato .mhubpack incluye un `manifest.json` y las imágenes originales en binario sin inflar su tamaño mediante base64; conserva máscara, composición, texto, SafeFrame y paleta de cada proyecto.
+- Antes de restaurar, comprueba la estructura del ZIP, las rutas permitidas, nombres duplicados, tamaños, CRC32, referencias del manifiesto, formato y ajustes de todos los proyectos.
+- La restauración **no sustituye proyectos existentes**. Comprueba previamente espacio y cantidad, luego incorpora todo el lote en una sola transacción IndexedDB; si no hay capacidad o el archivo es inválido, no añade ninguno.
+- Se conserva la exportación de proyectos individuales `.mhub` y el resto de herramientas del editor. No se altera ni mezcla la biblioteca multimedia anterior.
+- Límites: 12 proyectos, 80 MB de imágenes fuente y 90 MB por respaldo importado. No hay cifrado de .mhubpack ni sincronización automática; custodiar las copias como archivos privados.
+- Pruebas unitarias de ZIP/CRC/integridad y E2E en Chromium/WebKit para copia total, importación y conservación del proyecto previamente restaurado.
