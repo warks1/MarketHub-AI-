@@ -8,6 +8,8 @@ import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
 const storeKey='markethub-ai-demo-v1';
+// Fecha ISO local estable también en Safari iOS, sin depender del formato del locale.
+const todayLocal=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
 const demoPosts=[
   {id:1,title:'Bienvenido a MarketHub AI',platform:'Instagram',date:'2026-11-08',status:'Programada'},
   {id:2,title:'Presentación de nuestra campaña',platform:'TikTok',date:'2026-11-11',status:'Borrador'}
@@ -112,7 +114,7 @@ function studio(){
 function create(){
  const editing=findPost(state.posts,state.editPostId);
  const status=editing?.status==='Borrador'?'Borrador':'Programada';
- const date=editing?.date||new Date().toLocaleDateString('en-CA');
+ const date=editing?.date||todayLocal();
  const platform=editing?.platform||'Instagram';
  const platforms=['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'];
  const selected=platforms.map(name=>'<option '+(platform===name?'selected':'')+'>'+name+'</option>').join('');
@@ -196,11 +198,11 @@ function toast(msg){
 function go(page){state.page=page;state.modal=null;state.menuMore=false;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
  const growthTarget=e.target.closest('[data-growth-action]');
- if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
+ if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
  const visualTarget=e.target.closest('[data-visual-action]');
- if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
+ if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
  const officeTarget=e.target.closest('[data-office-action]');
- if(officeTarget&&officeClick(officeTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});save();go('crear');toast('Texto añadido a los borradores locales.')}}))return;
+ if(officeTarget&&officeClick(officeTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto añadido a los borradores locales.')}}))return;
  const page=e.target.closest('[data-page]');
  if(page){go(page.dataset.page);return}
  const filter=e.target.closest('[data-filter]');if(filter){state.toolsFilter=filter.dataset.filter;render();return}
@@ -255,7 +257,7 @@ document.addEventListener('click',e=>{
  case 'draft-from-studio':{
   const input=document.querySelector('#creativePrompt'),val=input?.value.trim();
   if(!val){toast('Escribe una idea antes de crear el borrador.');break}
-  state.posts.unshift({id:Date.now(),title:val.slice(0,240),platform:'Instagram',date:new Date().toLocaleDateString('en-CA'),status:'Borrador'});
+  state.posts.unshift({id:Date.now(),title:val.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});
   save();go('crear');toast('Borrador de demostración guardado en el dispositivo.');break;
  }
  case 'studio-unavailable':state.modal='tools';render();break;
