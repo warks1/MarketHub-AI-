@@ -132,7 +132,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #08edff;outline-offset:3p
 .nexus-home{animation:nexus-fade .3s ease-out}
 @keyframes nexus-fade{from{opacity:.7;transform:translateY(4px)}to{opacity:1;transform:none}}
 /* Estudio: jerarquía y distribución del boceto 02 */
-.nexus-studio-body{display:grid;grid-template-columns:minmax(130px,.74fr) minmax(135px,.8fr) minmax(220px,2.25fr) minmax(150px,.84fr) minmax(165,.9fr);gap:8px;align-items:stretch}
+.nexus-studio-body{display:grid;grid-template-columns:minmax(130px,.74fr) minmax(135px,.8fr) minmax(220px,2.25fr) minmax(150px,.84fr) minmax(155px,.9fr);gap:8px;align-items:stretch}
 .nexus-studio-categories,.nexus-studio-editor,.nexus-studio-ai,.nexus-studio-recommend{display:flex;flex-direction:column;gap:6px}
 .nexus-studio-choice,.nexus-studio-tool{display:flex;align-items:center;justify-content:space-between;text-align:left;gap:5px;background:#112148;border:1px solid #355185;color:#eaf3ff;border-radius:8px;padding:9px 8px;min-height:33px;font-size:10px}
 .nexus-studio-choice.active{background:linear-gradient(110deg,#8e1de9,#e747f8);box-shadow:0 0 10px #dd4dfd77;border-color:#f1a1ff}
