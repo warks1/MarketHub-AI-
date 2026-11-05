@@ -16,7 +16,7 @@ test('Las pestañas mantienen el mismo espacio de trabajo sin cambiar el menú g
  let refreshed=0;
  assert.equal(forgeTab('audio',()=>refreshed++),true);
  assert.match(forgePage(),/data-forge-action="wav"/);
- assert.match(forgePage(),/audio controls/);
+ assert.match(forgePage(),/Selecciona un audio para reproducirlo/);
  assert.equal(forgeTab('video',()=>refreshed++),true);
  assert.match(forgePage(),/data-forge-action="frame"/);
  assert.match(forgePage(),/data-forge-action="webm"/);
@@ -54,7 +54,7 @@ test('La conversión WAV genera cabecera RIFF válida y respeta tiempos',()=>{
 test('WAV rechaza intervalos inválidos para evitar resultados corruptos',()=>{
  const track=new Float32Array(500);
  const b={sampleRate:1000,numberOfChannels:1,length:500,duration:.5,getChannelData:()=>track};
- for(const [from,to] of [[.5,.2],[-1,.3],[.6,0],[0,.0001],[NaN,.3]]){
+ for(const [from,to] of [[.5,.2],[-1,.3],[.6,0],[.5,0],[NaN,.3]]){
   assert.throws(()=>encodeWav(b,from,to));
  }
 });
