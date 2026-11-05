@@ -24,7 +24,7 @@ test('Se conservan los cuatro bocetos originales y su visor',()=>{
    assert.ok(fs.existsSync(path.join(root,file)),'Falta '+file);
    assert.ok(fs.statSync(path.join(root,file)).size>20000,'Imagen incompleta: '+file);
   }
-  assert.ok(read('referencias.html').includes('assets/boceto-'+n+'.webp'));
+  assert.ok(read('referencias.html').includes('assets/boceto-'+n+'-original.jpeg'));
  }
  assert.match(app,/assets\/boceto-04-carga\.webp/);
  assert.match(html,/src\/reference\.css/);
