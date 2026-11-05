@@ -77,7 +77,7 @@ async function inspect(browser,engine,devices){
    }
    // Reproduce el fallo reportado: 56 % visible pero barra sin relleno.
    await page.locator('#progressFill').evaluate(el=>{
-    el.style.width='56%';
+    el.style.setProperty('--splash-progress','0.56');
     el.parentElement.querySelector('.progress-value').textContent='56%';
    });
    await page.waitForTimeout(180); // Transición CSS de 100 ms.
