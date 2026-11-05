@@ -261,6 +261,7 @@ try{
    await page.screenshot({path:'visual-qa/'+id+'-oficina-landing.png',fullPage:true});
 
    await go(page,'laboratorio',width);
+   await page.locator('.workspace-tabs [data-growth-action="tab-campanas"]').click();
    await page.locator('#briefName').fill('Campaña de prueba');
    await page.locator('#briefAudience').fill('Público de prueba');
    await page.locator('#briefOffer').fill('Servicio de muestra');
