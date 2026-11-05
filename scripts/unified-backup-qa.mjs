@@ -51,10 +51,20 @@ for(const [name,engine,width,height] of [['chromium-desktop',chromium,1440,900],
   await restored.locator('[data-unified-backup-import]').setInputFiles({
    name:'copia-integral.mhubfull',mimeType:'application/zip',buffer:backup
   });
-  await restored.waitForFunction(async()=>{
-   const p=await import('./src/creative-projects.js');
-   return (await p.listCreativeProjects()).length===2;
-  },null,{timeout:25000});
+  // Importación y recarga son asíncronas; consultar IndexedDB desde Node
+  // para evitar interpretar una Promise del navegador como un resultado verdadero.
+  let restoredProjects=0;
+  for(let attempt=0;attempt<75;attempt++){
+   try{
+    restoredProjects=await restored.evaluate(async()=>{
+     const p=await import('./src/creative-projects.js');
+     return (await p.listCreativeProjects()).length;
+    });
+   }catch{}
+   if(restoredProjects===2)break;
+   await restored.waitForTimeout(300);
+  }
+  if(restoredProjects!==2)errors.push('La restauración integral no agregó el proyecto esperado: '+restoredProjects);
   const check=await restored.evaluate(async()=>{
    const p=await import('./src/creative-projects.js'),v=await import('./src/media-vault.js'),
     b=await import('./src/brand-dna.js');
@@ -76,6 +86,9 @@ for(const [name,engine,width,height] of [['chromium-desktop',chromium,1440,900],
   if(check.office!=='Oficina no sobreescrita')errors.push('Los datos previos de Oficina fueron sobrescritos');
   if(check.mask!=='orbita'||check.imageType!=='image/png')errors.push('Se perdieron los ajustes editables');
 
+  // Después de restaurar la app recarga la vista principal. Volver a
+  // Configuración antes de probar la importación de una copia manipulada.
+  await openSettings(restored,width);
   // Una copia con bytes alterados debe rechazarse, sin añadir nuevos archivos.
   const damaged=Buffer.from(backup),position=damaged.indexOf(Buffer.from([137,80,78,71,13,10,26,10,5,7,9,11,20]));
   if(position<0)errors.push('No se encontró la imagen en el ZIP para prueba de integridad');
