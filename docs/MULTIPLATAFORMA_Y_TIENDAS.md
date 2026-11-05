@@ -45,3 +45,13 @@ Diseño y lógica compartidos. La disponibilidad comercial queda supeditada a la
 - Diseño fiel y utilizable en cada factor de forma, con capturas reales comprobadas.
 - Sin afirmaciones falsas: cuentas conectadas, publicaciones, IA generada, anuncios cobrados o compras solo si se ejecutan y validan realmente.
 - Cuenta/paquete de cada tienda y aprobación verificadas antes de anunciar disponibilidad.
+
+## Verificación del boceto 04 (5 noviembre 2026)
+- La pantalla de carga emplea **una sola composición DOM responsiva** en escritorio, tablet y teléfono: no hay una imagen panorámica alternativa ni una versión móvil visualmente distinta.
+- Se conservan los seis paneles, el logotipo, la esfera extraída del JPEG aprobado, la barra de progreso y los colores originales.
+- En pantallas estrechas los seis módulos se distribuyen en dos columnas, sin ocultarse; en pantallas anchas rodean la esfera central.
+- Las pantallas pequeñas utilizan áreas seguras de iOS/Android y desplazamiento vertical cuando el contenido no cabe sin sacrificar legibilidad.
+- La animación sutil modifica únicamente los brillos: no altera las geometrías ni mueve los paneles; se desactiva con la preferencia de movimiento reducido.
+- La prueba visual de Chromium/Safari WebKit/Firefox está automatizada en GitHub Actions y guarda capturas para inspección.
+- **Compilación web de producción:** `npm run build` ahora ejecuta `vite build`, no el servidor de desarrollo. El flujo de compilación web de GitHub Actions ha concluido correctamente.
+- **Android:** el workflow puede generar una APK de depuración para pruebas internas. No equivale a un paquete AAB comercial ni a su publicación en Google Play. iOS requiere compilación y firma en macOS.
