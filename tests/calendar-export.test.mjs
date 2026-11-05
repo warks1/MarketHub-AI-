@@ -27,7 +27,7 @@ test('El calendario respeta cambio de mes y año bisiesto',()=>{
 test('Neutraliza saltos de línea e inyecciones de propiedades ICS',()=>{
  const danger='Reel\nBEGIN:VEVENT\nSUMMARY:Hack;X,Y';
  const report=exportEditorialICS([{id:'x@evil',title:danger,date:'2026-12-01',platform:'X',status:'Programada'}],opts);
- assert.equal((report.content.match(/BEGIN:VEVENT/g)||[]).length,1);
+ assert.equal(report.content.split('\r\n').filter(line=>line==='BEGIN:VEVENT').length,1);
  assert.match(report.content,/Reel\\nBEGIN:VEVENT\\nSUMMARY:Hack\\;X\\,Y/);
  assert.ok(!report.content.includes('UID:markethub-x@evil'));
  assert.ok(icsEscape('a;b,c')==='a\\;b\\,c');
