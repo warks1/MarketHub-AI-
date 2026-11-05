@@ -79,7 +79,9 @@
     "src/subtitle-tools.js",
     "tests/subtitle-tools.test.mjs",
     "src/creative-audit.js",
-    "tests/creative-audit.test.mjs"
+    "tests/creative-audit.test.mjs",
+    "src/creative-projects.js",
+    "tests/creative-projects.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -718,6 +720,21 @@
         "function auditPanel()",
         "data-forge-action",
         "'audit-photo'"
+      ]
+    },
+    {
+      "id": "MF-PROJECTS",
+      "label": "Creación y recuperación portable de proyectos editables",
+      "file": "src/media-forge.js",
+      "tokens": [
+        "function projectsPage()",
+        "'project-save'",
+        "'project-open'",
+        "'project-export'",
+        "'project-delete'",
+        "data-forge-file=\"project\"",
+        "importPortableCreativeProject(",
+        "portableCreativeProject("
       ]
     }
   ]
