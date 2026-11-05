@@ -1,3 +1,10 @@
+## 2026-11-05 — v0.7.1 · Recomendaciones con datos propios
+
+- Las recomendaciones del panel ahora se calculan desde CSV importados, borradores y campañas locales.
+- Se identifican porcentajes de alcance por plataforma según la fuente importada y borradores vencidos o próximos.
+- No se atribuye crecimiento, ROI ni inteligencia generativa donde no existen fuentes.
+- Tests unitarios y caché PWA actualizados para mantener este módulo en todos los dispositivos.
+
 ## 2026-11-05 — v0.7.0 · Vídeo, copias cifradas y competencia
 
 - Exportación de vídeo local desde storyboard (MP4/WebM según navegador), fundidos y zoom suave, 720p, duración máxima 45 s y 12 escenas. Sin audio.
