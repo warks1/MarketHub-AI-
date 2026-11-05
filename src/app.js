@@ -236,7 +236,7 @@ function render(){
  '<div class="nexus-header-context"><div class="nexus-context-chip"><span>▥</span><span>Espacio de trabajo<b>Marketing Global · demo</b></span></div>'+
  '<div class="nexus-context-chip"><span>✧</span><span>Proyecto<b>Lanzamiento Q1 · demo</b></span></div></div>'+
  '<input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones guardadas..." value="'+safe(state.search)+'">'+
- '<div class="topbar-right">'+(state.mirrorLive&&['inicio','estudio'].includes(state.page)?'<button type="button" class="secondary" data-action="mirror-back" aria-label="Volver al diseño original">Vista original</button>':'')+'<a class="nexus-reference-link" href="./referencias.html" title="Ver los cuatro bocetos originales" aria-label="Ver los cuatro bocetos originales">Bocetos originales</a><button type="button" class="nexus-bell" data-action="goto-bandeja" aria-label="Abrir bandeja">♧</button>'+
+ '<div class="topbar-right"><button type="button" class="nexus-bell" data-action="goto-bandeja" aria-label="Abrir bandeja">♧</button>'+
  '<button type="button" class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · DEMO':'FREE · DEMO')+'</button>'+
  '<div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div></div>'+
  '<nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+
