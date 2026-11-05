@@ -55,7 +55,18 @@ function scheduleStoryboardPlayback(){
   }
  },duration*1000);
 }
-const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,localMessages:state.localMessages,localMentions:state.localMentions,storyboard:state.storyboard,consent:state.consent}))}catch{}};
+state.storageError=false;
+const save=()=>{
+ try{
+  localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,localMessages:state.localMessages,localMentions:state.localMentions,storyboard:state.storyboard,consent:state.consent}));
+  state.storageError=false;
+  return true;
+ }catch(error){
+  state.storageError=true;
+  toast('No se han guardado los cambios: almacenamiento lleno o bloqueado. Exporta una copia de seguridad.');
+  return false;
+ }
+};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
  sparkles:'<path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="m19 17 .7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z"/>',
@@ -260,7 +271,7 @@ function render(){
  '<input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones guardadas..." value="'+safe(state.search)+'">'+
  '<div class="topbar-right"><button type="button" class="nexus-bell" data-action="goto-bandeja" aria-label="Abrir bandeja">♧</button>'+
  '<button type="button" class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · DEMO':'FREE · DEMO')+'</button>'+
- '<div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div></div>'+
+ '<div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+(state.storageError?'<div class="storage-warning" role="alert">Los cambios de esta sesión no se han guardado. El almacenamiento está lleno o bloqueado. Abre Ajustes y exporta la copia de seguridad antes de cerrar.</div>':'')+content()+'</main></div></div>'+
  '<nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+
  (state.modal?modalHTML():'')+(state.menuMore?mobileDrawer():'')+
  (!state.mirrorLive?mirrorLayer(state.page,{menu:state.mirrorMenu}):'');
