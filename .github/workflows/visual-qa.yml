@@ -2,6 +2,13 @@ name: MarketHub AI · QA visual responsive
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'index.html'
+      - 'scripts/visual-qa.mjs'
+      - '.github/workflows/visual-qa.yml'
   pull_request:
     paths:
       - 'src/**'
