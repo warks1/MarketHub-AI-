@@ -36,3 +36,15 @@
 .mobile-more-button{color:#c5d3ef}
 .mobile-more-button[aria-expanded=true]{background:linear-gradient(135deg,#325dbe,#a033c6);color:white}
 @media(min-width:681px){.mobile-menu-backdrop,.mobile-menu-drawer{display:none}}
+
+/* Biblioteca de publicaciones local: acciones cómodas en móvil y escritorio. */
+.post-list-row{gap:12px;align-items:flex-start;flex-wrap:wrap}
+.post-main{min-width:0;flex:1 1 190px;overflow-wrap:anywhere}
+.post-right{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:9px;flex:1 1 190px}
+.post-actions{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end;align-items:center}
+.post-actions button{min-width:0;touch-action:manipulation}
+@media(max-width:680px){
+ .post-right{justify-content:flex-start;flex-basis:100%}
+ .post-actions{justify-content:flex-start;width:100%}
+ .post-actions button{flex:1 1 auto}
+}
