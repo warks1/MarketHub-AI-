@@ -1,3 +1,8 @@
+## 2026-11-05 — v0.7.2 · Corrección de carga PWA
+
+- Precache corregida para incluir los nuevos estilos responsive de la pantalla de carga. Se conserva íntegra la apariencia seleccionada y los cuatro diseños de referencia.
+- Actualización de versión para evitar mezclar hojas de estilo viejas en instalaciones anteriores.
+
 ## 2026-11-05 — v0.7.1 · Recomendaciones con datos propios
 
 - Las recomendaciones del panel ahora se calculan desde CSV importados, borradores y campañas locales.
