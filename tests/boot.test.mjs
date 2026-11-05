@@ -54,3 +54,8 @@ test('La recuperación evita borrar borradores y tolera datos malformados',()=>{
   assert.match(app,/state\.posts\.filter\(p=>p && typeof p==='object'/);
   assert.match(app,/__MARKETHUB_BOOT__\.ready = true/);
 });
+
+test('La compilación genera la aplicación de producción en lugar de arrancar Vite Dev',()=>{
+  const pkg=JSON.parse(readFileSync(path.join(root,'package.json'),'utf8'));
+  assert.equal(pkg.scripts.build,'vite build');
+});
