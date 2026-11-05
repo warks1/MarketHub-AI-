@@ -361,7 +361,25 @@ case 'campaign-export':{
 document.addEventListener('submit',e=>{
  if(e.target.id?.startsWith('growth-')){e.preventDefault();growthSubmit(e.target,state.plan,{refresh:render,toast});return}
  if(e.target.id?.startsWith('office-')){e.preventDefault();officeSubmit(e.target,state.plan,{refresh:render,toast});return}
- if(e.target.id!=='postForm')return;
+ if(e.target.id==='campaignForm'){
+ e.preventDefault();
+ const form=new FormData(e.target);
+ const validated=validateCampaign({
+  name:form.get('name'),objective:form.get('objective'),channel:form.get('channel'),
+  start:form.get('start'),end:form.get('end'),budget:form.get('budget'),status:form.get('status')
+ });
+ if(validated.error){toast(validated.error);return}
+ const existing=campaignById(state.campaigns,state.editCampaignId);
+ if(existing)Object.assign(existing,validated.value);
+ else{
+  if(state.campaigns.length>=campaignLimit(state.plan)){toast('Límite de '+campaignLimit(state.plan)+' campañas locales alcanzado en el modo demo.');return}
+  state.campaigns.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,9),...validated.value});
+ }
+ state.editCampaignId=null;save();render();
+ toast(existing?'Campaña local actualizada.':'Campaña local guardada. No se han activado anuncios.');
+ return;
+}
+if(e.target.id!=='postForm')return;
  e.preventDefault();const form=new FormData(e.target);
  const result=validatePost({title:form.get('title'),platform:form.get('platform'),date:form.get('date'),status:form.get('status')});
  if(result.error){toast(result.error);return}
