@@ -7,6 +7,7 @@ import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
 import {campaignManagerHTML,campaignLimit,validateCampaign,campaignById,campaignsToCSV} from './campaign-manager.js';
 import {analyticsLocalHTML,analyticsCsvTemplate,parseAnalyticsCSV} from './analytics-local.js';
+import {mirrorLayer} from './mirror-ui.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -28,6 +29,7 @@ state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
 state.editPostId=null;state.pendingDeleteId=null;
 state.editCampaignId=null;state.pendingDeleteCampaignId=null;
 state.calendarOffset=0;state.preselectedDate=null;
+state.mirrorLive=false;state.mirrorMenu=false;
 const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,consent:state.consent}))}catch{}};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
@@ -230,11 +232,17 @@ function render(){
  '<div class="nexus-header-context"><div class="nexus-context-chip"><span>▥</span><span>Espacio de trabajo<b>Marketing Global · demo</b></span></div>'+
  '<div class="nexus-context-chip"><span>✧</span><span>Proyecto<b>Lanzamiento Q1 · demo</b></span></div></div>'+
  '<input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones guardadas..." value="'+safe(state.search)+'">'+
- '<div class="topbar-right"><a class="nexus-reference-link" href="./referencias.html" title="Ver los cuatro bocetos originales" aria-label="Ver los cuatro bocetos originales">Bocetos originales</a><button type="button" class="nexus-bell" data-action="goto-bandeja" aria-label="Abrir bandeja">♧</button>'+
+ '<div class="topbar-right">'+(state.mirrorLive&&['inicio','estudio'].includes(state.page)?'<button type="button" class="secondary" data-action="mirror-back" aria-label="Volver al diseño original">Vista original</button>':'')+'<a class="nexus-reference-link" href="./referencias.html" title="Ver los cuatro bocetos originales" aria-label="Ver los cuatro bocetos originales">Bocetos originales</a><button type="button" class="nexus-bell" data-action="goto-bandeja" aria-label="Abrir bandeja">♧</button>'+
  '<button type="button" class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · DEMO':'FREE · DEMO')+'</button>'+
  '<div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div></div>'+
  '<nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+
- (state.modal?modalHTML():'')+(state.menuMore?mobileDrawer():'');
+ (state.modal?modalHTML():'')+(state.menuMore?mobileDrawer():'')+
+ (!state.mirrorLive?mirrorLayer(state.page,{menu:state.mirrorMenu}):'');
+ const mirrored=!state.mirrorLive&&['inicio','estudio'].includes(state.page);
+ const underlying=app.querySelector('.nexus-canvas');
+ if(underlying)underlying.inert=mirrored;
+ const mobileNative=app.querySelector('.mobile-bottom');
+ if(mobileNative)mobileNative.inert=mirrored;
  if(state.page==='diseño')visualMount();
 }
 function modalHTML(){
@@ -255,7 +263,7 @@ function toast(msg){
  const elem=document.createElement('div');elem.className='toast';elem.setAttribute('role','status');elem.textContent=msg;document.body.append(elem);
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>elem.remove(),3300);
 }
-function go(page){if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
+function go(page){if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=false;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
  const growthTarget=e.target.closest('[data-growth-action]');
  if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
@@ -281,7 +289,11 @@ document.addEventListener('click',e=>{
  const tool=catalogueSections.flatMap(s=>s.tools).find(t=>t.id===target.dataset.tool);
  if(tool){state.selectedTool=tool;state.modal='tool-detail';render()}break;
  }
- case 'show-mobile-menu':state.menuMore=true;render();break;
+ case 'mirror-menu':state.mirrorMenu=true;render();break;
+  case 'mirror-close-menu':state.mirrorMenu=false;render();break;
+  case 'mirror-live':state.mirrorLive=true;state.mirrorMenu=false;render();break;
+  case 'mirror-back':state.mirrorLive=false;render();break;
+  case 'show-mobile-menu':state.menuMore=true;render();break;
  case 'close-mobile-menu':state.menuMore=false;render();break;
  case 'backup-export':backupExport({toast});break;
 case 'calendar-prev':state.calendarOffset=Math.max(-12,state.calendarOffset-1);render();break;
