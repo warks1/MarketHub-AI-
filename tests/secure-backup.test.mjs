@@ -37,3 +37,33 @@ test('Archivos malformados o con parámetros inseguros se rechazan',async()=>{
  await assert.rejects(()=>decryptBackupJSON({...encrypted,iterations:10},password,{cryptoImpl:webcrypto}),/compatible/);
  await assert.rejects(()=>decryptBackupJSON({...encrypted,iv:'a'},password,{cryptoImpl:webcrypto}));
 });
+
+
+test('Restauración cifrada autorizada repone registros locales y rechaza contraseña equivocada',async()=>{
+ const {backupImport}=await import('../src/backup.js');
+ const map=new Map(),messages=[];
+ let reloads=0,consents=0;
+ globalThis.localStorage={
+  getItem:key=>map.has(key)?map.get(key):null,
+  setItem:(key,value)=>map.set(key,String(value)),
+  removeItem:key=>map.delete(key)
+ };
+ globalThis.window={
+  confirm:()=>{consents++;return true},
+  location:{reload:()=>{reloads++}}
+ };
+ map.set('markethub-ai-demo-v1',JSON.stringify({plan:'free'}));
+ const encrypted=await encryptBackupJSON(payload,password,{cryptoImpl:webcrypto});
+ const serialized=JSON.stringify(encrypted);
+ const mockFile={size:Buffer.byteLength(serialized),text:async()=>serialized};
+ const wrong=await backupImport(mockFile,{password:'frase incorrecta de prueba',toast:m=>messages.push(m),cryptoImpl:webcrypto});
+ assert.equal(wrong,false);
+ assert.equal(consents,0);
+ assert.equal(JSON.parse(map.get('markethub-ai-demo-v1')).plan,'free');
+ assert.equal(reloads,0);
+ const success=await backupImport(mockFile,{password,toast:m=>messages.push(m),cryptoImpl:webcrypto});
+ assert.equal(success,true);
+ assert.equal(consents,1);
+ assert.equal(reloads,1);
+ assert.equal(JSON.parse(map.get('markethub-ai-demo-v1')).posts[0].title,'Información privada de campaña');
+});
