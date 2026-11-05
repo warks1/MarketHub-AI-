@@ -40,10 +40,14 @@ function calendar(posts,offset){
 }
 function graph(rows){
  const data=clean(rows),dates=[...new Set(data.map(r=>r.fecha).filter(Boolean))].sort().slice(-15);
- if(!dates.length)return '<div class="live-blank-graph"><svg viewBox="0 0 600 180" role="img" aria-label="Gráfico sin datos">'+
+ if(!dates.length)return '<div class="live-blank-graph"><svg viewBox="0 0 600 180" role="img" aria-label="Gráfico ilustrativo de redes sin datos reales">'+
  '<path d="M0 30H600 M0 75H600 M0 120H600 M0 165H600" stroke="#415682" fill="none"/>'+
- '<path d="M0 159Q110 150 210 100T395 102T600 46" fill="none" stroke="#10dffe" stroke-dasharray="8 9" opacity=".6" stroke-width="3"/></svg>'+
- '<p>Importa un CSV para activar tu gráfica de rendimiento.</p>'+page('Importar métricas','analitica','live-primary')+'</div>';
+ '<path d="M0 151C55 142 80 116 140 124S238 48 303 70S403 108 473 46S552 31 600 17" fill="none" stroke="#17eaff" opacity=".93" stroke-width="3"/>'+
+ '<path d="M0 165C63 155 92 91 162 104S248 124 318 69S420 56 488 65S562 28 600 25" fill="none" stroke="#f044ed" opacity=".9" stroke-width="3"/>'+
+ '<path d="M0 170C61 160 101 149 170 141S259 123 314 115S405 122 474 84S554 93 600 66" fill="none" stroke="#baff42" opacity=".9" stroke-width="3"/>'+
+ '<path d="M0 175C75 170 100 167 172 153S261 154 321 147S414 122 474 136S563 104 600 102" fill="none" stroke="#9261ff" opacity=".87" stroke-width="2.5"/>'+
+ '<path d="M0 166C63 157 101 156 166 141S262 126 324 132S411 98 480 112S553 79 600 81" fill="none" stroke="#fa467b" opacity=".82" stroke-width="2.5"/></svg>'+
+ '<p>Vista de ejemplo · Importa un CSV para activar tu gráfica de rendimiento.</p>'+page('Importar métricas','analitica','live-primary')+'</div>';
  const networks=['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'],cols=['#f044ed','#11ecf7','#ff3b63','#69d5ff','#aaff49','#b269ff'];
  const max=Math.max(1,...data.map(r=>Number(r.alcance)||0));
  const plots=networks.map((network,k)=>{
