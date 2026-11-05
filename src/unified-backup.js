@@ -7,6 +7,7 @@ import {listVaultAssets,getVaultAsset,validateVaultAsset,saveVaultAssetsBatch,
 import {readBrandProfiles,normalizeBrandProfile,mergeBrandProfilesBatch,MAX_BRANDS} from './brand-dna.js';
 import {readBackup,validateBackup,backupModuleKeys} from './backup.js';
 import {crc32} from './project-portfolio.js';
+import {secureUnifiedSupported} from './unified-crypto.js';
 
 const TE=new TextEncoder(),TD=new TextDecoder('utf-8',{fatal:true});
 const BK='markethub-brand-dna-v1';
@@ -204,11 +205,17 @@ export async function restoreUnifiedBackup(blob){
 
 /** Controles de la copia integral, junto a las copias cifradas ya existentes. */
 export function unifiedBackupSettingsHTML(){
+ const available=secureUnifiedSupported();
  return '<div class="card"><div class="card-head"><h2>📦 Copia integral de MarketHub AI</h2><span class="tag">Local · ZIP</span></div>'+
- '<p>Una copia conjunta de: proyectos editables e imágenes fuente, Mi biblioteca multimedia, perfiles ADN de Marca y los cuatro módulos locales de publicaciones/Oficina/Visual/Growth Lab.</p>'+
- '<div class="workspace-actions"><button class="primary" type="button" data-action="unified-backup-export">Descargar copia integral (.mhubfull)</button>'+
+ '<p>Conserva proyectos editables, imágenes fuente, biblioteca multimedia, ADN de Marca, publicaciones, Oficina, Estudio Visual y Growth Lab. No elimina las funciones anteriores.</p>'+
+ '<div class="form-field"><label for="unifiedBackupPassword">Contraseña para cifrar o recuperar una copia integral protegida</label>'+
+ '<input class="input" id="unifiedBackupPassword" type="password" minlength="12" maxlength="256" autocomplete="new-password" placeholder="12 caracteres o más">'+
+ '<p class="tiny muted">La contraseña no se almacena. Si la pierdes, no podrás recuperar la copia cifrada.</p></div>'+
+ '<div class="workspace-actions"><button class="primary" type="button" data-action="unified-backup-encrypted-export"'+(available?'':' disabled')+'>🔒 Descargar copia integral CIFRADA (.mhubsecure)</button>'+
+ '<button class="secondary" type="button" data-action="unified-backup-export">Descargar copia integral SIN cifrar (.mhubfull)</button>'+
  '<label class="secondary" for="unifiedBackupImport" style="cursor:pointer">Restaurar copia integral</label>'+
- '<input id="unifiedBackupImport" data-unified-backup-import type="file" accept=".mhubfull,application/zip" aria-label="Importar copia integral de MarketHub AI" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"></div>'+
- '<p class="tiny muted">La restauración añade proyectos, archivos y marcas sin reemplazar los que ya tengas. Los datos de Oficina y otros módulos locales existentes también se conservan; solo se recuperan módulos que falten. Si no hay capacidad suficiente, se cancela antes de importar. El archivo no incluye servicios externos ni datos de otras apps.</p>'+
- '<div class="notice" style="margin-top:12px"><strong>Privacidad:</strong> esta copia contiene fotografías y documentos originales, no está cifrada ni se sube a Internet. Guarda el archivo de forma privada. Puede alcanzar 245 MB y necesitar memoria libre; no sustituye a la copia JSON cifrada disponible arriba. La reversión entre varias bases de datos se intenta si falla una restauración, pero no es una transacción única ante cortes inesperados.</div></div>';
+ '<input id="unifiedBackupImport" data-unified-backup-import type="file" accept=".mhubsecure,.mhubfull,application/octet-stream,application/zip" aria-label="Importar copia integral cifrada o normal de MarketHub AI" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"></div>'+
+ '<p class="tiny muted">El formato .mhubsecure utiliza AES-256-GCM por bloques con PBKDF2-SHA256 y contraseña. Todo ocurre en el dispositivo, sin enviar contenidos ni claves. '+(available?'':'El cifrado necesita HTTPS o un navegador compatible con Web Crypto. ')+'La versión SIN cifrar se conserva por compatibilidad.</p>'+
+ '<p class="tiny muted">La restauración añade proyectos, archivos y marcas sin reemplazar los existentes. Los datos de Oficina y demás módulos solo se añaden cuando faltan. Si no hay capacidad, se cancela. Máximo aproximado: 245 MB por copia.</p>'+
+ '<div class="notice" style="margin-top:12px"><strong>Privacidad:</strong> la copia sin cifrar incluye material privado, no la compartas. Las copias cifradas dependen de la seguridad de la contraseña elegida. En dispositivos con poca RAM, archivos muy grandes pueden fallar. No hay sincronización automática. La recuperación entre varias bases de datos no es una transacción única ante un apagado inesperado.</div></div>';
 }
