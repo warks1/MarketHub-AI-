@@ -298,6 +298,7 @@ function modalHTML(){
  if(state.modal==='reset'){head='Borrar datos locales';body='Se eliminarán los borradores y campañas locales, y tu selección de plan de este navegador.';foot=btn('Cancelar','close-modal')+btn('Sí, borrar','confirm-reset','primary')}
  if(state.modal==='delete-post'){head='Eliminar borrador local';body='La publicación seleccionada desaparecerá de la biblioteca de este dispositivo. Puedes exportar una copia antes de eliminar.';foot=btn('Cancelar','close-modal')+btn('Eliminar publicación','confirm-delete-post','primary')}
  if(state.modal==='storyboard-delete'){head='Eliminar esta escena';body='Se borrará la escena seleccionada del storyboard local. Exporta una copia antes si deseas conservarla.';foot=btn('Cancelar','close-modal')+btn('Eliminar escena','confirm-storyboard-delete','primary')}
+ if(state.modal==='delete-competitor'){head='Eliminar registro de competidor';body='Se eliminarán las cifras introducidas manualmente en este dispositivo. No afecta a redes externas.';foot=btn('Cancelar','close-modal')+btn('Eliminar registro','confirm-delete-competitor','primary')}
  if(state.modal==='delete-campaign'){head='Eliminar campaña local';body='Se borrará esta planificación del dispositivo. No afecta a anuncios reales: no hay cuentas conectadas.';foot=btn('Cancelar','close-modal')+btn('Eliminar campaña','confirm-delete-campaign','primary')}
  if(state.modal==='clear-analytics'){head='Eliminar métricas importadas';body='Se eliminarán las filas CSV guardadas localmente. No afecta a tus cuentas externas.';foot=btn('Cancelar','close-modal')+btn('Borrar métricas locales','confirm-clear-analytics','primary')}
  return '<div class="modal-backdrop" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">'+head+'</h2><p>'+body+'</p><div class="modal-actions">'+foot+'</div></div></div>';
@@ -364,6 +365,33 @@ case 'calendar-day':{
   state.preselectedDate=date;state.editPostId=null;go('crear');
  }
  break;
+}
+case 'competitor-edit':{
+ const item=findCompetitor(state.competitors,target.dataset.id);
+ if(item){state.editCompetitorId=item.id;go('competencia');}
+ break;
+}
+case 'competitor-cancel':state.editCompetitorId=null;render();break;
+case 'competitor-delete':{
+ const item=findCompetitor(state.competitors,target.dataset.id);
+ if(item){state.pendingDeleteCompetitorId=item.id;state.modal='delete-competitor';render()}
+ break;
+}
+case 'confirm-delete-competitor':{
+ const id=state.pendingDeleteCompetitorId;
+ if(id!=null){
+  state.competitors=state.competitors.filter(c=>String(c.id)!==String(id));
+  if(String(state.editCompetitorId)===String(id))state.editCompetitorId=null;
+  save();toast('Registro de competencia eliminado.');
+ }
+ state.modal=null;state.pendingDeleteCompetitorId=null;render();break;
+}
+case 'competitor-export':{
+ const csv=competitorsToCSV(state.competitors),blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='markethub-competidores-'+todayLocal()+'.csv';
+ document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+ toast('Comparativa manual exportada a CSV.');break;
 }
 case 'campaign-edit':{
  const campaign=campaignById(state.campaigns,target.dataset.id);
@@ -585,7 +613,7 @@ case 'campaign-export':{
  case 'confirm-reward':state.credits+=5;state.modal=null;save();render();toast('+5 créditos ficticios. No se ha visto ningún anuncio.');break;
  case 'close-modal':state.modal=null;render();break;
  case 'reset-data':state.modal='reset';render();break;
- case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.campaigns=[];state.analyticsRows=[];state.localMessages=[];state.localMentions=[];state.storyboard=[createScene()];state.storyboardCurrent=0;state.editPostId=null;state.pendingDeleteId=null;state.editCampaignId=null;state.pendingDeleteCampaignId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
+ case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.campaigns=[];state.analyticsRows=[];state.competitors=[];state.editCompetitorId=null;state.pendingDeleteCompetitorId=null;state.localMessages=[];state.localMentions=[];state.storyboard=[createScene()];state.storyboardCurrent=0;state.editPostId=null;state.pendingDeleteId=null;state.editCampaignId=null;state.pendingDeleteCampaignId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
  case 'no-op':break;
  }
 });
