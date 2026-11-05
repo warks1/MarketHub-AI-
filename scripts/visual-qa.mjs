@@ -75,6 +75,26 @@ try{
    await page.locator('[data-action="storyboard-export-png"]').click();
    const png=await output;
    if(!png.suggestedFilename().endsWith('.png'))problems.push('El estudio no exporta una imagen PNG real');
+   const photoBase64=await page.evaluate(()=>{
+    const c=document.createElement('canvas');c.width=48;c.height=48;
+    const ctx=c.getContext('2d');ctx.fillStyle='#ff008c';ctx.fillRect(0,0,48,48);
+    ctx.fillStyle='#00ffff';ctx.fillRect(16,16,16,16);
+    return c.toDataURL('image/png').split(',')[1];
+   });
+   await page.locator('#live-scene-photo').setInputFiles({
+    name:'imagen-de-escena.png',mimeType:'image/png',buffer:Buffer.from(photoBase64,'base64')
+   });
+   await page.locator('.live-scene-photo').waitFor({state:'visible'});
+   const imgSaved=await page.evaluate(()=>{
+    const data=JSON.parse(localStorage.getItem('markethub-ai-demo-v1')||'{}');
+    return data.storyboard?.some(x=>typeof x.imageData==='string'&&x.imageData.startsWith('data:image/jpeg;base64,'));
+   });
+   if(!imgSaved)problems.push('La foto del storyboard no persiste en el almacenamiento del dispositivo');
+   const pngWithPhoto=page.waitForEvent('download',{timeout:10000});
+   await page.locator('[data-action="storyboard-export-png"]').click();
+   const photoDownload=await pngWithPhoto;
+   if(!photoDownload.suggestedFilename().endsWith('.png'))problems.push('No exporta el PNG con la foto');
+   await page.screenshot({path:'visual-qa/'+id+'-estudio-con-foto.png',fullPage:true});
    await page.locator('[data-action="storyboard-select"][data-index="0"]').click();
    await page.locator('#live-scene-duration').fill('1');
    await page.locator('#storyboardForm button[type="submit"]').click();
