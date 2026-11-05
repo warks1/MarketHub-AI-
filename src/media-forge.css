@@ -1,0 +1,34 @@
+/* MEDIA FORGE — módulo nativo responsive integrado en NEXUS × PULSE */
+.media-forge{width:100%;min-width:0;color:#f2f6ff;padding:3px 0 36px}
+.media-forge *{box-sizing:border-box}
+.forge-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin:6px 0 18px}
+.forge-head h1{font:800 clamp(25px,3.2vw,43px)/1.14 'Space Grotesk',system-ui;margin:5px 0}
+.forge-head h1:first-letter{color:#23ebfa}
+.forge-head p{color:#b9ccf2;font-size:13px}
+.forge-private{border:1px solid #28dbe5;color:#adfaff;border-radius:99px;padding:9px 13px;background:#063359;font-size:12px;white-space:nowrap}
+.forge-tabs{display:flex;gap:9px;overflow-x:auto;scrollbar-width:thin;padding:3px 1px 13px}
+.forge-tabs button{flex:0 0 auto;border-radius:13px;padding:12px 14px;color:#d0e3ff;background:#17244e;border:1px solid #5361a0;font-size:12px;font-weight:700;min-height:44px}
+.forge-tabs button[aria-current=page]{color:white;background:linear-gradient(105deg,#126ca5,#6541be,#ae2eaa);border-color:#5eedf0;box-shadow:0 0 14px #7b51da75}
+.forge-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.2fr);align-items:start;gap:14px}
+.forge-panel{min-width:0;padding:clamp(13px,1.5vw,22px);border:1px solid #53629e;background:linear-gradient(150deg,#15244d,#13163a 72%);border-radius:20px;box-shadow:inset 0 0 32px #2985bb19}
+.forge-panel h2{font-size:clamp(17px,1.65vw,23px);margin:0 0 11px}
+.forge-panel>p{color:#bfcdef;font-size:12px;line-height:1.55;margin:10px 0;overflow-wrap:anywhere}
+.forge-panel label:not(.forge-file){display:grid;gap:6px;font-size:12px;font-weight:700;color:#bfe7f8;margin-top:13px;min-width:0}
+.forge-panel select,.forge-panel input:not([type=file]){font:inherit;color:#f3f7ff;background:#101d42;border:1px solid #6474b3;border-radius:11px;padding:12px;min-width:0;max-width:100%;width:100%;min-height:44px}
+.forge-file{position:relative;display:flex;justify-content:center;align-items:center;text-align:center;border:1px dashed #35d4f3;color:#defbff;min-height:72px;border-radius:14px;margin-top:16px;padding:13px 11px;cursor:pointer;background:#063d6b8a;font-weight:750;font-size:13px}
+.forge-file:focus-within{outline:2px solid #f948ec;outline-offset:2px}
+.forge-file input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.forge-meta{font-size:11px!important;overflow-wrap:anywhere}
+.forge-actions{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0 12px}
+.forge-actions button{flex:1 1 112px;min-height:44px;padding:10px;border-radius:12px;background:linear-gradient(100deg,#006bba,#5e4cc3,#af36b6);border:1px solid #88c7eb;color:#fff;font-size:12px;font-weight:750}
+.forge-actions button:disabled{opacity:.45;cursor:not-allowed}
+.forge-preview{display:flex;align-items:center;justify-content:center;min-height:380px;max-height:min(75dvh,820px);overflow:hidden;padding:15px;border-radius:16px;background:radial-gradient(ellipse at 50% 30%,#292069,#090e28 70%);border:1px solid #435fa5}
+.forge-preview canvas{display:block;width:auto;height:auto;max-width:100%;max-height:min(69dvh,770px);object-fit:contain;box-shadow:0 15px 35px #0006}
+.forge-panel video{display:block;width:100%;max-height:70dvh;object-fit:contain;background:#000;border-radius:12px;border:1px solid #657ab2}
+.forge-panel audio{display:block;width:100%;margin:20px 0;min-height:50px}
+.forge-empty{display:grid;place-items:center;color:#a8bee9;min-height:280px;border:1px dashed #536ca2;border-radius:14px;text-align:center;padding:20px}
+.forge-times{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.forge-pdf{display:block;width:100%;min-height:70dvh;background:#fff;border:1px solid #6678aa;border-radius:12px}
+@media(max-width:1140px){.forge-grid{grid-template-columns:1fr}.forge-preview{min-height:300px;max-height:66dvh}.forge-preview canvas{max-height:62dvh}}
+@media(max-width:680px){.media-forge{padding:0 0 95px}.forge-head{margin:7px 0 13px}.forge-head h1{font-size:26px}.forge-tabs{gap:7px}.forge-tabs button{padding:11px;font-size:11px}.forge-grid{grid-template-columns:minmax(0,1fr);gap:11px}.forge-panel{padding:12px}.forge-preview{min-height:270px;max-height:59dvh;padding:9px}.forge-preview canvas{max-height:55dvh}.forge-times{gap:8px}.forge-pdf{min-height:55dvh}}
+@media(prefers-reduced-motion:reduce){.media-forge *{scroll-behavior:auto!important;transition:none!important}}
