@@ -125,3 +125,14 @@ Mi biblioteca multimedia, ADN de Marca ni datos de Oficina**, que requieren
 sus propios respaldos. Los ZIP no están cifrados.
 La APK generada por este workflow es únicamente una versión de depuración;
 se debe probar importación/exportación en Android físico antes del lanzamiento.
+
+### Copia integral de MarketHub AI — APK de verificación (5 noviembre 2026)
+La app incorpora en **Configuración** la descarga de un ZIP privado `.mhubfull`
+con proyectos editables, archivos de la biblioteca, perfiles de marca y los
+cuatro módulos locales de trabajo. La importación añade nuevos proyectos y
+medios sin sustituir los anteriores; la recuperación de otras áreas solo
+rellena datos ausentes. Se validan CRC, formatos y capacidad.
+**Importante:** el ZIP no está cifrado y puede alcanzar 245 MB. La app no lo
+sincroniza automáticamente. Se debe probar su descarga y reimportación en
+WebViews de Android e iOS reales, especialmente en móviles con poca memoria.
+La APK del workflow es de depuración, no un AAB comercial firmado.
