@@ -147,10 +147,18 @@ for(const [engine,runner,width,height] of [
   await page.locator('[data-forge-file="portfolio"]').setInputFiles({
    name:'respaldo-de-campanas.mhubpack',mimeType:'application/zip',buffer:fullBytes
   });
-  await page.waitForFunction(()=>document.querySelectorAll('.forge-project-item').length===2,
-   null,{timeout:15000}).catch(()=>problems.push('La copia completa no restauró el proyecto adicional'));
-  const countAfterFullImport=await page.locator('.forge-project-item').count();
-  if(countAfterFullImport!==2)problems.push('El respaldo completo ha reemplazado o duplicado mal los proyectos');
+  await page.waitForFunction(async()=>{
+   const {listCreativeProjects}=await import('./src/creative-projects.js');
+   return (await listCreativeProjects()).length===2;
+  },null,{timeout:15000}).catch(()=>{});
+  const countAfterFullImport=await page.evaluate(async()=>{
+   const {listCreativeProjects}=await import('./src/creative-projects.js');
+   return (await listCreativeProjects()).length;
+  });
+  if(countAfterFullImport!==2){
+   const message=await page.locator('.toast').last().textContent().catch(()=>'(sin aviso)');
+   problems.push('La copia completa no añadió el proyecto: hay '+countAfterFullImport+' en IndexedDB; aviso: '+message);
+  }
 
   // Un respaldo manipulado debe ser rechazado ANTES de añadir nada.
   const damaged=Buffer.from(fullBytes);
@@ -162,8 +170,12 @@ for(const [engine,runner,width,height] of [
     name:'copia-danada.mhubpack',mimeType:'application/zip',buffer:damaged
    });
    await page.locator('.toast').filter({hasText:'Restauración cancelada:'}).waitFor({state:'visible',timeout:12000});
-   if(await page.locator('.forge-project-item').count()!==2)
-    problems.push('ZIP corrupto alteró los proyectos ya guardados');
+   const afterDamage=await page.evaluate(async()=>{
+    const {listCreativeProjects}=await import('./src/creative-projects.js');
+    return (await listCreativeProjects()).length;
+   });
+   if(afterDamage!==countAfterFullImport)
+    problems.push('ZIP corrupto modificó IndexedDB: antes '+countAfterFullImport+', después '+afterDamage);
   }
 
 
