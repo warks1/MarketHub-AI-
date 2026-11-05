@@ -9,8 +9,10 @@ const check=(okay,why)=>{if(!okay)failures.push(why)};
 const refs=[...html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="([^"]+)"/g)].map(x=>x[1]);
 check(html.includes('id="app"'),'Falta nodo app');
 check(html.includes('boot-fallback'),'Falta UI de recuperación');
-check(refs.includes('./src/app.js'),'Script del proyecto debe ser relativo');
-for(const href of refs)if(href.startsWith('./'))check(fs.existsSync(path.join(root,href)),'Falta recurso '+href);
+check(html.includes('markethubBootFailed'),'Falta detección de fallos de inicio');
+check(html.includes('bootStatus'),'Falta mensaje de arranque accesible');
+check(refs.some(href=>href.split(/[?#]/,1)[0]==='./src/app.js'),'Script del proyecto debe ser relativo');
+for(const href of refs){const clean=href.split(/[?#]/,1)[0];if(clean.startsWith('./'))check(fs.existsSync(path.join(root,clean)),'Falta recurso '+href);}
 function scan(file){
  if(visited.has(file))return;
  visited.add(file);
