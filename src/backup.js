@@ -93,7 +93,7 @@ export async function backupImport(file,ctx){
 }
 export function backupSettingsHTML(){
  return '<div class="card"><div class="card-head"><h2>🗂 Copia de seguridad local</h2><span class="tag">Beta</span></div>'+
- '<div class="notice" style="margin-bottom:13px">Puedes guardar borradores, Oficina, Estudio Visual y Growth Lab en un solo archivo JSON. <strong>No está cifrado:</strong> protégelo como un documento privado. Restaurar sobreescribe los módulos incluidos, pero no borra los que falten en la copia.</div>'+
+ '<div class="notice" style="margin-bottom:13px">Puedes guardar borradores, campañas planificadas, analítica CSV local, Oficina, Estudio Visual y Growth Lab en un solo archivo JSON. <strong>No está cifrado:</strong> protégelo como un documento privado. Restaurar sobreescribe los módulos incluidos, pero no borra los que falten en la copia.</div>'+
  '<div class="workspace-actions">'+
  '<button class="primary" type="button" data-action="backup-export">Descargar copia conjunta (.json)</button>'+
  '<label class="secondary" for="localBackupImport" style="cursor:pointer">Restaurar archivo JSON</label>'+
