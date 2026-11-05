@@ -1,11 +1,14 @@
 /* MarketHub AI · service worker PWA para modo básico sin conexión.
    La estrategia de navegación es network-first: no inmovilizar versiones antiguas ni ocultar fallos de publicación. */
-const CACHE = 'markethub-nexus-pulse-shell-v0.4.0';
+const CACHE = 'markethub-nexus-pulse-shell-v0.4.1';
 const SHELL = [
  './','./index.html','./logo.svg','./manifest.webmanifest',
  './src/app.js','./src/catalogue.js','./src/nexus-ui.js','./src/post-manager.js',
  './src/office.js','./src/growth.js','./src/visual.js','./src/backup.js',
- './src/style.css','./src/nexus-ui.css','./src/nexus.css',
+ './src/style.css','./src/nexus-ui.css','./src/nexus.css','./src/reference.css',
+ './assets/boceto-01-inicio.webp','./assets/boceto-02-estudio.webp',
+ './assets/boceto-03-movil.webp','./assets/boceto-04-carga.webp',
+ './referencias.html','./icon-192.png','./icon-512.png',
  './src/office.css','./src/growth.css','./src/visual.css'
 ];
 self.addEventListener('install', event=>{
@@ -60,15 +63,17 @@ self.addEventListener('fetch',event=>{
  }
  if(!url.pathname.startsWith(new URL('./',self.registration.scope).pathname))return;
  event.respondWith((async()=>{
-  const cached=await caches.match(req,{ignoreSearch:true});
-  if(cached)return cached;
+  // JS y CSS siempre se actualizan desde la red antes de acudir al modo offline.
   try{
-   const network=await fetch(req);
-   if(network.ok && ['script','style','image','manifest'].includes(req.destination)){
-    const cache=await caches.open(CACHE);await cache.put(req,network.clone());
+   const network=await fetch(req,{cache:'no-cache'});
+   if(network.ok && ['script','style','image','manifest','document'].includes(req.destination)){
+    const cache=await caches.open(CACHE);
+    await cache.put(req,network.clone());
    }
    return network;
   }catch{
+   const cached=await caches.match(req); // No mezclar revisiones de archivos JS.
+   if(cached)return cached;
    return new Response('Recurso no disponible sin conexión',{status:503,statusText:'Offline'});
   }
  })());
