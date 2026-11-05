@@ -748,13 +748,7 @@ function splash(){
  overlay.setAttribute('role','status');
  overlay.setAttribute('aria-label','Iniciando MarketHub AI');
  // Pantalla de carga 04 intacta en equipos panorámicos.
- const wide='<div class="nexus-original-splash-board">'+
-  '<img src="'+original+'" width="1536" height="864" alt="Pantalla de carga original seleccionada MarketHub AI" fetchpriority="high" draggable="false">'+
-  '<div class="progress-track" aria-label="Progreso de inicio">'+
-   '<div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
-  '<p id="progressLabel" class="mirror-sr-only">Preparando paneles, campañas y analítica...</p>'+
-  '<button type="button" class="splash-skip mirror-skip" id="skipSplash" aria-label="Entrar directamente en MarketHub AI"></button>'+
- '</div>';
+ // Una sola composición dinámica para todos los tamaños, sin imagen panorámica alternativa.
  // Móvil y tablet: SEIS paneles originales, completos, en celdas reales y legibles.
  // Nunca usamos el centro recortado con banners partidos o fuera de pantalla.
  const iconPaths={
@@ -790,8 +784,7 @@ function splash(){
   '<div class="mh-splash-bottom"><span>© '+new Date().getFullYear()+' MarketHub AI · Todos los derechos reservados</span>'+
   '<button type="button" id="skipSplash" class="mh-splash-enter">Entrar</button></div>'+
  '</div></div>';
- const adapt=window.matchMedia?.('(max-width:1199px), (max-height:640px)')?.matches;
- overlay.innerHTML=adapt?compact:wide;
+ overlay.innerHTML=compact;
  document.body.append(overlay);
  const bar=overlay.querySelector('#progressFill');
  const value=overlay.querySelector('#progressPercent');
