@@ -1,6 +1,6 @@
 // MarketHub AI · auditoría de la interfaz REAL adaptable: nada de capturas inertes.
 import {chromium} from 'playwright';
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,writeFile,readFile} from 'node:fs/promises';
 const origin=process.env.MARKETHUB_URL||'http://127.0.0.1:5173/';
 const sizes=[
  ['smartphone-320',320,568],['iphone-375',375,812],['smartphone-390',390,844],
@@ -51,6 +51,14 @@ try{
   if(await page.locator('.mirror-overlay').count())problems.push('Captura estática cubre la interfaz funcional');
   if((await page.locator('.live-stat').count())!==6)problems.push('No están los 6 indicadores funcionales');
   await page.screenshot({path:'visual-qa/'+id+'-inicio.png',fullPage:true});
+  if(['smartphone-390','pc-1440'].includes(id)){
+   const editorial=page.waitForEvent('download',{timeout:10000});
+   await page.locator('.live-calendar-actions [data-action="export-calendar"]').click();
+   const file=await editorial;
+   if(!file.suggestedFilename().endsWith('.ics'))problems.push('Falta descarga del calendario .ics');
+   const bytes=await readFile(await file.path(),'utf8');
+   if(!bytes.includes('BEGIN:VCALENDAR')||!bytes.includes('BEGIN:VEVENT'))problems.push('Calendario exportado no tiene eventos válidos');
+  }
   const home=await widths(page,'inicio');
   if(home.total>home.viewport+4)problems.push('Inicio se desborda '+JSON.stringify(home));
   if(width<=680){
