@@ -150,3 +150,14 @@ Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalida
 - **Continuidad:** contrato obligatorio actualizado; shell offline actualizado sin perder el boceto de carga aprobado ni otros módulos.
 - **Limitaciones reales:** biblioteca y marcas no se sincronizan; no hay todavía conversión universal MP4/MP3, IA generativa integrada, suscripciones ni anuncios comerciales.
 - **Estado de distribución:** los paquetes APK/web de la versión previa se generaron; la ampliación posterior debe volver a pasar el pipeline. Publicar en tiendas requiere pruebas y firma.
+
+## 2026-11-05 · Proyectos creativos reeditables y copias portables .mhub
+- Media Forge incorpora la pestaña **Proyectos editables** y un botón para guardar/reanudar desde la herramienta Foto y máscaras.
+- Cada proyecto guarda su **imagen fuente original**, formato, máscara, tratamiento visual, texto, SafeFrame y colores activos de identidad de marca, no solo la foto exportada.
+- Los proyectos se guardan en una base IndexedDB independiente de Mi biblioteca para no modificar ni perder los ficheros multimedia existentes.
+- Límite preventivo: 12 proyectos, imágenes originales de hasta 8 MB y 80 MB en total.
+- Permite **exportar/descargar una copia .mhub** e importarla en otro navegador/dispositivo sin cuenta, con validación de estructura, campos y tamaño. La copia incluye datos de la imagen (no contraseñas).
+- Las importaciones de una foto nueva se mantienen independientes para evitar sobrescribir accidentalmente el último proyecto abierto.
+- Pruebas unitarias y E2E añadidas: guardar, reabrir, formato 1:1, máscara, texto, exportación, eliminación e importación portable tras recargar, en Chromium y WebKit.
+- Corregido el paso CI de instalación de Playwright a una versión estable publicada: 1.64.1; el instalador anterior intentaba instalar una versión de playwright-core todavía inexistente.
+- Se conserva la composición de pantalla de carga aprobada, PULSE PACK, la biblioteca, los otros conversores, Estudio y las funciones anteriores. La sincronización automática en nube y las publicaciones comerciales siguen pendientes.
