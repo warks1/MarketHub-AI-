@@ -149,7 +149,15 @@ export function forgePage(){
  '<nav class="forge-tabs" aria-label="Laboratorio multimedia">'+Object.entries(tabNames).map(([k,n])=>'<button type="button" data-forge-tab="'+k+'" aria-current="'+(s.tab===k?'page':'false')+'">'+n+'</button>').join('')+'</nav>'+
  (s.tab==='audio'?audio():s.tab==='video'?video():s.tab==='pdf'?pdf():s.tab==='subs'?subtitles():s.tab==='vault'?vaultPage():s.tab==='projects'?projectsPage():photo())+'</section>';
 }
-export function forgeTab(name,refresh){if(!tabNames[name])return false;s.tab=name;refresh();if(name==='vault')void forgeVaultLoad(refresh);if(name==='projects')void forgeProjectLoad(refresh);return true}
+export function forgeTab(name,refresh){
+ if(!tabNames[name])return false;
+ s.tab=name;
+ // Evitar reemplazar el selector de archivos mientras el usuario importa una copia.
+ // Solo mostrar la pestaña con formularios tras concluir la carga de IndexedDB.
+ if(name==='vault'){void forgeVaultLoad(refresh);return true}
+ if(name==='projects'){void forgeProjectLoad(refresh);return true}
+ refresh();return true;
+}
 export const outputDimensions=format=>SIZES[format]||SIZES['9:16'];
 export const safeFileName=name=>String(name||'media').replace(/\.[^.]*$/,'').replace(/[^a-z0-9_-]/gi,'-').slice(0,70)||'media';
 function maskShape(ctx,w,h,mask){
