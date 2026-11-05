@@ -126,7 +126,7 @@ function create(){
  '<div class="form-field"><label for="postStatus">Estado local</label><select class="input" id="postStatus" name="status"><option value="Borrador" '+(status==='Borrador'?'selected':'')+'>Borrador</option><option value="Programada" '+(status==='Programada'?'selected':'')+'>Planificada (sin publicación automática)</option></select></div>'+
  '<div class="platforms" style="margin:0 0 16px"><span class="tag">✓ Archivo local</span><span class="tag pink">Sin publicar</span></div>'+
  '<button type="submit" class="primary full">'+(editing?'Guardar cambios locales':'Guardar publicación local')+'</button>'+
- (editing?'<div class="post-actions" style="margin-top:12px">'+btn('Cancelar edición','cancel-edit','secondary full')+'</div>':'')+
+ (editing?'<div class="post-actions" style="margin-top:12px">'+btn('Cancelar edición','cancel-edit','secondary full','type="button"')+'</div>':'')+
  '</form></div>'+
  '<div class="section-stack"><div class="card"><div class="card-head"><h2>Biblioteca local</h2><span class="tag">'+state.posts.filter(p=>p&&typeof p==='object').length+' / '+draftLimit(state.plan)+' borradores</span></div>'+
  '<div class="line-list">'+(postsFiltered().length?postsFiltered().map(p=>postRow(p,true)).join(''):'<div class="empty">No hay publicaciones.</div>')+'</div>'+
