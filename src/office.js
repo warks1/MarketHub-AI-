@@ -113,7 +113,9 @@ function landingPage(){
  '<div class="workspace-landing-preview"><span class="eyebrow">'+esc(model.brand.name||'TU MARCA')+'</span><h2>'+esc(d.title||'Tu propuesta comienza aquí')+'</h2><p>'+esc(d.subtitle||'Descubre lo que tenemos preparado para ti.')+'</p><span class="landing-preview-button">'+esc(d.button||'Descubre más')+'</span></div><div class="workspace-actions" style="margin-top:14px">'+asButton('Descargar landing HTML','download-landing','primary')+'</div><p class="tiny muted" style="margin-top:10px">El archivo se abre en navegador. Para publicar en internet necesitas alojamiento web, dominio y revisión legal.</p>')+'</div>';
 }
 function calculatorPage(){
- const c=model.calculation;
+ const raw=model.calculation;
+ // Los datos restaurados pueden estar incompletos o dañados; nunca pintar NaN/Infinity.
+ const c=raw&&['spend','revenue','leads','orders'].every(k=>typeof raw[k]==='number'&&Number.isFinite(raw[k])&&raw[k]>=0&&raw[k]<=1e12)?raw:null;
  return '<div class="workspace-dual">'+card('↗ Calculadora de rentabilidad',
  '<p class="tiny muted" style="margin-bottom:12px">Introduce cifras propias; los resultados serán cálculos matemáticos, no estimaciones de ventas.</p><form id="office-calc-form">'+
  field('Gasto publicitario (€)','calcSpend',c?.spend??'','number','required min="0" step="0.01"')+
