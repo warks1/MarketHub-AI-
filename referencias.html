@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#071029">
+<title>MarketHub AI · Bocetos originales seleccionados</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 0 0,#086c8a44,transparent 35%),radial-gradient(circle at 100% 3%,#9225bd55,transparent 39%),#040924;color:#eff6ff;min-height:100dvh}
+main{max-width:1700px;margin:auto;padding:clamp(12px,3vw,34px)}
+header{text-align:center;margin-bottom:22px}
+.logo{display:flex;align-items:center;justify-content:center;gap:12px;font-size:clamp(22px,4vw,39px);font-weight:850;letter-spacing:-.04em}
+.logo img{height:54px;width:54px}
+.gradient{background:linear-gradient(95deg,#22e8ff,#9361ff,#f746dc);background-clip:text;-webkit-background-clip:text;color:transparent}
+p{color:#c3d4ed;line-height:1.55}
+.note{font-size:13px;max-width:830px;margin:9px auto}
+nav{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:16px auto}
+nav button,a.go{font:700 13px system-ui;cursor:pointer;border:1px solid #596baf;background:#132451;color:#f4f6ff;border-radius:13px;padding:11px 17px;min-height:42px}
+nav button[aria-selected="true"]{border-color:#fb85ff;background:linear-gradient(110deg,#174aca,#972ac5,#e33dca);box-shadow:0 0 17px #a633dd55}
+a.go{text-decoration:none;display:inline-block;border-color:#23edfa;background:linear-gradient(115deg,#056d92,#7138c2)}
+.viewer{position:relative;background:#07122a;border:1px solid #964cdd;border-radius:19px;overflow:hidden;box-shadow:0 0 18px #d13ded4a,0 0 28px #10c7f42b}
+.viewer figure{display:none;margin:0}
+.viewer figure[aria-hidden="false"]{display:block}
+.viewer img{width:100%;height:auto;display:block;object-fit:contain}
+.viewer figcaption{padding:12px 15px;font-size:13px;color:#c8d8f1}
+footer{text-align:center;margin:17px auto;font-size:11px;color:#a7b9d9}
+@media(max-width:600px){main{padding:10px}nav{display:grid;grid-template-columns:repeat(2,1fr)}nav button{font-size:11px;padding:9px 8px}.viewer{border-radius:12px}.viewer figcaption{font-size:11px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="logo"><img src="./logo.svg" alt=""><span>MarketHub <span class="gradient">AI</span></span></div>
+<p>Referencias originales aprobadas · NEXUS × PULSE</p>
+<p class="note">Estas son las cuatro imágenes originales elegidas. Se muestran sin rediseñarlas. Son una <strong>referencia visual</strong> para verificar el desarrollo; las cifras, nombres y conexiones dibujadas no representan datos reales. La aplicación funcional se abre por separado.</p>
+<nav aria-label="Seleccionar boceto">
+<button type="button" aria-selected="true" aria-controls="ref01" data-ref="ref01">01 · Pantalla principal</button>
+<button type="button" aria-selected="false" aria-controls="ref02" data-ref="ref02">02 · Estudio creativo</button>
+<button type="button" aria-selected="false" aria-controls="ref03" data-ref="ref03">03 · Versión móvil</button>
+<button type="button" aria-selected="false" aria-controls="ref04" data-ref="ref04">04 · Pantalla de carga</button>
+</nav>
+<a href="./?bocetos=originales" class="go">Abrir la aplicación funcional ↗</a>
+</header>
+<div class="viewer">
+<figure id="ref01" aria-hidden="false"><img src="./assets/boceto-01-inicio.webp" alt="Boceto 01 original: panel principal con indicadores, gráfico, calendario, asistente, campañas y plataformas conectadas de ejemplo"><figcaption>Boceto 01 · Pantalla principal — composición original elegida</figcaption></figure>
+<figure id="ref02" aria-hidden="true"><img loading="lazy" src="./assets/boceto-02-estudio.webp" alt="Boceto 02 original: estudio creativo con editor, vista previa, línea de tiempo y recomendaciones IA de ejemplo"><figcaption>Boceto 02 · Estudio creativo — composición original elegida</figcaption></figure>
+<figure id="ref03" aria-hidden="true"><img loading="lazy" src="./assets/boceto-03-movil.webp" alt="Boceto 03 original: tres vistas móviles de MarketHub AI"><figcaption>Boceto 03 · Versión móvil — composición original elegida</figcaption></figure>
+<figure id="ref04" aria-hidden="true"><img loading="lazy" src="./assets/boceto-04-carga.webp" alt="Boceto 04 original: esfera neón con logo MarketHub AI, seis funciones y barra de carga"><figcaption>Boceto 04 · Pantalla de carga — composición original elegida</figcaption></figure>
+</div>
+<footer>© 2026 MarketHub AI · Archivo de referencia visual aprobado · No sustituye una prueba funcional en móvil y ordenador.</footer>
+</main>
+<script>
+(function(){
+ const buttons=[...document.querySelectorAll('[data-ref]')],figures=[...document.querySelectorAll('.viewer figure')];
+ buttons.forEach(button=>button.addEventListener('click',()=>{
+  buttons.forEach(x=>x.setAttribute('aria-selected',String(x===button)));
+  figures.forEach(x=>x.setAttribute('aria-hidden',String(x.id!==button.dataset.ref)));
+ }));
+}());
+</script>
+</body>
+</html>
