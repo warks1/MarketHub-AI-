@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {runInNewContext, Script} from 'node:vm';
+import {Script} from 'node:vm';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
@@ -35,7 +35,7 @@ test('El detector de errores arranca, avisa y respeta el estado ready',()=>{
   let timer;
   const win={addEventListener(name,cb){alerts[name]=cb;},setTimeout(cb){timer=cb;}};
   const doc={getElementById(id){return elements[id]||null;},createElement(){return {id:'',style:{},textContent:''};}};
-  runInNewContext(script, {window:win,document:doc});
+  script.runInNewContext({window:win,document:doc});
   assert.equal(win.__MARKETHUB_BOOT__.ready,false);
   assert.equal(typeof win.markethubBootFailed,'function');
   alerts.error({target:win,message:'Prueba controlada'});
