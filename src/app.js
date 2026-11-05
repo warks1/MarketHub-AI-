@@ -314,6 +314,7 @@ document.addEventListener('click',e=>{
  if(!target)return;
  const action=target.dataset.action;
  if(action.startsWith('goto-')){go(action.slice(5));return}
+ if(state.storyboardPlaying && ['storyboard-add','storyboard-move-left','storyboard-move-right','storyboard-duplicate','storyboard-remove','confirm-storyboard-delete'].includes(action))stopStoryboardPlayback();
  switch(action){
  case 'catalogue-open-growth':{if(state.selectedTool?.growthTab){growthOpenTab(state.selectedTool.growthTab);go('laboratorio')}break}
  case 'catalogue-open-local':{
@@ -494,6 +495,7 @@ document.addEventListener('submit',e=>{
  if(e.target.id?.startsWith('growth-')){e.preventDefault();growthSubmit(e.target,state.plan,{refresh:render,toast});return}
  if(e.target.id?.startsWith('office-')){e.preventDefault();officeSubmit(e.target,state.plan,{refresh:render,toast});return}
  if(e.target.id==='storyboardForm'){
+  stopStoryboardPlayback();
   e.preventDefault();
   const current=state.storyboard[state.storyboardCurrent];
   if(!current){toast('Añade una escena primero.');return}
