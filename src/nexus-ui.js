@@ -14,9 +14,9 @@ function postItem(p){
  const status=p?.status==='Borrador'?'Borrador':'Planificada';
  return '<div class="nexus-post-item"><div class="nexus-post-thumb" aria-hidden="true">✦</div><div class="nexus-post-details"><b>'+title+'</b><small>'+name+' · '+when+'</small></div><span class="nexus-post-status">'+status+'</span></div>';
 }
-function monthCalendar(posts){
- const today=new Date();
- const yr=today.getFullYear(), month=today.getMonth();
+function monthCalendar(posts,offset=0){
+ const now=new Date(),shown=new Date(now.getFullYear(),now.getMonth()+Math.min(12,Math.max(-12,offset)),1);
+ const yr=shown.getFullYear(),month=shown.getMonth();
  const first=(new Date(yr,month,1).getDay()+6)%7;
  const last=new Date(yr,month+1,0).getDate();
  const marked=new Set(posts.filter(p=>p&&typeof p==='object').map(p=>p.date));
@@ -24,10 +24,15 @@ function monthCalendar(posts){
  for(let n=0;n<first;n++)cells+='<span class="nexus-empty"></span>';
  for(let day=1;day<=last;day++){
   const iso=[yr,String(month+1).padStart(2,'0'),String(day).padStart(2,'0')].join('-');
-  const classes=['nexus-day',day===today.getDate()?'active':'',marked.has(iso)?'marked':''].join(' ');
-  cells+='<span class="'+classes+'" title="'+(marked.has(iso)?'Contenido guardado':'')+'">'+day+'</span>';
+  const current=day===now.getDate()&&month===now.getMonth()&&yr===now.getFullYear();
+  const classes=['nexus-day',current?'active':'',marked.has(iso)?'marked':''].join(' ');
+  cells+='<button type="button" class="'+classes+'" data-action="calendar-day" data-date="'+iso+'" title="Preparar contenido para '+iso+'" aria-label="Crear publicación para '+iso+'">'+day+'</button>';
  }
- return '<div class="nexus-cal-month">'+new Intl.DateTimeFormat('es-ES',{month:'long',year:'numeric'}).format(today)+'</div><div class="nexus-calendar-grid">'+cells+'</div>';
+ return '<div class="nexus-cal-nav">'+
+ '<button type="button" data-action="calendar-prev" aria-label="Mes anterior" '+(offset<=-12?'disabled':'')+'>‹</button>'+
+ '<div class="nexus-cal-month">'+new Intl.DateTimeFormat('es-ES',{month:'long',year:'numeric'}).format(shown)+'</div>'+
+ '<button type="button" data-action="calendar-next" aria-label="Mes siguiente" '+(offset>=12?'disabled':'')+'>›</button></div>'+
+ '<div class="nexus-calendar-grid">'+cells+'</div>';
 }
 function platform(name,symbol){
  return '<div class="nexus-platform"><span class="nexus-platform-symbol">'+symbol+'</span><b>'+name+'</b><small>Sin conectar</small></div>';
@@ -82,7 +87,7 @@ function connections(){
  ].join('')+'</div><p class="nexus-muted nexus-footnote">Las conexiones reales requieren autorización oficial de cada red.</p>',
  action('goto-ajustes','Gestionar ↗'),'nexus-connections');
 }
-export function nexusHome({posts=[],chart='',plan='free'}={}){
+export function nexusHome({posts=[],chart='',plan='free',calendarOffset=0}={}){
  const valid=posts.filter(p=>p&&typeof p==='object');
  return '<div class="nexus-home">'+
  '<div class="nexus-page-head"><div><span class="nexus-eyebrow">PANEL PRINCIPAL · NEXUS × PULSE</span><h1>¡Hola! 👋</h1><p>Así va tu marketing hoy. Tu ecosistema en un solo lugar.</p></div><div class="nexus-period">▦ Últimos 30 días <span>· datos demo</span></div></div>'+
@@ -95,7 +100,7 @@ export function nexusHome({posts=[],chart='',plan='free'}={}){
  kpi('▥','Crecimiento','+42,8%','10,9 pp','green')
  ].join('')+'</div>'+
  '<div class="nexus-main-grid">'+performance(chart)+
- card('▦ Calendario de contenidos',monthCalendar(valid)+
+ card('▦ Calendario de contenidos',monthCalendar(valid,calendarOffset)+
  '<div class="nexus-calendar-next"><small>Próximas publicaciones · locales</small>'+
  (valid.length?valid.slice(0,2).map(postItem).join(''):'<p>No hay publicaciones guardadas.</p>')+'</div>',
  action('goto-crear','Ver calendario ↗'),'nexus-calendar')+
