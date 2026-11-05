@@ -218,11 +218,12 @@ Referencias y fechas: [RADAR_TECNOLOGICO_2026.md](RADAR_TECNOLOGICO_2026.md).
 ### Núcleo multimedia integrado — MF
 
 - **MF-01 [implementado en web, requiere prueba nativa]:** Media Forge accesible desde navegación PC/Mac, menú móvil y catálogo de herramientas.
-- **MF-02 [implementado]:** visor de imágenes y editor de composición local con máscaras originales de MarketHub AI y estilos de color: Órbita NEXUS, círculo, redondeada, estrella, hexágono y completa.
+- **MF-02 [implementado]:** visor de imágenes y editor de composición local con 15 máscaras originales y estilos de color: Órbita NEXUS, círculo, ovalada, redondeada, estrella, hexágono, pentágono, octágono, triángulo, diamante, corazón, bandas horizontal y vertical, ventana y completa.
 - **MF-03 [implementado]:** redimensionamiento centrado para redes 9:16, 4:5, 1:1, 16:9 y 3:2; exportación PNG/JPEG/WebP basada en Canvas. La exportación WebP exige soporte del navegador y no debe simular éxito.
 - **MF-04 [implementado]:** reproductor de audio local, recorte por segundos y exportación WAV PCM 16 bits con Web Audio API, según códecs disponibles. No se afirma exportación MP3 ni AAC sin motor real.
 - **MF-05 [implementado con restricciones]:** reproductor de vídeo, captura de fotogramas PNG y conversor WebM mediante MediaRecorder/captureStream donde el motor del navegador lo soporte; límite de 90 segundos. No promete MP4 nativo, compatibilidad universal ni procesamiento en segundo plano.
 - **MF-06 [implementado con dependencia del sistema]:** visor integrado de PDF y enlace alternativo para sistemas sin visor.
+- **MF-06A [implementado]:** PULSE PACK: una imagen y un estilo se exportan en cinco tamaños sociales como JPEG dentro de un único ZIP generado localmente, sin servicio externo.
 - **MF-07 [obligatorio]:** procesamiento local prioritario, sin subir imágenes/audio/vídeo/PDF por defecto; límites de tamaño, comprobación de formatos, mensajes de incompatibilidad y ausencia de pérdida de los proyectos previos.
 - **MF-08 [obligatorio]:** mismo flujo táctil con iPhone/iPad/Android y ratón/teclado en Mac/PC; tamaños adaptables, controles accesibles, rendimiento y memoria limitados para móviles.
 
