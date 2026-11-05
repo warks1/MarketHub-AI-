@@ -68,6 +68,27 @@ for(const [engine,runner,width,height] of [
   if(zip.subarray(0,4).toString()!=='PK\u0003\u0004')problems.push('ZIP exportado inválido');
   for(const format of ['9x16','4x5','1x1','16x9','3x2'])
    if(!zip.includes(Buffer.from('campana-prueba-'+format+'.jpg')))problems.push('Falta formato '+format+' en PULSE PACK');
+  // Guardar el ORIGINAL con capas/parámetros editables, exportar una copia portable,
+  // y reabrir desde la galería sin depender de otro editor.
+  await page.locator('[data-forge-input="projectName"]').fill('Campaña editable PULSE');
+  await page.locator('[data-forge-action="project-save"]').click();
+  await page.locator('.toast').filter({hasText:'Proyecto editable guardado.'}).waitFor({state:'visible',timeout:20000});
+  await page.locator('[data-forge-action="project-list"]').click();
+  await page.locator('.forge-project-item').first().waitFor({state:'visible',timeout:15000});
+  const backupWait=page.waitForEvent('download',{timeout:25000});
+  await page.locator('[data-forge-action="project-export"]').first().click();
+  const projectDownload=await backupWait,projectBytes=await readFile(await projectDownload.path());
+  if(!projectDownload.suggestedFilename().endsWith('.mhub'))problems.push('Copia de proyecto no usa .mhub');
+  let portable;
+  try{portable=JSON.parse(projectBytes.toString('utf8'))}catch{problems.push('Copia de proyecto no es JSON válido')}
+  if(portable?.format!=='mhub-creative-project'||portable?.settings?.mask!=='corazon'||
+     portable?.settings?.format!=='1:1'||!portable?.sourceBase64)
+   problems.push('La copia editable no incluye foto original y ajustes de campaña');
+  await page.locator('[data-forge-action="project-open"]').first().click();
+  await page.locator('[data-forge-input="format"]').waitFor();
+  if(await page.locator('[data-forge-input="mask"]').inputValue()!=='corazon'||
+     await page.locator('[data-forge-input="caption"]').inputValue()!=='CAMPAÑA DE PRUEBA')
+   problems.push('Los ajustes del proyecto no se recuperan al reabrirlo');
   // Persistencia real en IndexedDB: guardar, recargar, reabrir y eliminar.
   await page.locator('[data-forge-action="vault-save-photo"]').click();
   // El guardado es asíncrono; confirmar su finalización antes de abrir otra pestaña.
@@ -99,6 +120,22 @@ for(const [engine,runner,width,height] of [
   page.once('dialog',dialog=>dialog.accept());
   await page.locator('.forge-vault-item [data-forge-action="vault-delete"]').first().click();
   await page.locator('.forge-vault-item').first().waitFor({state:'detached',timeout:10000});
+  // Proyectos: sobreviven a recarga, se eliminan con confirmación y se pueden
+  // recuperar en otro dispositivo desde el fichero portable exportado.
+  await page.locator('[data-forge-tab="projects"]').click();
+  await page.locator('.forge-project-item').first().waitFor({state:'visible',timeout:15000});
+  page.once('dialog',dialog=>dialog.accept());
+  await page.locator('[data-forge-action="project-delete"]').first().click();
+  await page.locator('.forge-project-item').first().waitFor({state:'detached',timeout:15000});
+  await page.locator('[data-forge-file="project"]').setInputFiles({
+    name:'campana-recuperada.mhub',mimeType:'application/json',buffer:projectBytes
+  });
+  await page.locator('.forge-project-item').first().waitFor({state:'visible',timeout:15000});
+  await page.locator('[data-forge-action="project-open"]').first().click();
+  await page.locator('[data-forge-input="format"]').waitFor();
+  if(await page.locator('[data-forge-input="format"]').inputValue()!=='1:1')
+   problems.push('La copia portable no restaura el formato de la campaña');
+
   await page.locator('[data-forge-tab="audio"]').click();
   await page.locator('[data-forge-file="audio"]').setInputFiles({
    name:'voz-prueba.wav',mimeType:'audio/wav',buffer:Buffer.from(wavBuffer)
