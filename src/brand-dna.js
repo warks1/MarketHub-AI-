@@ -49,6 +49,8 @@ export function mergeBrandProfilesBatch(profiles){
  if(raw!==null){
   let records;try{records=JSON.parse(raw)}catch{throw Error('No se puede fusionar: el ADN local existente no es legible')}
   if(!Array.isArray(records))throw Error('La lista local de marcas tiene un formato inválido');
+  if(records.length!==readBrandProfiles().length)
+   throw Error('Hay marcas locales no reconocidas: exporta los datos antes de fusionar para evitar pérdidas');
  }
  const present=readBrandProfiles(),existing=new Set(present.map(x=>x.id));
  const added=normalized.filter(x=>!existing.has(x.id));
