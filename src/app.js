@@ -375,7 +375,7 @@ function splash(){
  if(window.matchMedia?.('(min-width:900px) and (min-aspect-ratio:14/10)').matches){
   overlay.classList.add('nexus-original-splash');
   overlay.innerHTML='<div class="nexus-original-splash-board">'+
-   '<img src="./assets/boceto-04-carga.webp" alt="Pantalla de carga original seleccionada: esfera neón, seis módulos y logo MarketHub AI">'+
+   '<img src="./assets/boceto-04-carga-original.jpeg" alt="Pantalla de carga original seleccionada: esfera neón, seis módulos y logo MarketHub AI">'+
    '<div class="progress-track"><div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
    '<p id="progressLabel">Preparando paneles, campañas y analítica...</p>'+
    '<button type="button" class="splash-skip" id="skipSplash">Entrar ahora</button>'+
