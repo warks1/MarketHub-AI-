@@ -113,7 +113,12 @@ export function forgeInput(target){
  else if(name==='mask'&&MASKS.includes(target.value))s.mask=target.value;
  else if(name==='look'&&looks[target.value])s.look=target.value;
  else if(name==='caption')s.caption=String(target.value).slice(0,90);
- else if(name==='subtitle')s.subtitle=String(target.value).slice(0,1000000);
+ else if(name==='subtitle'){
+  s.subtitle=String(target.value).slice(0,1000000);
+  const message=document.getElementById('forgeSubtitleStatus');
+  if(message)message.textContent=(()=>{try{return parseSubtitles(s.subtitle).length+' fragmentos reconocidos';}catch{return 'Corrige o añade tiempos para convertir.'}})();
+  for(const key of ['srt','vtt']){const button=document.querySelector('[data-forge-action="'+key+'"]');if(button)button.disabled=!s.subtitle.trim()}
+ }
  else return false;
  forgeMount();return true;
 }
