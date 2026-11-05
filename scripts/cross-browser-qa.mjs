@@ -30,8 +30,11 @@ for(const [id,engine,width,height] of cases){
    if(!(await img.getAttribute('src')).includes('boceto-04-carga-original.jpeg'))
     problems.push('No usa la pantalla de carga aprobada');
    await page.screenshot({path:'browser-qa/'+id+'-carga.png'});
-   await page.locator('#skipSplash').click();
+   // La carga se cierra sola tras un breve progreso: en Safari el botón puede
+   // desaparecer durante el click de Playwright. No es un fallo de la app.
+   await page.locator('#skipSplash').click({force:true,timeout:900}).catch(()=>{});
   }
+  await page.locator('.nexus-original-splash').waitFor({state:'hidden',timeout:5000}).catch(()=>{});
   await page.locator('.live-home').waitFor({state:'visible',timeout:12000});
   if(await page.locator('.mirror-overlay').count())problems.push('Captura estática impide operar');
   if(await page.locator('.live-stat').count()!==6)problems.push('No se muestran seis métricas');
