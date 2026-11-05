@@ -229,3 +229,7 @@
 .live-editor-transport [aria-pressed="true"]{border-color:#12f5ff;box-shadow:0 0 13px #02e0ff7d;background:linear-gradient(105deg,#1459b4,#a634db)}
 .live-editor-transport [data-action="storyboard-play"]{min-height:37px;font-weight:800}
 @media(prefers-reduced-motion:reduce){.live-editor-canvas,.live-orbit{animation:none!important}}
+
+/* Warning shown only when local data cannot be persisted, never silently lost. */
+.storage-warning{padding:12px 14px;margin:8px 0 14px;border:1px solid #fcb34e;border-radius:12px;background:#452e26;color:#ffe6bc;font-size:12px;line-height:1.55}
+@media(max-width:680px){.storage-warning{font-size:13px;margin:6px 0 12px}}
