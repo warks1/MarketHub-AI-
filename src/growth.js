@@ -27,7 +27,7 @@ const https=value=>{
 };
 const today=()=>new Date().toISOString().slice(0,10);
 const newId=()=>new Date().getTime().toString(36)+'-'+Math.random().toString(36).slice(2,8);
-const fmtMoney=v=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(Number(v)||0);
+const fmtMoney=v=>{const n=Number(v);return new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(Number.isFinite(n)?n:0)};
 function card(title,body){return '<div class="card"><div class="card-head"><h2>'+title+'</h2></div>'+body+'</div>'}
 function textField(label,id,value='',attrs=''){return '<div class="form-field"><label for="'+id+'">'+label+'</label><input class="input" id="'+id+'" name="'+id+'" value="'+esc(value)+'" '+attrs+'></div>'}
 function areaField(label,id,value='',attrs=''){return '<div class="form-field"><label for="'+id+'">'+label+'</label><textarea class="input" id="'+id+'" name="'+id+'" '+attrs+'>'+esc(value)+'</textarea></div>'}
