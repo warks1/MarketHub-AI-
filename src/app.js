@@ -322,7 +322,7 @@ document.addEventListener('click',e=>{
  if(forgeTabTarget){forgeTab(forgeTabTarget.dataset.forgeTab,render);return}
  const forgeActionTarget=e.target.closest('[data-forge-action]');
  if(forgeActionTarget){
-  void forgeClick(forgeActionTarget,{toast,sendStudioImage:async(blob)=>{
+  void forgeClick(forgeActionTarget,{toast,refresh:render,sendStudioImage:async(blob)=>{
    const scene=state.storyboard[state.storyboardCurrent];
    if(!scene)throw Error('Crea una escena en Estudio antes de enviar imágenes');
    const file=new File([blob],'media-forge.jpg',{type:'image/jpeg'});
