@@ -7,6 +7,7 @@ import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
 import {campaignManagerHTML,campaignLimit,validateCampaign,campaignById,campaignsToCSV} from './campaign-manager.js';
 import {analyticsLocalHTML,analyticsCsvTemplate,parseAnalyticsCSV} from './analytics-local.js';
+import {competitorsHTML,competitorLimit,validateCompetitor,findCompetitor,competitorsToCSV} from './competitor-local.js';
 import {mirrorLayer} from './mirror-ui.js';
 import {liveHome,liveInbox,liveListening} from './live-ui.js';
 import {liveStudio,createScene,parseScene,STUDIO_THEMES} from './live-studio.js';
@@ -28,12 +29,13 @@ let saved={};
 try{saved=JSON.parse(localStorage.getItem(storeKey)||'{}')||{}}catch{saved={}}
 let state={
   page:'inicio',plan:saved.plan==='pro'?'pro':'free',credits:Number.isFinite(saved.credits)?saved.credits:20,
-  posts:Array.isArray(saved.posts)?saved.posts:demoPosts,campaigns:Array.isArray(saved.campaigns)?saved.campaigns:[],analyticsRows:Array.isArray(saved.analyticsRows)?saved.analyticsRows:[],localMessages:Array.isArray(saved.localMessages)?saved.localMessages:[],localMentions:Array.isArray(saved.localMentions)?saved.localMentions:[],storyboard:Array.isArray(saved.storyboard)?saved.storyboard:[{id:'demo-scene-1',title:'Nuevo lanzamiento',caption:'Presenta tu producto o servicio',duration:5,theme:'Neón'},{id:'demo-scene-2',title:'Contenido que convierte',caption:'Describe el valor de tu marca',duration:5,theme:'Violeta'}],modal:null,creativeMode:'Video / Reels',
+  posts:Array.isArray(saved.posts)?saved.posts:demoPosts,campaigns:Array.isArray(saved.campaigns)?saved.campaigns:[],analyticsRows:Array.isArray(saved.analyticsRows)?saved.analyticsRows:[],competitors:Array.isArray(saved.competitors)?saved.competitors:[],localMessages:Array.isArray(saved.localMessages)?saved.localMessages:[],localMentions:Array.isArray(saved.localMentions)?saved.localMentions:[],storyboard:Array.isArray(saved.storyboard)?saved.storyboard:[{id:'demo-scene-1',title:'Nuevo lanzamiento',caption:'Presenta tu producto o servicio',duration:5,theme:'Neón'},{id:'demo-scene-2',title:'Contenido que convierte',caption:'Describe el valor de tu marca',duration:5,theme:'Violeta'}],modal:null,creativeMode:'Video / Reels',
   videoFormat:'9:16',search:'',menuMore:false,consent: saved.consent || 'pending'
 };
 state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
 state.editPostId=null;state.pendingDeleteId=null;
 state.editCampaignId=null;state.pendingDeleteCampaignId=null;
+state.editCompetitorId=null;state.pendingDeleteCompetitorId=null;
 state.calendarOffset=0;state.preselectedDate=null;
 state.mirrorLive=true;state.mirrorMenu=false;
 state.storyboardCurrent=0;
@@ -62,7 +64,7 @@ function scheduleStoryboardPlayback(){
 state.storageError=false;
 const save=()=>{
  try{
-  localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,localMessages:state.localMessages,localMentions:state.localMentions,storyboard:state.storyboard,consent:state.consent}));
+  localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,competitors:state.competitors,localMessages:state.localMessages,localMentions:state.localMentions,storyboard:state.storyboard,consent:state.consent}));
   state.storageError=false;
   return true;
  }catch(error){
@@ -237,7 +239,8 @@ function content(){
  case 'escucha':return liveListening({mentions:state.localMentions});
  case 'planes':return plans();
  case 'ajustes':return settings();
- case 'biblioteca':case 'competencia':case 'automatizaciones':return extraScreen(state.page);
+ case 'competencia':return competitorsHTML({items:state.competitors,editingId:state.editCompetitorId,plan:state.plan});
+ case 'biblioteca':case 'automatizaciones':return extraScreen(state.page);
  default:return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan,calendarOffset:state.calendarOffset});
  }
 }
