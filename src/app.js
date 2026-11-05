@@ -10,6 +10,7 @@ import {analyticsLocalHTML,analyticsCsvTemplate,parseAnalyticsCSV} from './analy
 import {mirrorLayer} from './mirror-ui.js';
 import {liveHome,liveInbox,liveListening} from './live-ui.js';
 import {liveStudio,createScene,parseScene,STUDIO_THEMES} from './live-studio.js';
+import {imageFileToSceneData,canStoreSceneImage} from './studio-scene-media.js';
 import {downloadScenePNG} from './studio-scene-export.js';
 
 const app=document.querySelector('#app');
@@ -417,6 +418,16 @@ case 'campaign-export':{
    document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
    toast('Archivo CSV generado en este dispositivo.');break;
   }
+ case 'storyboard-clear-photo':{
+  stopStoryboardPlayback();
+  const current=state.storyboard[state.storyboardCurrent];
+  if(current?.imageData){
+   const old=current.imageData;delete current.imageData;
+   if(!save()){current.imageData=old;toast('No se pudo guardar el cambio.');break}
+   render();toast('Fotografía quitada de esta escena.');
+  }
+  break;
+ }
  case 'storyboard-play':{
   if(state.storyboardPlaying){stopStoryboardPlayback();render();break}
   if(!state.storyboard.length){toast('Añade al menos una escena para reproducir.');break}
@@ -566,6 +577,24 @@ if(e.target.id!=='postForm')return;
  save();render();toast(editing?'Publicación local actualizada.':'Borrador local guardado. No se ha publicado en ninguna red.');
 });
 document.addEventListener('change',e=>{
+ if(e.target.matches('[data-scene-image]')){
+  const file=e.target.files?.[0];
+  if(!file)return;
+  const sceneId=state.storyboard[state.storyboardCurrent]?.id;
+  if(sceneId==null){toast('Primero añade una escena.');return}
+  stopStoryboardPlayback();
+  imageFileToSceneData(file).then(data=>{
+   const item=state.storyboard.find(x=>String(x.id)===String(sceneId));
+   if(!item){toast('Esa escena ya no existe.');return}
+   if(!canStoreSceneImage(state.storyboard,sceneId,data)){
+    toast('El proyecto supera 1,35 MB de fotografías guardadas. Elimina fotos de otras escenas.');return;
+   }
+   const previous=item.imageData;item.imageData=data;
+   if(!save()){item.imageData=previous;return}
+   render();toast('Fotografía añadida a la escena y al PNG exportable.');
+  }).catch(err=>toast('No se pudo importar la foto: '+String(err.message||err).slice(0,160)));
+  return;
+ }
  if(e.target.matches('[data-analytics-file]')){
   const file=e.target.files?.[0];
   if(!file)return;
