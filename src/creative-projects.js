@@ -150,3 +150,17 @@ export async function importCreativeProjectBatch(entries){
   });
  }finally{db.close()}
 }
+
+/** Retroceso seguro de proyectos añadidos durante una restauración interrumpida. */
+export async function removeCreativeProjectsBatch(ids){
+ if(!Array.isArray(ids)||ids.some(id=>typeof id!=='string'))throw Error('IDs de proyectos incorrectos');
+ if(!ids.length)return;
+ const db=await openDb();
+ try{await new Promise((resolve,reject)=>{
+  const tx=db.transaction(STORE,'readwrite'),store=tx.objectStore(STORE);
+  ids.forEach(id=>store.delete(id));
+  tx.oncomplete=resolve;
+  tx.onabort=()=>reject(tx.error||Error('No se pudo revertir el lote de proyectos'));
+  tx.onerror=()=>{};
+ })}finally{db.close()}
+}
