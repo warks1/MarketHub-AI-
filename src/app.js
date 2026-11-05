@@ -452,6 +452,34 @@ case 'campaign-export':{
 document.addEventListener('submit',e=>{
  if(e.target.id?.startsWith('growth-')){e.preventDefault();growthSubmit(e.target,state.plan,{refresh:render,toast});return}
  if(e.target.id?.startsWith('office-')){e.preventDefault();officeSubmit(e.target,state.plan,{refresh:render,toast});return}
+ if(e.target.id==='storyboardForm'){
+  e.preventDefault();
+  const current=state.storyboard[state.storyboardCurrent];
+  if(!current){toast('Añade una escena primero.');return}
+  const f=new FormData(e.target);
+  const result=parseScene({title:f.get('title'),caption:f.get('caption'),duration:f.get('duration'),theme:f.get('theme')});
+  if(result.error){toast(result.error);return}
+  Object.assign(current,result.value);save();render();toast('Cambios de la escena guardados.');return;
+ }
+ if(e.target.id==='liveMessageForm'){
+  e.preventDefault();
+  const f=new FormData(e.target),contact=String(f.get('contact')||'').trim().slice(0,80),
+  network=String(f.get('network')||'Otro').slice(0,30),body=String(f.get('body')||'').trim().slice(0,600);
+  if(!contact||!body){toast('Completa el contacto y el mensaje.');return}
+  if(state.localMessages.length>=200){toast('Límite local de 200 conversaciones.');return}
+  state.localMessages.unshift({id:Date.now()+'-'+Math.random().toString(36).slice(2,8),contact,network,body,status:'Pendiente',date:todayLocal()});
+  save();render();toast('Conversación guardada en este dispositivo.');return;
+ }
+ if(e.target.id==='liveMentionForm'){
+  e.preventDefault();
+  const f=new FormData(e.target),text=String(f.get('text')||'').trim().slice(0,140),
+  sentiment=String(f.get('sentiment')||'Neutra'),source=String(f.get('source')||'').trim().slice(0,60);
+  if(!text||!source){toast('Completa la mención y la fuente.');return}
+  if(!['Positiva','Neutra','Negativa'].includes(sentiment)){toast('Sentimiento no válido.');return}
+  if(state.localMentions.length>=500){toast('Límite local de 500 menciones.');return}
+  state.localMentions.unshift({id:Date.now()+'-'+Math.random().toString(36).slice(2,8),text,source,sentiment,date:todayLocal()});
+  save();render();toast('Mención guardada localmente.');return;
+ }
  if(e.target.id==='campaignForm'){
  e.preventDefault();
  const form=new FormData(e.target);
