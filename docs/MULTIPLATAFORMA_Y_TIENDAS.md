@@ -136,3 +136,12 @@ rellena datos ausentes. Se validan CRC, formatos y capacidad.
 sincroniza automáticamente. Se debe probar su descarga y reimportación en
 WebViews de Android e iOS reales, especialmente en móviles con poca memoria.
 La APK del workflow es de depuración, no un AAB comercial firmado.
+
+### Revisión completa de respaldo local (5 noviembre 2026)
+Pruebas de navegador aprobadas para copia integral `.mhubfull` y para el sistema
+previo `.mhubpack`: recuperación sin reemplazar los datos existentes,
+validación CRC, rechazo de archivos dañados y controles estables tras la carga
+asíncrona de IndexedDB. Los archivos no están cifrados. La protección requiere
+guardar copias fuera del dispositivo, especialmente antes de limpiar caché.
+La APK resultante es de depuración; falta instalación y QA en teléfonos reales,
+firma para tiendas, integración comercial de anuncios y suscripciones.
