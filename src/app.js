@@ -2,6 +2,7 @@ import { catalogueSections } from './catalogue.js';
 import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './office.js';
 import {growthPage,growthOpenTab,growthClick,growthSubmit} from './growth.js';
 import {backupExport,backupEncryptedExport,backupImport,backupSettingsHTML} from './backup.js';
+import {exportUnifiedBackup,restoreUnifiedBackup,MAX_UNIFIED_BYTES,unifiedBackupSettingsHTML} from './unified-backup.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 import {forgePage,forgeMount,forgeTab,forgeClick,forgeInput,forgeFile} from './media-forge.js';
 import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
@@ -208,7 +209,7 @@ function plans(){
 function settings(){
  return sectionHeader('Configuración','Personaliza la demostración de MarketHub AI.')+
  '<div class="two-cols"><div class="card"><div class="card-head"><h2>Cuenta y suscripción</h2></div><div class="switch-wrap"><div><b>Tu plan actual (demo)</b><p class="muted tiny">'+(state.plan==='pro'?'PRO · sin publicidad':'FREE · con publicidad')+'</p></div>'+btn('Ver planes','goto-planes','secondary small-btn')+'</div><div class="switch-wrap" style="margin-top:12px"><div><b>Créditos de ejemplo</b><p class="muted tiny">'+state.credits+' créditos guardados localmente</p></div><span class="tag">'+state.credits+'</span></div><div class="notice" style="margin-top:14px">Los datos se almacenan solo en este navegador. No hay cuenta, sincronización, publicidad real ni contratación activa.</div></div>'+
- '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>'+backupSettingsHTML();
+ '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>'+backupSettingsHTML()+unifiedBackupSettingsHTML();
 }
 function extraScreen(page){
  if(page==='biblioteca'){
@@ -373,6 +374,17 @@ document.addEventListener('click',e=>{
   case 'show-mobile-menu':state.menuMore=true;render();break;
  case 'close-mobile-menu':state.menuMore=false;render();break;
  case 'backup-export':backupExport({toast});break;
+ case 'unified-backup-export':{
+  toast('Preparando la copia integral local; no cierres la pantalla.');
+  void exportUnifiedBackup().then(blob=>{
+   const url=URL.createObjectURL(blob),link=document.createElement('a');
+   link.href=url;link.download='MarketHub-AI-Copia-INTEGRAL-'+new Date().toISOString().slice(0,10)+'.mhubfull';
+   document.body.append(link);link.click();link.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),60000);
+   toast('Copia integral descargada. Consérvala en un lugar privado.');
+  }).catch(err=>toast('Error al crear la copia integral: '+String(err.message||err).slice(0,130)));
+  break;
+ }
  case 'backup-encrypted-export':{
   const passwordField=document.querySelector('#backupPassword');
   const password=passwordField?.value||'';
@@ -752,6 +764,22 @@ document.addEventListener('change',e=>{
    save();render();
    toast(rows.length+' filas importadas y resumidas localmente.');
   }).catch(err=>toast('Error en CSV: '+String(err.message||err).slice(0,150)));
+  return;
+ }
+ if(e.target.matches('[data-unified-backup-import]')){
+  const file=e.target.files?.[0];e.target.value='';
+  if(!file)return;
+  if(!file.name.toLowerCase().endsWith('.mhubfull')||file.size<100||file.size>MAX_UNIFIED_BYTES){
+   toast('Selecciona una copia integral .mhubfull de hasta 245 MB.');return;
+  }
+  if(!window.confirm('La restauración añadirá los proyectos, medios y marcas de la copia sin reemplazar los existentes. Los módulos locales solo se rellenarán si faltan. ¿Continuar?')){
+   toast('Restauración cancelada.');return;
+  }
+  toast('Validando el respaldo integral antes de recuperar archivos.');
+  void restoreUnifiedBackup(file).then(result=>{
+   toast('Recuperados '+result.projects+' proyectos, '+result.assets+' medios, '+result.brands+' marcas y '+result.modules+' módulos. Reiniciando vista.');
+   window.location.reload();
+  }).catch(err=>toast('No se pudo restaurar la copia: '+String(err.message||err).slice(0,155)));
   return;
  }
  if(e.target.matches('[data-backup-import]')){const field=document.querySelector('#backupPassword'),password=field?.value||'';if(field)field.value='';backupImport(e.target.files?.[0],{toast,password}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
