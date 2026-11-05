@@ -32,3 +32,15 @@
 @media(max-width:1140px){.forge-grid{grid-template-columns:1fr}.forge-preview{min-height:300px;max-height:66dvh}.forge-preview canvas{max-height:62dvh}}
 @media(max-width:680px){.media-forge{padding:0 0 95px}.forge-head{margin:7px 0 13px}.forge-head h1{font-size:26px}.forge-tabs{gap:7px}.forge-tabs button{padding:11px;font-size:11px}.forge-grid{grid-template-columns:minmax(0,1fr);gap:11px}.forge-panel{padding:12px}.forge-preview{min-height:270px;max-height:59dvh;padding:9px}.forge-preview canvas{max-height:55dvh}.forge-times{gap:8px}.forge-pdf{min-height:55dvh}}
 @media(prefers-reduced-motion:reduce){.media-forge *{scroll-behavior:auto!important;transition:none!important}}
+
+/* Subtítulos: editor funcional local, ajustable a teléfono, tablet y escritorio. */
+.media-forge .forge-panel textarea{
+ display:block;width:100%;min-width:0;min-height:225px;resize:vertical;
+ margin-top:8px;padding:12px 13px;border:1px solid #5c74b5;border-radius:12px;
+ background:#081631;color:#eff7ff;font:500 13px/1.55 ui-monospace,Consolas,monospace;
+ white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2;
+}
+.media-forge .forge-panel textarea:focus-visible{outline:2px solid #41e4f3;outline-offset:2px}
+@media(max-width:680px){
+ .media-forge .forge-panel textarea{font-size:16px;min-height:195px}
+}
