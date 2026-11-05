@@ -37,6 +37,20 @@ for(const [name,engine,width,height] of [['chromium-desktop',chromium,1440,900],
   const download=await downloadPromise,backup=await readFile(await download.path());
   if(!download.suggestedFilename().endsWith('.mhubfull'))errors.push('No se exportó formato .mhubfull');
   if(backup.subarray(0,4).toString('hex')!=='504b0304')errors.push('La copia no comienza con cabecera ZIP');
+  // Cifrado íntegro por contraseña en móvil y PC: el archivo no debe incluir
+  // marcas ni datos en claro y debe poderse recuperar en otro navegador.
+  const encryptedPassword='Prueba de cifrado MarketHub AI 2026+';
+  await page.locator('#unifiedBackupPassword').fill(encryptedPassword);
+  const encryptedWait=page.waitForEvent('download',{timeout:30000});
+  await page.locator('[data-action="unified-backup-encrypted-export"]').click();
+  const encryptedDownload=await encryptedWait,encryptedBytes=await readFile(await encryptedDownload.path());
+  if(!encryptedDownload.suggestedFilename().endsWith('.mhubsecure')||
+      encryptedBytes.subarray(0,8).toString('ascii')!=='MHUBSEC1')
+   errors.push('No se descargó una copia cifrada .mhubsecure válida');
+  if(encryptedBytes.includes(Buffer.from('Campaña integral'))||
+      encryptedBytes.includes(Buffer.from('Tarea respaldada')))
+   errors.push('La copia protegida contiene información de usuario visible en claro');
+
   const fresh=await browser.newContext({viewport:{width,height},acceptDownloads:true});
   const restored=await fresh.newPage();
   restored.on('pageerror',e=>errors.push('JS import: '+e.message));
@@ -108,6 +122,42 @@ for(const [name,engine,width,height] of [['chromium-desktop',chromium,1440,900],
    if(numbers[0]!==2||numbers[1]!==1)errors.push('ZIP dañado modificó archivos del usuario');
   }
   await restored.screenshot({path:'visual-qa/full-backup/'+name+'-configuracion.png',fullPage:true});
+  const cryptoContext=await browser.newContext({viewport:{width,height},acceptDownloads:true});
+  const cryptoPage=await cryptoContext.newPage();
+  cryptoPage.on('pageerror',e=>errors.push('JS descifrado: '+e.message));
+  await openSettings(cryptoPage,width);
+  cryptoPage.on('dialog',dialog=>dialog.accept());
+  await cryptoPage.locator('#unifiedBackupPassword').fill(encryptedPassword);
+  await cryptoPage.locator('[data-unified-backup-import]').setInputFiles({
+   name:'copia-segura.mhubsecure',mimeType:'application/octet-stream',buffer:encryptedBytes
+  });
+  let encryptedRestored=0;
+  for(let attempt=0;attempt<65;attempt++){
+   try{
+    encryptedRestored=await cryptoPage.evaluate(async()=>{
+     const {listCreativeProjects}=await import('./src/creative-projects.js');
+     return (await listCreativeProjects()).length;
+    });
+   }catch{}
+   if(encryptedRestored===1)break;
+   await cryptoPage.waitForTimeout(300);
+  }
+  if(encryptedRestored!==1)errors.push('No se pudo restaurar el archivo integral cifrado');
+  await openSettings(cryptoPage,width);
+  // Alteración autenticada: no debe restaurar un solo dato de un archivo corrupto.
+  const tamperedEncrypted=Buffer.from(encryptedBytes);
+  tamperedEncrypted[52+Math.min(12,tamperedEncrypted.length-53)]^=1;
+  await cryptoPage.locator('#unifiedBackupPassword').fill(encryptedPassword);
+  await cryptoPage.locator('[data-unified-backup-import]').setInputFiles({
+   name:'copia-protegida-alterada.mhubsecure',mimeType:'application/octet-stream',buffer:tamperedEncrypted
+  });
+  await cryptoPage.locator('.toast').filter({hasText:'No se pudo restaurar la copia'}).waitFor({state:'visible',timeout:18000});
+  const afterTamper=await cryptoPage.evaluate(async()=>{
+   const {listCreativeProjects}=await import('./src/creative-projects.js');
+   return (await listCreativeProjects()).length;
+  });
+  if(afterTamper!==1)errors.push('Un respaldo cifrado manipulado cambió los proyectos existentes');
+  await cryptoContext.close();
   await orig.close();await fresh.close();
  }catch(e){errors.push('Excepción E2E: '+e.message)}
  finally{await browser.close()}
