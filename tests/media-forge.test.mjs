@@ -69,3 +69,23 @@ test('No se inventa compatibilidad WebM ni extensiones inseguras',()=>{
  assert.match(app,/forgeFile\(/);
  assert.match(css,/max-width:680px/);
 });
+
+test('PULSE PACK empaqueta varios formatos sin biblioteca externa',async()=>{
+ const {createMediaZip}=await import('../src/media-forge.js');
+ const entries=[
+  {name:'foto-9x16.jpg',data:new Uint8Array([1,2,3,4])},
+  {name:'foto-1x1.jpg',data:new Uint8Array([5,6,7])}
+ ];
+ const blob=createMediaZip(entries);
+ assert.equal(blob.type,'application/zip');
+ const bytes=new Uint8Array(await blob.arrayBuffer()),view=new DataView(bytes.buffer);
+ assert.equal(view.getUint32(0,true),0x04034b50);
+ assert.equal(view.getUint32(bytes.length-22,true),0x06054b50);
+ assert.equal(view.getUint16(bytes.length-12,true),2);
+ assert.equal(view.getUint32(bytes.length-6,true),0);
+ const contents=new TextDecoder().decode(bytes);
+ assert.ok(contents.includes('foto-9x16.jpg'));
+ assert.ok(contents.includes('foto-1x1.jpg'));
+ assert.match(forgePage(),/PULSE PACK/);
+ assert.throws(()=>createMediaZip([]));
+});
