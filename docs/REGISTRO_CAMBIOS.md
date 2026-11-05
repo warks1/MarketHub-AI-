@@ -1,3 +1,11 @@
+## 2026-11-05 — v0.3.2 Gestión de contenidos y recuperación de inicio
+
+- Pantalla de recuperación de arranque, caché versionada y acceso al diagnóstico de recursos en GitHub Pages, sin borrar datos locales.
+- Nueva biblioteca local de contenidos: edición, duplicado, eliminación con confirmación, estados y exportación CSV (neutralización de fórmulas).
+- Límites de biblioteca local en prototipo: FREE 20 / PRO demo 500; cuotas comerciales por validar.
+- Mejoras responsive en las acciones de publicación y nuevas pruebas de validación, CSV y continuidad.
+- Sin integraciones con redes, ni publicación automática, anuncios reales o pagos comerciales.
+
 # Registro de cambios — MarketHub AI
 
 ## 2026-11-04 — Integración visual, backup e innovación sectorial
