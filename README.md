@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.5.0. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.6.0. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,7 +25,7 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.5.0 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.6.0 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 
@@ -113,6 +113,12 @@ En **Analítica → Analítica con datos propios**, descarga la plantilla CSV, c
 
 ## Modo ESPEJO — referencia visual aprobada
 
-Por decisión del propietario, las vistas principales se abren mostrando **los JPEG originales** de los bocetos 01 (Inicio), 02 (Estudio creativo) y 03 (pantallas móviles), sin filtros, inversiones, recoloreados ni reinterpretaciones. La pantalla de carga utiliza el JPEG original 04 en todos los dispositivos. Los originales están duplicados **sin modificar un byte** en `public/assets/` para que la compilación Vite y las apps Capacitor utilicen los mismos diseños que la web.
+La versión 0.6.0 conserva intactos los cuatro JPEG aprobados, pero **las vistas Inicio y Estudio se abren con componentes vivos y adaptables**. La superposición de fotos anterior impedía que los paneles se reorganizaran o editaran sin perder usabilidad. En versiones anteriores, las vistas se abrían mostrando **los JPEG originales** de los bocetos 01 (Inicio), 02 (Estudio creativo) y 03 (pantallas móviles), sin filtros, inversiones, recoloreados ni reinterpretaciones. La pantalla de carga utiliza el JPEG original 04 en todos los dispositivos. Los originales están duplicados **sin modificar un byte** en `public/assets/` para que la compilación Vite y las apps Capacitor utilicen los mismos diseños que la web.
 
 Las áreas transparentes sobre los originales permiten navegar y abrir funciones locales. Desde la placa inferior del escritorio, las zonas de edición del estudio o la opción «Abrir controles editables» del menú móvil se entra a los controles funcionales. Los KPI, conexiones y cifras fotografiados forman parte del boceto y **no representan mediciones ni conexiones reales**. La reproducción pixel a pixel de una imagen no equivale todavía a haber implementado todas sus funciones. Se debe mantener este diseño literal mientras se sustituyen progresivamente las zonas estáticas por componentes vivos con geometría y paleta coincidentes.
+
+## Interfaz adaptable y funcional (v0.6.0)
+
+El panel principal se construye con componentes reales: seis indicadores, gráfico de alcance basado en CSV, calendario, publicaciones, campañas, bandeja, Social Listening y accesos funcionales. Los datos sin conectar se presentan como no disponibles, sin fingir ROI ni conexiones. En móviles todos los bloques se reordenan verticalmente y la navegación permanece accesible en la barra inferior; en tablet el menú lateral muestra sus etiquetas; en PC/Mac aparecen varias columnas.
+
+El Estudio creativo ahora incluye storyboard con edición de escenas, orden, duración, textos, formato, paleta, vista previa, exportación JSON y descarga **PNG auténtica** de 1080×1920 o 1920×1080. El editor gráfico PNG previo se mantiene. **Todavía no renderiza vídeo**, ni genera imágenes con IA externa, ni publica en redes. Los cuatro bocetos originales siguen guardados como referencia de fidelidad; la composición dinámica aún necesita ajustes visuales para igualar exactamente cada elemento.
