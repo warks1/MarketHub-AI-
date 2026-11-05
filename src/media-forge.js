@@ -3,14 +3,15 @@ import {convertSubtitles,parseSubtitles} from './subtitle-tools.js';
 import {listVaultAssets,getVaultAsset,saveVaultAsset,removeVaultAsset,vaultSupported,VAULT_MAX_ITEMS} from './media-vault.js';
 import {readBrandProfiles,saveBrandProfile,removeBrandProfile,normalizeBrandProfile,TONES} from './brand-dna.js';
 import {auditCreative} from './creative-audit.js';
+import {listCreativeProjects,saveCreativeProject,openCreativeProject,removeCreativeProject,portableCreativeProject,importPortableCreativeProject,MAX_PROJECTS} from './creative-projects.js';
 // Sin subida de archivos a servidores, ni dependencias de servicios externos.
-const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[],vaultLoadToken:0,brandSelection:'',brandName:'',brandPrimary:'#26E9FB',brandAccent:'#EB4DF5',brandTone:'Profesional',brandCta:'',brandActive:false,audit:null};
+const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[],vaultLoadToken:0,brandSelection:'',brandName:'',brandPrimary:'#26E9FB',brandAccent:'#EB4DF5',brandTone:'Profesional',brandCta:'',brandActive:false,audit:null,projectId:null,projectName:'Nueva campaña',projects:[],projectsReady:false,projectError:'',projectLoadToken:0};
 export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9':[1920,1080],'3:2':[1500,1000]};
 // SafeFrame es una orientación visual nuestra, no los requisitos oficiales de las redes sociales.
 export const SAFEFRAME_GUIDES={'9:16':{top:.17,right:.12,bottom:.25,left:.09},'4:5':{top:.10,right:.08,bottom:.18,left:.08},'1:1':{top:.10,right:.08,bottom:.15,left:.08},'16:9':{top:.10,right:.11,bottom:.17,left:.11},'3:2':{top:.10,right:.10,bottom:.15,left:.10}};
 export const MASKS=['orbita','circulo','ovalada','redondeada','estrella','hexagono','pentagono','octagono','triangulo','diamante','corazon','banda-horizontal','banda-vertical','ventana','completa'];
 const looks={neon:['contrast(1.1) saturate(1.3)','#26e9fb','#eb4df5'],editorial:['contrast(1.06) saturate(.85)','#ffcfa2','#ef9bcd'],noir:['grayscale(1) contrast(1.25)','#f0f4ff','#8190dd'],natural:['none','#ffffff','#8acde9']};
-const tabNames={photo:'Foto y máscaras',audio:'Audio y WAV',video:'Vídeo y fotogramas',pdf:'Visor PDF',subs:'Subtítulos SRT / VTT',vault:'Mi biblioteca'};
+const tabNames={photo:'Foto y máscaras',audio:'Audio y WAV',video:'Vídeo y fotogramas',pdf:'Visor PDF',subs:'Subtítulos SRT / VTT',vault:'Mi biblioteca',projects:'Proyectos editables'};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const btn=(label,action,disabled=false)=>'<button type="button" data-forge-action="'+action+'" '+(disabled?'disabled':'')+'>'+label+'</button>';
 const field=(label,key,opts)=>'<label>'+label+'<select data-forge-input="'+key+'">'+opts.map(([v,n])=>'<option value="'+v+'" '+(s[key]===v?'selected':'')+'>'+n+'</option>').join('')+'</select></label>';
@@ -44,8 +45,9 @@ function photo(){
  field('Máscara creativa','mask',MASKS.map(k=>[k,k==='orbita'?'Órbita NEXUS · creación propia':k]))+
  field('Tratamiento visual','look',Object.keys(looks).map(k=>[k,k]))+
  field('SafeFrame PULSE · zona de texto','safezone',[['off','Desactivada'],['on','Mostrar guías y proteger texto']])+
+ '<label>Nombre de proyecto editable<input type="text" data-forge-input="projectName" maxlength="70" value="'+esc(s.projectName)+'" placeholder="Nombre de campaña"></label>'+
  '<label>Texto sobre la composición<input data-forge-input="caption" maxlength="90" value="'+esc(s.caption)+'" placeholder="Tu mensaje opcional"></label>'+
- actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image),btn('Auditor PULSE · revisar','audit-photo',!s.image),btn('Guardar en Mi biblioteca','vault-save-photo',!s.image),btn('Usar imagen en Estudio','studio',!s.image)])+
+ actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image),btn('Auditor PULSE · revisar','audit-photo',!s.image),btn('Guardar en Mi biblioteca','vault-save-photo',!s.image),btn(s.projectId?'Actualizar proyecto editable':'Guardar proyecto editable','project-save',!s.image),btn('Mis proyectos','project-list'),btn('Usar imagen en Estudio','studio',!s.image)])+
  '<p>El editor utiliza recorte centrado y no modifica el original. SafeFrame PULSE marca guías de texto orientativas (no certificadas por las redes sociales). La máscara Órbita combina foto, marcos dobles y formato social.</p>')+
  panel('Vista previa real','<div class="forge-preview"><canvas id="forgeCanvas" role="img" aria-label="Vista previa de composición"></canvas></div>')+'</div>'+auditPanel()+brandDnaPanel();
 }
@@ -79,6 +81,27 @@ function subtitles(){
  '<div class="forge-empty">Prepara subtítulos aquí y guárdalos para utilizarlos con tus vídeos y campañas. Los tiempos se comprueban antes de exportar.</div>')+'</div>';
 }
 // Galería offline: los ficheros persisten en IndexedDB hasta que el usuario los elimine.
+function projectsPage(){
+ const cards=s.projects.map(item=>'<article class="forge-project-item">'+
+  '<div class="forge-project-banner"><strong>'+esc(item.name)+'</strong><small>'+esc(item.settings.format)+' · '+esc(item.settings.mask)+'</small></div>'+
+  '<p>'+esc(item.settings.caption||'Sin texto')+' · '+(item.size/1048576).toFixed(2)+' MB</p>'+
+  '<div class="forge-vault-buttons"><button type="button" data-forge-action="project-open" data-forge-project-id="'+esc(item.id)+'">Seguir editando</button>'+
+  '<button type="button" data-forge-action="project-export" data-forge-project-id="'+esc(item.id)+'">Exportar copia .mhub</button>'+
+  '<button type="button" class="forge-vault-delete" data-forge-action="project-delete" data-forge-project-id="'+esc(item.id)+'">Eliminar</button></div></article>').join('');
+ return '<section class="forge-panel forge-projects"><h2>Mis proyectos creativos</h2><p>Guarda el original y todos tus ajustes. Reanuda cuando quieras o exporta un archivo .mhub para transferirlo a otro dispositivo. No requiere conexión a servidores.</p>'+
+ '<div class="forge-project-toolbar"><label class="forge-file">＋ Importar proyecto .mhub<input type="file" data-forge-file="project" accept=".mhub,application/json"></label></div>'+
+ '<p class="forge-meta">'+s.projects.length+' / '+MAX_PROJECTS+' proyectos · máximo 8 MB de imagen original por proyecto · sin sincronización entre dispositivos</p>'+
+ (s.projectError?'<p class="forge-vault-error" role="alert">'+esc(s.projectError)+'</p>':'')+
+ (!s.projectsReady?'<div class="forge-empty">Abriendo proyectos de este dispositivo…</div>':
+ cards?'<div class="forge-project-grid">'+cards+'</div>':'<div class="forge-empty">Aún no hay proyectos editables. Abre una foto, ajusta su diseño y pulsa «Guardar proyecto editable».</div>')+
+ '<p class="forge-meta">Los proyectos están en este navegador. La copia .mhub contiene la imagen original y los parámetros necesarios para continuar la edición. No incluye contraseñas ni datos de cuentas.</p></section>';
+}
+async function forgeProjectLoad(refresh){
+ const token=++s.projectLoadToken;s.projectsReady=false;s.projectError='';
+ try{const items=await listCreativeProjects();if(token!==s.projectLoadToken)return;s.projects=items}
+ catch(err){if(token!==s.projectLoadToken)return;s.projects=[];s.projectError=String(err.message||err)}
+ s.projectsReady=true;if(s.tab==='projects')refresh();
+}
 function vaultPage(){
  const used=s.vault.reduce((sum,item)=>sum+item.size,0);
  const cards=s.vault.map(item=>{
@@ -123,9 +146,9 @@ async function forgeVaultLoad(refresh){
 export function forgePage(){
  return '<section class="media-forge"><header class="forge-head"><div><span class="eyebrow">NEXUS + PULSE · HERRAMIENTAS INTEGRADAS</span><h1>MEDIA FORGE ✦</h1><p>Visualiza, edita y convierte sin salir de MarketHub AI.</p></div><span class="forge-private">◎ Sin subir archivos</span></header>'+
  '<nav class="forge-tabs" aria-label="Laboratorio multimedia">'+Object.entries(tabNames).map(([k,n])=>'<button type="button" data-forge-tab="'+k+'" aria-current="'+(s.tab===k?'page':'false')+'">'+n+'</button>').join('')+'</nav>'+
- (s.tab==='audio'?audio():s.tab==='video'?video():s.tab==='pdf'?pdf():s.tab==='subs'?subtitles():s.tab==='vault'?vaultPage():photo())+'</section>';
+ (s.tab==='audio'?audio():s.tab==='video'?video():s.tab==='pdf'?pdf():s.tab==='subs'?subtitles():s.tab==='vault'?vaultPage():s.tab==='projects'?projectsPage():photo())+'</section>';
 }
-export function forgeTab(name,refresh){if(!tabNames[name])return false;s.tab=name;refresh();if(name==='vault')void forgeVaultLoad(refresh);return true}
+export function forgeTab(name,refresh){if(!tabNames[name])return false;s.tab=name;refresh();if(name==='vault')void forgeVaultLoad(refresh);if(name==='projects')void forgeProjectLoad(refresh);return true}
 export const outputDimensions=format=>SIZES[format]||SIZES['9:16'];
 export const safeFileName=name=>String(name||'media').replace(/\.[^.]*$/,'').replace(/[^a-z0-9_-]/gi,'-').slice(0,70)||'media';
 function maskShape(ctx,w,h,mask){
@@ -195,6 +218,7 @@ export function forgeInput(target){
  else if(name==='brandTone'&&TONES.includes(target.value))s.brandTone=target.value;
  else if(name==='brandCta')s.brandCta=String(target.value).slice(0,60);
  else if(name==='caption')s.caption=String(target.value).slice(0,90);
+ else if(name==='projectName')s.projectName=String(target.value).slice(0,70);
  else if(name==='subtitle'){
   s.subtitle=String(target.value).slice(0,1000000);
   if(typeof document!=='undefined'){
@@ -208,7 +232,19 @@ export function forgeInput(target){
  forgeMount();return true;
 }
 export async function forgeFile(target,ctx){
- const type=target?.dataset?.forgeFile;if(!tabNames[type==='photo'?'photo':type])return false;
+ const type=target?.dataset?.forgeFile;
+ if(type==='project'){
+  const file=target.files?.[0];if(!file)return true;
+  if(!file.name.toLowerCase().endsWith('.mhub')||!file.size||file.size>12*1024*1024){ctx.toast('Selecciona una copia .mhub de hasta 12 MB');return true}
+  try{
+   const saved=await importPortableCreativeProject(file);
+   s.projectId=null;await forgeProjectLoad(ctx.refresh);
+   forgeTab('projects',ctx.refresh);
+   ctx.toast('Proyecto importado: '+saved.name);
+  }catch(err){ctx.toast('No se pudo importar: '+String(err.message||err).slice(0,100))}
+  return true;
+ }
+if(!tabNames[type==='photo'?'photo':type])return false;
  const file=target.files?.[0];if(!file)return true;
  const max=type==='video'?250:type==='audio'?60:type==='pdf'?30:type==='subs'?1:25;
  if(!file.size||file.size>max*1048576){ctx.toast('Archivo demasiado grande o vacío (máximo '+max+' MB).');return true}
@@ -274,6 +310,39 @@ export function canRecordWebM(video){return !!(video&&video.captureStream&&typeo
 export async function forgeClick(target,ctx){
  const action=target?.dataset?.forgeAction;if(!action)return false;
  try{
+  if(action.startsWith('project-')){
+   if(action==='project-save'){
+    if(!s.files.photo)throw Error('Primero abre la fotografía original');
+    const project=await saveCreativeProject({id:s.projectId,name:s.projectName,file:s.files.photo,
+     settings:{format:s.format,mask:s.mask,look:s.look,safezone:s.safezone,caption:s.caption,
+      brandActive:s.brandActive,brandPrimary:s.brandPrimary,brandAccent:s.brandAccent}});
+    s.projectId=project.id;ctx.refresh();ctx.toast('Proyecto editable guardado.');
+   }else if(action==='project-list'){
+    forgeTab('projects',ctx.refresh);
+   }else{
+    const id=target.dataset.forgeProjectId;
+    if(action==='project-open'){
+     const p=await openCreativeProject(id);
+     const source=new File([p.file],p.name+'.'+(p.type==='image/png'?'png':p.type==='image/webp'?'webp':p.type==='image/gif'?'gif':'jpg'),{type:p.type});
+     await forgeFile({dataset:{forgeFile:'photo'},files:[source]},ctx);
+     Object.assign(s,p.settings);
+     s.projectId=p.id;s.projectName=p.name;s.audit=null;
+     forgeTab('photo',ctx.refresh);
+     ctx.toast('Proyecto reabierto para editar.');
+    }else if(action==='project-export'){
+     const p=await openCreativeProject(id);
+     send(await portableCreativeProject(id),safeFileName(p.name)+'.mhub');
+     ctx.toast('Copia editable .mhub descargada.');
+    }else if(action==='project-delete'){
+     const p=await openCreativeProject(id);
+     if(window.confirm('¿Eliminar el proyecto editable «'+p.name+'» del dispositivo?')){
+      await removeCreativeProject(id);if(s.projectId===id)s.projectId=null;
+      await forgeProjectLoad(ctx.refresh);ctx.toast('Proyecto eliminado del dispositivo.');
+     }
+    }else return false;
+   }
+   return true;
+  }
   if(action==='audit-photo'){
    if(!s.image)throw Error('Selecciona primero una imagen');
    const [w,h]=outputDimensions(s.format);
