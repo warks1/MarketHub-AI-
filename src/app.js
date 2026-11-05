@@ -3,6 +3,7 @@ import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './
 import {growthPage,growthOpenTab,growthClick,growthSubmit} from './growth.js';
 import {backupExport,backupEncryptedExport,backupImport,backupSettingsHTML} from './backup.js';
 import {exportUnifiedBackup,restoreUnifiedBackup,MAX_UNIFIED_BYTES,unifiedBackupSettingsHTML} from './unified-backup.js';
+import {encryptUnifiedBlob,decryptUnifiedBlob,SECURE_UNIFIED_MAX_CIPHERTEXT} from './unified-crypto.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 import {forgePage,forgeMount,forgeTab,forgeClick,forgeInput,forgeFile} from './media-forge.js';
 import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
@@ -375,6 +376,20 @@ document.addEventListener('click',e=>{
   case 'show-mobile-menu':state.menuMore=true;render();break;
  case 'close-mobile-menu':state.menuMore=false;render();break;
  case 'backup-export':backupExport({toast});break;
+ case 'unified-backup-encrypted-export':{
+  const field=document.querySelector('#unifiedBackupPassword'),password=field?.value||'';
+  if(field)field.value='';
+  if(password.length<12||password.length>256){toast('La contraseña de la copia integral debe tener de 12 a 256 caracteres.');break}
+  toast('Protegiendo la copia integral local. Conserva la contraseña en un lugar seguro.');
+  void exportUnifiedBackup().then(blob=>encryptUnifiedBlob(blob,password)).then(blob=>{
+   const url=URL.createObjectURL(blob),link=document.createElement('a');
+   link.href=url;link.download='MarketHub-AI-Copia-CIFRADA-'+new Date().toISOString().slice(0,10)+'.mhubsecure';
+   document.body.append(link);link.click();link.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),60000);
+   toast('Copia integral cifrada descargada; la contraseña no se ha guardado.');
+  }).catch(err=>toast('No se pudo cifrar el respaldo: '+String(err.message||err).slice(0,140)));
+  break;
+ }
  case 'unified-backup-export':{
   toast('Preparando la copia integral local; no cierres la pantalla.');
   void exportUnifiedBackup().then(blob=>{
@@ -770,14 +785,24 @@ document.addEventListener('change',e=>{
  if(e.target.matches('[data-unified-backup-import]')){
   const file=e.target.files?.[0];e.target.value='';
   if(!file)return;
-  if(!file.name.toLowerCase().endsWith('.mhubfull')||file.size<100||file.size>MAX_UNIFIED_BYTES){
-   toast('Selecciona una copia integral .mhubfull de hasta 245 MB.');return;
+  const name=file.name.toLowerCase(),secured=name.endsWith('.mhubsecure'),plain=name.endsWith('.mhubfull');
+  if((!secured&&!plain)||file.size<100||
+      file.size>(secured?SECURE_UNIFIED_MAX_CIPHERTEXT:MAX_UNIFIED_BYTES)){
+   toast('Selecciona una copia .mhubsecure cifrada o .mhubfull normal de tamaño válido.');return;
+  }
+  const field=document.querySelector('#unifiedBackupPassword'),password=field?.value||'';
+  if(field)field.value='';
+  if(secured&&(password.length<12||password.length>256)){
+   toast('Escribe primero la contraseña de la copia integral cifrada.');return;
   }
   if(!window.confirm('La restauración añadirá los proyectos, medios y marcas de la copia sin reemplazar los existentes. Los módulos locales solo se rellenarán si faltan. ¿Continuar?')){
    toast('Restauración cancelada.');return;
   }
-  toast('Validando el respaldo integral antes de recuperar archivos.');
-  void restoreUnifiedBackup(file).then(result=>{
+  toast(secured?'Descifrando y validando el respaldo integral.':'Validando el respaldo integral antes de recuperar archivos.');
+  void (async()=>{
+   const archive=secured?await decryptUnifiedBlob(file,password):file;
+   return restoreUnifiedBackup(archive);
+  })().then(result=>{
    toast('Recuperados '+result.projects+' proyectos, '+result.assets+' medios, '+result.brands+' marcas y '+result.modules+' módulos. Reiniciando vista.');
    window.location.reload();
   }).catch(err=>toast('No se pudo restaurar la copia: '+String(err.message||err).slice(0,155)));
