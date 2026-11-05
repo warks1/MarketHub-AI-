@@ -96,3 +96,14 @@ son copias JSON con imagen original en base64, sin cifrar: se deben custodiar
 como imágenes privadas. Se comprueban navegadores Chromium y WebKit; el siguiente
 paquete Android es únicamente una APK de depuración para probar en teléfonos.
 No existe sincronización automática entre móviles ni cuentas de usuario.
+
+### Proyectos editables portables — APK de pruebas (5 de noviembre de 2026)
+Media Forge permite guardar proyectos de imagen con ajustes editables en una
+base local independiente (12 proyectos / imagen origen máxima 8 MB), reabrirlos
+tras reiniciar y exportar/importar copias individuales `.mhub` entre equipos.
+El formato portable incluye la imagen original y configuración en un JSON
+base64 **sin cifrar**; no contiene claves de acceso ni sincroniza por la nube.
+La APK que se compile ahora sigue siendo de depuración: antes de publicar en
+tiendas se necesita probar almacenamiento persistente, selector de archivos
+personalizados, exportación/compartición y recuperación de proyectos en
+teléfonos y tabletas Android reales e iPhone/iPad con Xcode.
