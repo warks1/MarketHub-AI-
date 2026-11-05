@@ -1,8 +1,9 @@
 // MEDIA FORGE · Herramientas multimedia locales originales de MarketHub AI.
 import {convertSubtitles,parseSubtitles} from './subtitle-tools.js';
 import {listVaultAssets,getVaultAsset,saveVaultAsset,removeVaultAsset,vaultSupported,VAULT_MAX_ITEMS} from './media-vault.js';
+import {readBrandProfiles,saveBrandProfile,removeBrandProfile,normalizeBrandProfile,TONES} from './brand-dna.js';
 // Sin subida de archivos a servidores, ni dependencias de servicios externos.
-const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[]};
+const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[],brandSelection:'',brandName:'',brandPrimary:'#26E9FB',brandAccent:'#EB4DF5',brandTone:'Profesional',brandCta:'',brandActive:false};
 export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9':[1920,1080],'3:2':[1500,1000]};
 // SafeFrame es una orientación visual nuestra, no los requisitos oficiales de las redes sociales.
 export const SAFEFRAME_GUIDES={'9:16':{top:.17,right:.12,bottom:.25,left:.09},'4:5':{top:.10,right:.08,bottom:.18,left:.08},'1:1':{top:.10,right:.08,bottom:.15,left:.08},'16:9':{top:.10,right:.11,bottom:.17,left:.11},'3:2':{top:.10,right:.10,bottom:.15,left:.10}};
@@ -15,6 +16,20 @@ const field=(label,key,opts)=>'<label>'+label+'<select data-forge-input="'+key+'
 const upload=(type,accept)=>'<label class="forge-file">＋ Abrir '+({photo:'fotografía',audio:'audio',video:'vídeo',pdf:'PDF'}[type])+'<input type="file" data-forge-file="'+type+'" accept="'+accept+'"></label><p class="forge-meta">'+(s.files[type]?esc(s.files[type].name)+' · '+(s.files[type].size/1048576).toFixed(1)+' MB':'Sin archivo · procesamiento local')+'</p>';
 const actions=(list)=>'<div class="forge-actions">'+list.join('')+'</div>';
 const panel=(title,body)=>'<section class="forge-panel"><h2>'+title+'</h2>'+body+'</section>';
+function brandDnaPanel(){
+ const records=readBrandProfiles();
+ const options=records.map(item=>'<option value="'+esc(item.id)+'"'+(s.brandSelection===item.id?' selected':'')+'>'+esc(item.name)+'</option>').join('');
+ return '<section class="forge-panel forge-brand"><h2>✦ ADN Creativo de Marca</h2>'+
+ '<p>Guarda una paleta visual, tono y llamada a la acción. Reutilízalos en distintas campañas desde tu dispositivo.</p>'+
+ '<label>Marcas guardadas<select id="forgeBrandSelect"><option value="">Seleccionar una marca…</option>'+options+'</select></label>'+
+ '<div class="forge-brand-fields"><label>Nombre de la marca<input type="text" maxlength="65" data-forge-input="brandName" value="'+esc(s.brandName)+'" placeholder="Ej. Mi estudio"></label>'+
+ '<label>Tono de comunicación<select data-forge-input="brandTone">'+TONES.map(t=>'<option value="'+esc(t)+'"'+(s.brandTone===t?' selected':'')+'>'+esc(t)+'</option>').join('')+'</select></label>'+
+ '<label>Color principal<input type="color" data-forge-input="brandPrimary" value="'+esc(s.brandPrimary)+'"></label>'+
+ '<label>Color de acento<input type="color" data-forge-input="brandAccent" value="'+esc(s.brandAccent)+'"></label>'+
+ '<label>CTA de marca<input type="text" maxlength="60" data-forge-input="brandCta" value="'+esc(s.brandCta)+'" placeholder="Ej. Descubre más"></label></div>'+
+ actions([btn('Guardar / actualizar ADN','brand-save'),btn('Aplicar marca seleccionada','brand-apply',!records.length),btn('Eliminar seleccionada','brand-delete',!records.length)])+
+ '<p class="forge-meta">El color de la marca aplicada se incorpora a Órbita NEXUS y a las composiciones exportadas. Máximo 12 perfiles locales; exporta tus creatividades para guardarlas fuera del dispositivo.</p></section>';
+}
 function photo(){
  return '<div class="forge-grid">'+panel('Máscaras y conversor de imágenes',upload('photo','image/png,image/jpeg,image/webp,image/gif')+
  field('Formato social','format',Object.entries(SIZES).map(([k,d])=>[k,k+' · '+d.join('×')]))+
@@ -24,7 +39,7 @@ function photo(){
  '<label>Texto sobre la composición<input data-forge-input="caption" maxlength="90" value="'+esc(s.caption)+'" placeholder="Tu mensaje opcional"></label>'+
  actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image),btn('Guardar en Mi biblioteca','vault-save-photo',!s.image),btn('Usar imagen en Estudio','studio',!s.image)])+
  '<p>El editor utiliza recorte centrado y no modifica el original. SafeFrame PULSE marca guías de texto orientativas (no certificadas por las redes sociales). La máscara Órbita combina foto, marcos dobles y formato social.</p>')+
- panel('Vista previa real','<div class="forge-preview"><canvas id="forgeCanvas" role="img" aria-label="Vista previa de composición"></canvas></div>')+'</div>';
+ panel('Vista previa real','<div class="forge-preview"><canvas id="forgeCanvas" role="img" aria-label="Vista previa de composición"></canvas></div>')+'</div>'+brandDnaPanel();
 }
 function audio(){
  return '<div class="forge-grid">'+panel('Reproductor y conversor WAV',upload('audio','audio/*')+
@@ -133,8 +148,8 @@ export function composeImage(canvas,image,opts={}){
  const ratio=Math.max(w/sourceW,h/sourceH),dw=sourceW*ratio,dh=sourceH*ratio;
  ctx.filter=look[0];ctx.drawImage(image,(w-dw)/2,(h-dh)/2,dw,dh);ctx.filter='none';ctx.restore();
  if(mask==='orbita'){
-  ctx.strokeStyle=look[1];ctx.lineWidth=Math.max(2,w*.008);ctx.beginPath();ctx.ellipse(w/2,h/2,Math.min(w,h)*.41,Math.min(w,h)*.48,-.24,0,2*Math.PI);ctx.stroke();
-  ctx.strokeStyle=look[2];ctx.lineWidth=Math.max(1,w*.004);ctx.beginPath();ctx.ellipse(w/2,h/2,Math.min(w,h)*.46,Math.min(w,h)*.38,.3,0,2*Math.PI);ctx.stroke();
+  ctx.strokeStyle=s.brandActive?s.brandPrimary:look[1];ctx.lineWidth=Math.max(2,w*.008);ctx.beginPath();ctx.ellipse(w/2,h/2,Math.min(w,h)*.41,Math.min(w,h)*.48,-.24,0,2*Math.PI);ctx.stroke();
+  ctx.strokeStyle=s.brandActive?s.brandAccent:look[2];ctx.lineWidth=Math.max(1,w*.004);ctx.beginPath();ctx.ellipse(w/2,h/2,Math.min(w,h)*.46,Math.min(w,h)*.38,.3,0,2*Math.PI);ctx.stroke();
  }
  const caption=String(opts.caption??s.caption).trim().slice(0,90);
  if(caption){ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='800 '+Math.max(15,Math.round(w*.045))+'px system-ui';ctx.shadowColor='#000';ctx.shadowBlur=w*.015;ctx.fillText(caption,w/2,s.safezone==='on'?h*(1-SAFEFRAME_GUIDES[opts.format||s.format].bottom)-w*.04:h*.85,w*.85)}
@@ -159,6 +174,11 @@ export function forgeInput(target){
  else if(name==='mask'&&MASKS.includes(target.value))s.mask=target.value;
  else if(name==='look'&&looks[target.value])s.look=target.value;
  else if(name==='safezone'&&['off','on'].includes(target.value))s.safezone=target.value;
+ else if(name==='brandName')s.brandName=String(target.value).slice(0,65);
+ else if(name==='brandPrimary'&&/^#[0-9a-fA-F]{6}$/.test(target.value)){s.brandPrimary=target.value;s.brandActive=true}
+ else if(name==='brandAccent'&&/^#[0-9a-fA-F]{6}$/.test(target.value)){s.brandAccent=target.value;s.brandActive=true}
+ else if(name==='brandTone'&&TONES.includes(target.value))s.brandTone=target.value;
+ else if(name==='brandCta')s.brandCta=String(target.value).slice(0,60);
  else if(name==='caption')s.caption=String(target.value).slice(0,90);
  else if(name==='subtitle'){
   s.subtitle=String(target.value).slice(0,1000000);
@@ -237,6 +257,29 @@ export function canRecordWebM(video){return !!(video&&video.captureStream&&typeo
 export async function forgeClick(target,ctx){
  const action=target?.dataset?.forgeAction;if(!action)return false;
  try{
+  if(action.startsWith('brand-')){
+   const selected=document.getElementById('forgeBrandSelect')?.value||'';
+   if(action==='brand-save'){
+    const entry=normalizeBrandProfile({name:s.brandName,primary:s.brandPrimary,accent:s.brandAccent,tone:s.brandTone,cta:s.brandCta});
+    const old=readBrandProfiles().find(item=>item.id===entry.id);
+    if(old&&!window.confirm('¿Actualizar el ADN de la marca «'+old.name+'»?'))return true;
+    const saved=saveBrandProfile(entry);s.brandSelection=saved.id;s.brandActive=true;
+    ctx.refresh();ctx.toast('ADN de marca guardado en este dispositivo.');
+   }else if(action==='brand-apply'){
+    const brand=readBrandProfiles().find(item=>item.id===selected);
+    if(!brand)throw Error('Selecciona una marca guardada');
+    s.brandSelection=brand.id;s.brandName=brand.name;s.brandPrimary=brand.primary;s.brandAccent=brand.accent;s.brandTone=brand.tone;s.brandCta=brand.cta;s.brandActive=true;
+    if(!s.caption.trim())s.caption=brand.cta||brand.name;
+    ctx.refresh();ctx.toast('Identidad de marca aplicada.');
+   }else if(action==='brand-delete'){
+    const brand=readBrandProfiles().find(item=>item.id===selected);
+    if(!brand)throw Error('Selecciona una marca');
+    if(window.confirm('¿Eliminar el ADN local de «'+brand.name+'»?')){
+     removeBrandProfile(brand.id);s.brandSelection='';ctx.refresh();ctx.toast('Perfil de marca eliminado.');
+    }
+   }
+   return true;
+  }
   if(action.startsWith('vault-')){
    if(action==='vault-save-photo'){
     if(!s.image)throw Error('Selecciona una fotografía');
