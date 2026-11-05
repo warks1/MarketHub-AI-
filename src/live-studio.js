@@ -19,7 +19,7 @@ export function parseScene(values){
  return {value:{title,caption,duration,theme}};
 }
 function option(name,selected){return '<option value="'+name+'"'+(selected===name?' selected':'')+'>'+name+'</option>'}
-export function liveStudio({scenes=[],current=0,format='9:16',mode='Video / Reels',posts=[]}={}){
+export function liveStudio({scenes=[],current=0,format='9:16',mode='Video / Reels',posts=[],playing=false}={}){
  const frames=list(scenes);
  const index=Math.max(0,Math.min(frames.length-1,Number(current)||0)),chosen=frames[index];
  const theme=STUDIO_THEMES.includes(chosen?.theme)?chosen.theme:'Neón';
@@ -42,6 +42,7 @@ export function liveStudio({scenes=[],current=0,format='9:16',mode='Video / Reel
  const transport='<div class="live-editor-transport">'+act('◀','storyboard-prev','live-outline','aria-label="Escena anterior"')+
  '<span>'+ (frames.length?index+1:0)+' / '+frames.length+' · '+duration+' s</span>'+
  act('▶','storyboard-next','live-outline','aria-label="Siguiente escena"')+
+ act(playing?'Ⅱ Pausar':'▶ Reproducir','storyboard-play',playing?'live-primary':'live-outline','aria-pressed="'+playing+'"')+
  act('9:16 / 16:9','format','live-outline')+act('⬇ Exportar PNG','storyboard-export-png','live-primary')+'</div>';
  const ai=['Generar guion con IA','Crear copies con IA','Subtítulos automáticos','Eliminación de silencios',
   'Voz en off realista','Redimensionar vídeo'].map(t=>act(esc(t)+' <span>›</span>','studio-unavailable','live-studio-switch')).join('');
