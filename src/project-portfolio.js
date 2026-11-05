@@ -37,9 +37,8 @@ function zipStore(items){
  return new Blob([...chunks,...central,end],{type:'application/zip'});
 }
 const extensions={'image/png':'png','image/jpeg':'jpg','image/webp':'webp','image/gif':'gif'};
-export async function exportCreativePortfolio(){
- const projects=await listCreativeProjects();
- if(!projects.length)throw Error('No hay proyectos editables que respaldar');
+export async function createCreativePortfolio(projects){
+ if(!Array.isArray(projects)||!projects.length)throw Error('No hay proyectos editables que respaldar');
  if(projects.length>MAX_PROJECTS)throw Error('Demasiados proyectos');
  const entries=[],manifest={format:PORTFOLIO_FORMAT,version:PORTFOLIO_VERSION,createdAt:new Date().toISOString(),projects:[]};
  let total=0;
@@ -53,6 +52,10 @@ export async function exportCreativePortfolio(){
  const header=enc.encode(JSON.stringify(manifest));
  if(header.length>65536)throw Error('Metadatos de respaldo demasiado grandes');
  return zipStore([{name:'manifest.json',bytes:header},...entries]);
+}
+export async function exportCreativePortfolio(){
+ const items=await listCreativeProjects();
+ return createCreativePortfolio(await Promise.all(items.map(item=>openCreativeProject(item.id))));
 }
 function parseZip(bytes){
  if(!(bytes instanceof Uint8Array)||bytes.byteLength<100||bytes.byteLength>MAX_PORTFOLIO_BYTES)
