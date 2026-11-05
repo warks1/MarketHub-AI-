@@ -139,7 +139,7 @@ export function nexusStudio({mode='Video / Reels',format='9:16',posts=[]}={}){
  editor.map(toolButton).join('')+'</section>'+
  '<section class="nexus-panel nexus-studio-preview"><div class="nexus-preview-tools"><span>Formato: '+esc(format)+'</span>'+
  action('format',format==='9:16'?'Cambiar a 16:9 ↔':'Cambiar a 9:16 ↕','nexus-quiet')+
- '<span>1080 × 1920 · DEMO</span></div><div class="nexus-preview-screen">'+previewSvg()+'</div>'+
+ '<span>1080 × 1920 · DEMO</span></div><div class="nexus-preview-screen">'+ '<img class="nexus-product-art" src="./assets/boceto-02-vista-previa.png" role="img" alt="Vista original elegida del anuncio de sérum, utilizada como ejemplo visual">' +'</div>'+
  '<div class="nexus-preview-transport"><span>▶</span><span>0:00 / 0:28</span><div class="nexus-seek"><i></i></div><span>1.0×</span><span>CC</span></div></section>'+
  '<section class="nexus-panel nexus-studio-ai"><div class="nexus-panel-title"><strong>✦ IA Creativa</strong><span class="nexus-tag">PREVISTA</span></div>'+
  '<div class="nexus-ai-tool-list">'+ai.map(toolButton).join('')+'</div></section>'+
