@@ -11,6 +11,7 @@ on:
       - 'scripts/cross-browser-qa.mjs'
       - 'scripts/splash-responsive-qa.mjs'
       - 'scripts/media-forge-qa.mjs'
+      - 'scripts/unified-backup-qa.mjs'
       - '.github/workflows/visual-qa.yml'
   pull_request:
     paths:
@@ -21,6 +22,7 @@ on:
       - 'scripts/cross-browser-qa.mjs'
       - 'scripts/splash-responsive-qa.mjs'
       - 'scripts/media-forge-qa.mjs'
+      - 'scripts/unified-backup-qa.mjs'
       - '.github/workflows/visual-qa.yml'
 
 permissions:
@@ -57,6 +59,8 @@ jobs:
         run: node scripts/cross-browser-qa.mjs
       - name: Comprobar Media Forge y PULSE PACK en navegadores
         run: node scripts/media-forge-qa.mjs
+      - name: Verificar copia integral y recuperación no destructiva en Chromium y Safari
+        run: node scripts/unified-backup-qa.mjs
       - name: Guardar capturas y resultados incluso si hay diferencias
         if: always()
         uses: actions/upload-artifact@v4
