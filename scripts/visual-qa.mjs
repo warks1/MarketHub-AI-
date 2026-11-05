@@ -75,6 +75,16 @@ try{
    await page.locator('[data-action="storyboard-export-png"]').click();
    const png=await output;
    if(!png.suggestedFilename().endsWith('.png'))problems.push('El estudio no exporta una imagen PNG real');
+   await page.locator('[data-action="storyboard-select"][data-index="0"]').click();
+   await page.locator('#live-scene-duration').fill('1');
+   await page.locator('#storyboardForm button[type="submit"]').click();
+   await page.locator('[data-action="storyboard-play"]').click();
+   if((await page.locator('[data-action="storyboard-play"]').getAttribute('aria-pressed'))!=='true')
+    problems.push('Reproducción de storyboard no se inicia');
+   await page.waitForFunction(()=>document.querySelector('.live-timeline-clip.selected')?.dataset.index==='1',null,{timeout:5000});
+   await page.locator('[data-action="storyboard-play"]').click();
+   if((await page.locator('[data-action="storyboard-play"]').getAttribute('aria-pressed'))!=='false')
+    problems.push('El storyboard no se puede pausar');
    await page.screenshot({path:'visual-qa/'+id+'-edicion.png',fullPage:true});
   }
   if(['iphone-375','pc-1440'].includes(id)){
