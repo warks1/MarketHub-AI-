@@ -83,7 +83,14 @@ async function inspect(browser,engine,devices){
    await page.waitForTimeout(180); // Transición CSS de 100 ms.
    const progress=await page.locator('#progressFill').evaluate(el=>{
     const a=el.getBoundingClientRect(),track=el.parentElement.getBoundingClientRect();
-    return {height:a.height,ratio:track.width?a.width/track.width:0,background:getComputedStyle(el).backgroundImage};
+    const computed=getComputedStyle(el);
+    return {
+     height:a.height,ratio:track.width?a.width/track.width:0,background:computed.backgroundImage,
+     paintedWidth:a.width,layoutWidth:el.offsetWidth,cssWidth:computed.width,
+     inlineProgress:el.style.getPropertyValue('--splash-progress'),
+     computedProgress:computed.getPropertyValue('--splash-progress'),
+     transform:computed.transform,trackWidth:track.width
+    };
    });
    if(progress.height<10||progress.ratio<.49||progress.ratio>.61||!progress.background.includes('gradient')){
     failures.push('La barra de 56 % no se rellena correctamente: '+JSON.stringify(progress));
