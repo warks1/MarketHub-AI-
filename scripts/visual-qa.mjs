@@ -35,6 +35,17 @@ try{
   if(home.contentWidth>home.viewport+3)faults.push('Desbordamiento horizontal '+home.contentWidth+' > '+home.viewport);
   if(width<=680&&home.mobileNav==='none')faults.push('Menú móvil oculto');
   if(width>980&&home.desktopNav==='none')faults.push('Barra de escritorio oculta');
+  if(id==='movil-390' || id==='pc-1440'){
+    await page.locator('[data-action="calendar-next"]').click();
+    const day=page.locator('[data-action="calendar-day"]').first();
+    const chosen=await day.getAttribute('data-date');
+    await day.click();
+    await page.locator('#postForm').waitFor({state:'visible'});
+    const actual=await page.locator('#date').inputValue();
+    if(actual!==chosen)faults.push('Fecha seleccionada en calendario no se precarga en el formulario');
+    if(width<=680)await page.locator('.mobile-bottom [data-page="inicio"]').click();
+    else await page.locator('.sidebar [data-page="inicio"]').click();
+  }
   if(width<=680){
    await page.locator('[data-action="show-mobile-menu"]').click();
    const drawer=page.locator('.mobile-menu-drawer');
