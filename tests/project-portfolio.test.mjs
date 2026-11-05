@@ -38,7 +38,7 @@ test('Rechaza una copia dañada o truncada en vez de restaurar proyectos parcial
  assert.ok(MAX_PORTFOLIO_BYTES>=90*1024*1024);
 });
 test('No permite formatos peligrosos, estructuras inválidas ni paquetes vacíos',async()=>{
- assert.throws(()=>createCreativePortfolio([]),/No hay proyectos/);
+ await assert.rejects(()=>createCreativePortfolio([]),/No hay proyectos/);
  await assert.rejects(()=>createCreativePortfolio(Array.from({length:13},(_,i)=>item('Proyecto '+i,photo,'image/png'))),/Demasiados proyectos/);
  await assert.rejects(()=>createCreativePortfolio([item('Ejecutable',new Uint8Array([1,2,3]),'image/svg+xml')]),/imagen JPG/);
  assert.throws(()=>parseCreativePortfolio('{}'),/ZIP/);
