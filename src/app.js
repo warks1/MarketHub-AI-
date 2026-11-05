@@ -13,6 +13,7 @@ import {liveStudio,createScene,parseScene,STUDIO_THEMES} from './live-studio.js'
 import {imageFileToSceneData,canStoreSceneImage} from './studio-scene-media.js';
 import {exportEditorialICS} from './calendar-export.js';
 import {downloadScenePNG} from './studio-scene-export.js';
+import {renderStoryboardVideo,saveVideoDownload} from './studio-video-export.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -38,6 +39,7 @@ state.mirrorLive=true;state.mirrorMenu=false;
 state.storyboardCurrent=0;
 state.storyboardPlaying=false;
 let storyboardTimer=null;
+let activeVideoExport=null;
 function stopStoryboardPlayback(){
  state.storyboardPlaying=false;
  if(storyboardTimer!=null){clearTimeout(storyboardTimer);storyboardTimer=null}
@@ -303,7 +305,7 @@ function toast(msg){
  const elem=document.createElement('div');elem.className='toast';elem.setAttribute('role','status');elem.textContent=msg;document.body.append(elem);
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>elem.remove(),3300);
 }
-function go(page){stopStoryboardPlayback();if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=true;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
+function go(page){if(activeVideoExport){activeVideoExport.abort();activeVideoExport=null;}stopStoryboardPlayback();if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=true;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
  const growthTarget=e.target.closest('[data-growth-action]');
  if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
@@ -475,6 +477,58 @@ case 'campaign-export':{
   if(state.storyboard.length)state.storyboard.splice(state.storyboardCurrent,1);
   state.storyboardCurrent=Math.max(0,Math.min(state.storyboardCurrent,state.storyboard.length-1));
   state.modal=null;save();render();toast('Escena eliminada del proyecto local.');break;
+ }
+ case 'storyboard-export-video':{
+  if(activeVideoExport){toast('Ya se está exportando el vídeo.');break}
+  stopStoryboardPlayback();
+  if(!state.storyboard.length){toast('Añade una escena antes de exportar vídeo.');break}
+  const controller=new AbortController();
+  activeVideoExport=controller;
+  const sceneCopy=state.storyboard.map(x=>({...x}));
+  const format=state.videoFormat;
+  const button=target;
+  const status=document.querySelector('#liveVideoExportStatus');
+  const cancel=document.querySelector('[data-action="storyboard-video-cancel"]');
+  if(status){status.hidden=false;status.textContent='Preparando escenas para grabar el vídeo…'}
+  if(cancel)cancel.hidden=false;
+  if(button)button.disabled=true;
+  renderStoryboardVideo({
+   scenes:sceneCopy,format,signal:controller.signal,
+   onProgress:({phase,percent})=>{
+    if(activeVideoExport!==controller)return;
+    const label=document.querySelector('#liveVideoExportStatus');
+    if(label){label.hidden=false;label.textContent=(phase==='preparando'?'Preparando escenas':'Grabando vídeo')+' · '+percent+'%'}
+   }
+  }).then(file=>{
+    if(activeVideoExport===controller&&state.page==='estudio'){
+     saveVideoDownload(file);
+     toast('Vídeo local '+file.extension.toUpperCase()+' · '+file.width+'×'+file.height+' descargado.');
+    }
+  }).catch(error=>{
+    if(error?.name!=='AbortError'&&activeVideoExport===controller)
+     toast('Error al exportar vídeo: '+String(error?.message||error).slice(0,180));
+  }).finally(()=>{
+    if(activeVideoExport===controller){
+     activeVideoExport=null;
+     const label=document.querySelector('#liveVideoExportStatus');
+     const cancelButton=document.querySelector('[data-action="storyboard-video-cancel"]');
+     const exportButton=document.querySelector('[data-action="storyboard-export-video"]');
+     if(label){label.hidden=true;label.textContent=''}
+     if(cancelButton)cancelButton.hidden=true;
+     if(exportButton)exportButton.disabled=false;
+    }
+  });
+  break;
+ }
+ case 'storyboard-video-cancel':{
+  if(activeVideoExport){activeVideoExport.abort();activeVideoExport=null;toast('Exportación de vídeo cancelada.')}
+  const label=document.querySelector('#liveVideoExportStatus');
+  if(label)label.hidden=true;
+  const cancel=document.querySelector('[data-action="storyboard-video-cancel"]');
+  if(cancel)cancel.hidden=true;
+  const exportButton=document.querySelector('[data-action="storyboard-export-video"]');
+  if(exportButton)exportButton.disabled=false;
+  break;
  }
  case 'storyboard-export-png':{
   downloadScenePNG(state.storyboard[state.storyboardCurrent],state.videoFormat)
