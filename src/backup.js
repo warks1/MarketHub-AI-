@@ -1,3 +1,4 @@
+import {isSceneImageData} from './studio-scene-media.js';
 // MarketHub AI — Copia de seguridad local: demo v0.3.
 // Operación explícita del usuario, no sube datos ni hace ninguna red.
 // Las copias JSON no están cifradas; tratar como información privada.
@@ -9,14 +10,14 @@ const keys=[
 ];
 const MAX_FILE=3*1024*1024;
 const safeObject=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
-function scan(value,depth=0){
+function scan(value,depth=0,key=''){
  if(depth>12)throw new Error('Estructura demasiado anidada.');
  if(value===null||typeof value==='boolean')return;
- if(typeof value==='string'){if(value.length>40000)throw new Error('Texto demasiado largo.');return}
+ if(typeof value==='string'){if(key==='imageData'&&isSceneImageData(value))return;if(value.length>40000)throw new Error('Texto demasiado largo.');return}
  if(typeof value==='number'){if(!Number.isFinite(value))throw new Error('Número no válido.');return}
  if(Array.isArray(value)){
   if(value.length>4000)throw new Error('Lista demasiado extensa.');
-  for(const v of value)scan(v,depth+1);
+  for(const v of value)scan(v,depth+1,key);
   return;
  }
  if(safeObject(value)){
@@ -24,7 +25,7 @@ function scan(value,depth=0){
   if(names.length>250)throw new Error('Objeto demasiado grande.');
   for(const name of names){
    if(['__proto__','constructor','prototype'].includes(name))throw new Error('Clave no autorizada.');
-   scan(value[name],depth+1);
+   scan(value[name],depth+1,name);
   }
   return;
  }
@@ -93,7 +94,7 @@ export async function backupImport(file,ctx){
 }
 export function backupSettingsHTML(){
  return '<div class="card"><div class="card-head"><h2>🗂 Copia de seguridad local</h2><span class="tag">Beta</span></div>'+
- '<div class="notice" style="margin-bottom:13px">Puedes guardar borradores, campañas planificadas, analítica CSV local, Oficina, Estudio Visual y Growth Lab en un solo archivo JSON. <strong>No está cifrado:</strong> protégelo como un documento privado. Restaurar sobreescribe los módulos incluidos, pero no borra los que falten en la copia.</div>'+
+ '<div class="notice" style="margin-bottom:13px">Puedes guardar borradores, campañas, fotografías del storyboard, analítica CSV local, Oficina, Estudio Visual y Growth Lab en un solo archivo JSON. <strong>No está cifrado:</strong> protégelo como un documento privado. Restaurar sobreescribe los módulos incluidos, pero no borra los que falten en la copia.</div>'+
  '<div class="workspace-actions">'+
  '<button class="primary" type="button" data-action="backup-export">Descargar copia conjunta (.json)</button>'+
  '<label class="secondary" for="localBackupImport" style="cursor:pointer">Restaurar archivo JSON</label>'+
