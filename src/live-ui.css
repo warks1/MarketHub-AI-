@@ -197,3 +197,29 @@
  .live-scene-pair{grid-template-columns:1fr}
 }
 @media(min-width:1800px){.live-top-grid{grid-template-columns:1.3fr 1fr .8fr}}
+
+/* Revisión visual: ningún menú queda reducido a iconos sin nombre en tablet. */
+@media (min-width:681px) and (max-width:980px){
+ .nexus-app.app-shell{grid-template-columns:174px minmax(0,1fr)}
+ .nexus-app .sidebar{padding:13px 9px}
+ .nexus-app .sidebar .brand{font-size:14px}
+ .nexus-app .sidebar .brand span,.nexus-app .nav-btn span{display:inline}
+ .nexus-app .nav-btn{justify-content:flex-start;padding:9px 8px;font-size:11px}
+ .nexus-app .nav-btn svg{width:17px;height:17px}
+}
+@media(max-width:680px){
+ .nexus-topbar .brand{display:flex;align-items:center;gap:6px;font-size:17px;min-width:0;flex:1 1 auto}
+ .nexus-topbar .brand span{display:inline!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .nexus-topbar .brand img{width:25px;height:25px;flex:none}
+ .nexus-topbar .topbar-right{flex:0 0 auto;gap:5px}
+ .nexus-topbar .plan-pill{display:none}
+ .nexus-topbar .avatar{width:30px;height:30px;font-size:10px}
+}
+@media(min-width:380px) and (max-width:700px){
+ .live-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .live-stat{min-height:102px;padding:8px}
+ .live-stat>span:first-child{font-size:9px;gap:4px}
+ .live-stat>span:first-child i{width:24px;height:24px;flex-basis:24px;font-size:16px}
+ .live-stat strong{font-size:18px}
+ .live-stat small{font-size:9px}
+}
