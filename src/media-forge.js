@@ -4,6 +4,7 @@ import {listVaultAssets,getVaultAsset,saveVaultAsset,removeVaultAsset,vaultSuppo
 import {readBrandProfiles,saveBrandProfile,removeBrandProfile,normalizeBrandProfile,TONES} from './brand-dna.js';
 import {auditCreative} from './creative-audit.js';
 import {listCreativeProjects,saveCreativeProject,openCreativeProject,removeCreativeProject,portableCreativeProject,importPortableCreativeProject,MAX_PROJECTS} from './creative-projects.js';
+import {exportCreativePortfolio,importCreativePortfolio,MAX_PORTFOLIO_BYTES} from './project-portfolio.js';
 // Sin subida de archivos a servidores, ni dependencias de servicios externos.
 const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[],vaultLoadToken:0,brandSelection:'',brandName:'',brandPrimary:'#26E9FB',brandAccent:'#EB4DF5',brandTone:'Profesional',brandCta:'',brandActive:false,audit:null,projectId:null,projectName:'Nueva campaña',projects:[],projectsReady:false,projectError:'',projectLoadToken:0};
 export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9':[1920,1080],'3:2':[1500,1000]};
@@ -89,12 +90,12 @@ function projectsPage(){
   '<button type="button" data-forge-action="project-export" data-forge-project-id="'+esc(item.id)+'">Exportar copia .mhub</button>'+
   '<button type="button" class="forge-vault-delete" data-forge-action="project-delete" data-forge-project-id="'+esc(item.id)+'">Eliminar</button></div></article>').join('');
  return '<section class="forge-panel forge-projects"><h2>Mis proyectos creativos</h2><p>Guarda el original y todos tus ajustes. Reanuda cuando quieras o exporta un archivo .mhub para transferirlo a otro dispositivo. No requiere conexión a servidores.</p>'+
- '<div class="forge-project-toolbar"><label class="forge-file">＋ Importar proyecto .mhub<input type="file" data-forge-file="project" accept=".mhub,application/json"></label></div>'+
+ '<div class="forge-project-toolbar"><label class="forge-file">＋ Importar proyecto .mhub<input type="file" data-forge-file="project" accept=".mhub,application/json"></label>'+'<label class="forge-file">＋ Restaurar copia completa .mhubpack<input type="file" data-forge-file="portfolio" accept=".mhubpack,application/zip"></label>'+actions([btn('Respaldar TODOS los proyectos · ZIP','project-batch-export',!s.projects.length)])+'</div>'+
  '<p class="forge-meta">'+s.projects.length+' / '+MAX_PROJECTS+' proyectos · máximo 8 MB de imagen original por proyecto · sin sincronización entre dispositivos</p>'+
  (s.projectError?'<p class="forge-vault-error" role="alert">'+esc(s.projectError)+'</p>':'')+
  (!s.projectsReady?'<div class="forge-empty">Abriendo proyectos de este dispositivo…</div>':
  cards?'<div class="forge-project-grid">'+cards+'</div>':'<div class="forge-empty">Aún no hay proyectos editables. Abre una foto, ajusta su diseño y pulsa «Guardar proyecto editable».</div>')+
- '<p class="forge-meta">Los proyectos están en este navegador. La copia .mhub contiene la imagen original y los parámetros necesarios para continuar la edición. No incluye contraseñas ni datos de cuentas.</p></section>';
+ '<p class="forge-meta">Los proyectos permanecen en este navegador. Una copia .mhub respalda un proyecto; .mhubpack guarda todos en un ZIP sin compresión. Restaurar añade proyectos, nunca reemplaza los existentes. Si no hay espacio, no se importa ninguno. Las copias no están cifradas: guárdalas de forma privada.</p></section>';
 }
 async function forgeProjectLoad(refresh){
  const token=++s.projectLoadToken;s.projectsReady=false;s.projectError='';
@@ -233,6 +234,18 @@ export function forgeInput(target){
 }
 export async function forgeFile(target,ctx){
  const type=target?.dataset?.forgeFile;
+ if(type==='portfolio'){
+  const file=target.files?.[0];if(!file)return true;
+  if(!file.name.toLowerCase().endsWith('.mhubpack')||file.size>MAX_PORTFOLIO_BYTES||file.size<100){
+   ctx.toast('Selecciona una copia .mhubpack válida, de hasta 90 MB.');return true;
+  }
+  try{
+   const response=await importCreativePortfolio(file);
+   await forgeProjectLoad(ctx.refresh);
+   ctx.toast(response.count+' proyectos restaurados sin sustituir los anteriores.');
+  }catch(err){ctx.toast('Restauración cancelada: '+String(err.message||err).slice(0,110))}
+  return true;
+ }
  if(type==='project'){
   const file=target.files?.[0];if(!file)return true;
   if(!file.name.toLowerCase().endsWith('.mhub')||!file.size||file.size>12*1024*1024){ctx.toast('Selecciona una copia .mhub de hasta 12 MB');return true}
@@ -321,6 +334,10 @@ export async function forgeClick(target,ctx){
     s.projectId=project.id;ctx.refresh();ctx.toast('Proyecto editable guardado.');
    }else if(action==='project-list'){
     forgeTab('projects',ctx.refresh);
+   }else if(action==='project-batch-export'){
+    const backup=await exportCreativePortfolio();
+    send(backup,'MarketHub-AI-Proyectos-'+new Date().toISOString().slice(0,10)+'.mhubpack');
+    ctx.toast('Copia completa de proyectos descargada.');
    }else{
     const id=target.dataset.forgeProjectId;
     if(action==='project-open'){
