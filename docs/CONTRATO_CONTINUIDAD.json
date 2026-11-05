@@ -66,7 +66,9 @@
     "src/competitor-local.css",
     "tests/studio-video-export.test.mjs",
     "tests/secure-backup.test.mjs",
-    "tests/competitor-local.test.mjs"
+    "tests/competitor-local.test.mjs",
+    "src/local-insights.js",
+    "tests/local-insights.test.mjs"
   ],
   "requiredScreens": [
     {
