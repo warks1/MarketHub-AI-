@@ -141,3 +141,12 @@ Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalida
 - Añadida transferencia directa de imagen editada desde Media Forge al Estudio de storyboard, con compresión y comprobaciones de capacidad antes de guardar.
 - Añadidas pruebas unitarias y secuencias visuales de comprobación móvil/escritorio.
 - Pendiente: comprobar resultados finales de integración y compatibilidad en dispositivos físicos, y ampliar decodificadores nativos bajo licencias adecuadas. No se promete conversión universal de MP4/MP3, transcripción automática ni uso de modelos de IA sin proveedores efectivos.
+
+## 2026-11-05 · Suite autónoma: integración incremental
+- **Mi biblioteca multimedia local:** guardado real con IndexedDB, galería con vistas previas, descarga, reapertura, eliminación confirmada, controles de tamaño/cantidad y límites de almacenamiento.
+- **ADN Creativo de Marca:** perfiles de identidad con nombre, paleta, tono y CTA; se pueden guardar, recuperar, modificar y aplicar a la máscara original Órbita.
+- **Auditor PULSE:** análisis geométrico local de recorte, resolución, texto y SafeFrame; recomendaciones orientativas sin representar políticas oficiales.
+- **Pruebas:** módulos unitarios para validación de biblioteca, marca y auditor; el recorrido visual cubre guardado, recarga, reapertura, eliminación y exportaciones anteriores.
+- **Continuidad:** contrato obligatorio actualizado; shell offline actualizado sin perder el boceto de carga aprobado ni otros módulos.
+- **Limitaciones reales:** biblioteca y marcas no se sincronizan; no hay todavía conversión universal MP4/MP3, IA generativa integrada, suscripciones ni anuncios comerciales.
+- **Estado de distribución:** los paquetes APK/web de la versión previa se generaron; la ampliación posterior debe volver a pasar el pipeline. Publicar en tiendas requiere pruebas y firma.
