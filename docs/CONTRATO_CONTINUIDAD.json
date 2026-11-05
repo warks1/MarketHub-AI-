@@ -81,7 +81,9 @@
     "src/creative-audit.js",
     "tests/creative-audit.test.mjs",
     "src/creative-projects.js",
-    "tests/creative-projects.test.mjs"
+    "tests/creative-projects.test.mjs",
+    "src/project-portfolio.js",
+    "tests/project-portfolio.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -735,6 +737,17 @@
         "data-forge-file=\"project\"",
         "importPortableCreativeProject(",
         "portableCreativeProject("
+      ]
+    },
+    {
+      "id": "MF-PORTFOLIO",
+      "label": "Respaldo total de proyectos sin reemplazar originales",
+      "file": "src/media-forge.js",
+      "tokens": [
+        "exportCreativePortfolio(",
+        "importCreativePortfolio(",
+        "'project-batch-export'",
+        "data-forge-file=\"portfolio\""
       ]
     }
   ]
