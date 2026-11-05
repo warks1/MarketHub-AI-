@@ -211,3 +211,31 @@
  .mh-splash-bottom{gap:5px;font-size:9px}
  .nexus-splash.nexus-original-splash .mh-splash-enter{min-height:32px;padding:7px 16px}
 }
+
+/* Animación discreta del MISMO boceto 04, sin desplazar tarjetas ni recortar la esfera. */
+@keyframes mh-splash-feature-glow{
+ 0%,100%{box-shadow:0 0 13px var(--feature-shadow),inset 0 0 21px #ffffff08}
+ 50%{box-shadow:0 0 19px var(--feature-shadow),inset 0 0 26px #ffffff12}
+}
+@keyframes mh-splash-orb-light{
+ 0%,100%{filter:drop-shadow(0 0 20px #125ed188)}
+ 50%{filter:drop-shadow(0 0 33px #5996ffb0)}
+}
+.nexus-splash.nexus-original-splash .mh-splash-feature{
+ animation:mh-splash-feature-glow 1.65s ease-in-out infinite;
+}
+.nexus-splash.nexus-original-splash .mh-splash-orb-crop{
+ animation:mh-splash-orb-light 1.65s ease-in-out infinite;
+}
+.nexus-splash.nexus-original-splash .mh-feature-creative,
+.nexus-splash.nexus-original-splash .mh-feature-social,
+.nexus-splash.nexus-original-splash .mh-feature-planning{
+ animation-delay:.35s;
+}
+@media(max-width:699px){
+ .nexus-splash.nexus-original-splash .mh-splash-enter{min-height:44px;touch-action:manipulation}
+}
+@media(prefers-reduced-motion:reduce){
+ .nexus-splash.nexus-original-splash .mh-splash-feature,
+ .nexus-splash.nexus-original-splash .mh-splash-orb-crop{animation:none!important}
+}
