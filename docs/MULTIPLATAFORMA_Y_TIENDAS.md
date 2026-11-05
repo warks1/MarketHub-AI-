@@ -72,3 +72,9 @@ Auditor PULSE, SafeFrame y transferencia interna al Estudio. La compilación se 
 para **probar dispositivos Android reales**: permisos de archivos, WebView, galería,
 descargas, IndexedDB, almacenamiento lleno, recarga y navegación, antes de generar un
 AAB firmado para distribución comercial. Los datos locales no se sincronizan entre móviles.
+
+### Corrección de biblioteca móvil (5 noviembre, revisión final de prueba)
+La carga de la galería se serializa por versión de solicitud para que un listado
+obsoleto no sobrescriba un guardado reciente. Los flujos de prueba esperan a
+que IndexedDB confirme el guardado y luego verifican reapertura tras recarga.
+La versión de prueba Android debe regenerarse a partir del último código.
