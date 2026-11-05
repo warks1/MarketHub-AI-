@@ -1,6 +1,6 @@
 {
   "title": "MarketHub AI — contrato mínimo de continuidad",
-  "version": "2026-11-04",
+  "version": "2026-11-05",
   "note": "Este contrato solo detecta eliminaciones estructurales obvias; no sustituye pruebas funcionales ni E2E. Si hay refactor, modificar el contrato junto con pruebas equivalentes y documentar paridad.",
   "mustExist": [
     "README.md",
@@ -71,7 +71,13 @@
     "tests/local-insights.test.mjs",
     "src/media-forge.js",
     "src/media-forge.css",
-    "scripts/media-forge-qa.mjs"
+    "scripts/media-forge-qa.mjs",
+    "src/media-vault.js",
+    "src/brand-dna.js",
+    "tests/media-vault.test.mjs",
+    "tests/brand-dna.test.mjs",
+    "src/subtitle-tools.js",
+    "tests/subtitle-tools.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -664,6 +670,41 @@
         "forgeMount()",
         "forgeClick(",
         "case 'catalogue-open-media'"
+      ]
+    },
+    {
+      "id": "MF-VAULT",
+      "label": "Biblioteca multimedia local reutilizable",
+      "file": "src/media-forge.js",
+      "tokens": [
+        "function vaultPage()",
+        "forgeVaultLoad(",
+        "saveVaultAsset(",
+        "getVaultAsset(",
+        "removeVaultAsset(",
+        "data-forge-action=\"vault-open\""
+      ]
+    },
+    {
+      "id": "MF-BRAND",
+      "label": "ADN Creativo de Marca",
+      "file": "src/media-forge.js",
+      "tokens": [
+        "function brandDnaPanel()",
+        "brand-save",
+        "brand-apply",
+        "readBrandProfiles(",
+        "s.brandActive?"
+      ]
+    },
+    {
+      "id": "MF-SUBS",
+      "label": "Conversor local SRT y WebVTT",
+      "file": "src/media-forge.js",
+      "tokens": [
+        "convertSubtitles(",
+        "data-forge-input=\"subtitle\"",
+        "'srt'||action==='vtt'"
       ]
     }
   ]
