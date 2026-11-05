@@ -51,6 +51,32 @@ for(const [engine,runner,width,height] of [
   if(zip.subarray(0,4).toString()!=='PK\u0003\u0004')problems.push('ZIP exportado inválido');
   for(const format of ['9x16','4x5','1x1','16x9','3x2'])
    if(!zip.includes(Buffer.from('campana-prueba-'+format+'.jpg')))problems.push('Falta formato '+format+' en PULSE PACK');
+  // Persistencia real en IndexedDB: guardar, recargar, reabrir y eliminar.
+  await page.locator('[data-forge-action="vault-save-photo"]').click();
+  await page.locator('[data-forge-tab="vault"]').click();
+  await page.locator('.forge-vault-item').first().waitFor({state:'visible',timeout:15000});
+  if((await page.locator('.forge-vault-item').count())!==1)problems.push('La biblioteca no guardó exactamente una imagen');
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>window.__MARKETHUB_BOOT__?.ready===true);
+  await page.locator('#skipSplash').click({timeout:4000}).catch(()=>{});
+  if(width<=680){
+   await page.locator('.mobile-bottom [data-action="show-mobile-menu"]').click();
+   await page.locator('.mobile-menu-drawer [data-page="multimedia"]').click();
+  }else await page.locator('.sidebar [data-page="multimedia"]').click();
+  await page.locator('[data-forge-tab="vault"]').click();
+  await page.locator('.forge-vault-item').first().waitFor({state:'visible',timeout:15000});
+  if(!(await page.locator('.forge-vault-item strong').first().textContent()).includes('campana-prueba'))
+   problems.push('La imagen de la biblioteca no sobrevivió a la recarga');
+  await page.screenshot({path:'visual-qa/forge/'+engine+'-biblioteca.png'});
+  await page.locator('.forge-vault-item [data-forge-action="vault-open"]').first().click();
+  await page.locator('#forgeCanvas').waitFor();
+  await page.waitForFunction(()=>document.querySelector('#forgeCanvas')?.width===600,{timeout:10000})
+   .catch(()=>problems.push('No se reabrió correctamente la imagen guardada'));
+  await page.locator('[data-forge-tab="vault"]').click();
+  await page.locator('.forge-vault-item').first().waitFor();
+  page.once('dialog',dialog=>dialog.accept());
+  await page.locator('.forge-vault-item [data-forge-action="vault-delete"]').first().click();
+  await page.locator('.forge-vault-item').first().waitFor({state:'detached',timeout:10000});
   await page.locator('[data-forge-tab="audio"]').click();
   await page.locator('[data-forge-file="audio"]').setInputFiles({
    name:'voz-prueba.wav',mimeType:'audio/wav',buffer:Buffer.from(wavBuffer)
