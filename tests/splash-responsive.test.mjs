@@ -44,3 +44,11 @@ test('Los nuevos estilos están cargados y el Service Worker no puede ignorarlos
  assert.match(read('sw.js'),/src\/splash-responsive\.css/);
  assert.equal(read('sw.js'),read('public/sw.js'));
 });
+
+test('La animación respeta el boceto y es accesible',()=>{
+ assert.match(css,/@keyframes mh-splash-feature-glow/);
+ assert.match(css,/@keyframes mh-splash-orb-light/);
+ assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
+ assert.match(css,/animation:none!important/);
+ assert.match(css,/min-height:44px;touch-action:manipulation/);
+});
