@@ -83,7 +83,10 @@
     "src/creative-projects.js",
     "tests/creative-projects.test.mjs",
     "src/project-portfolio.js",
-    "tests/project-portfolio.test.mjs"
+    "tests/project-portfolio.test.mjs",
+    "src/unified-backup.js",
+    "tests/unified-backup.test.mjs",
+    "scripts/unified-backup-qa.mjs"
   ],
   "requiredScreens": [
     {
@@ -748,6 +751,17 @@
         "importCreativePortfolio(",
         "'project-batch-export'",
         "data-forge-file=\"portfolio\""
+      ]
+    },
+    {
+      "id": "FULL-BACKUP",
+      "label": "Copia integral no destructiva de todos los datos locales",
+      "file": "src/app.js",
+      "tokens": [
+        "unifiedBackupSettingsHTML()",
+        "case 'unified-backup-export':",
+        "restoreUnifiedBackup(file)",
+        "data-unified-backup-import"
       ]
     }
   ]
