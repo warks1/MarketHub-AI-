@@ -33,3 +33,14 @@ test('Los subtítulos están integrados en Media Forge sin sustituir las pestañ
  forgeTab('photo',()=>{});
  assert.match(forgePage(),/PULSE PACK/);
 });
+
+test('Los selectores multimedia no muestran etiquetas undefined ni valores rotos',()=>{
+ for(const tab of ['photo','audio','video','pdf','subs','vault','projects']){
+  forgeTab(tab,()=>{});
+  const html=forgePage();
+  assert.doesNotMatch(html,/\bundefined\b|\bNaN\b|\[object Object\]/,'Texto roto en '+tab);
+ }
+ forgeTab('subs',()=>{});
+ assert.match(forgePage(),/Abrir subtítulos/);
+ forgeTab('photo',()=>{});
+});
