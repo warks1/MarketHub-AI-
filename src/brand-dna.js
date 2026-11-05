@@ -39,3 +39,20 @@ export function removeBrandProfile(id){
  catch{throw Error('No se pudo actualizar el ADN de marca')}
  return true;
 }
+
+/** Fusiona una copia SIN modificar identidades de marca preexistentes. */
+export function mergeBrandProfilesBatch(profiles){
+ if(!Array.isArray(profiles)||profiles.length>MAX_BRANDS)throw Error('Copia de ADN de marca incorrecta');
+ const normalized=profiles.map(normalizeBrandProfile),ids=new Set();
+ for(const p of normalized){if(ids.has(p.id))throw Error('La copia contiene marcas duplicadas');ids.add(p.id)}
+ const raw=localStorage.getItem(KEY);
+ if(raw!==null){
+  let records;try{records=JSON.parse(raw)}catch{throw Error('No se puede fusionar: el ADN local existente no es legible')}
+  if(!Array.isArray(records))throw Error('La lista local de marcas tiene un formato inválido');
+ }
+ const present=readBrandProfiles(),existing=new Set(present.map(x=>x.id));
+ const added=normalized.filter(x=>!existing.has(x.id));
+ if(added.length+present.length>MAX_BRANDS)throw Error('No hay espacio para todas las marcas del respaldo');
+ if(added.length)localStorage.setItem(KEY,JSON.stringify([...present,...added]));
+ return added.length;
+}
