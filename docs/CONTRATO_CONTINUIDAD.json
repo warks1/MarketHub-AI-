@@ -41,7 +41,10 @@
     "sw.js",
     "public/sw.js",
     "docs/PLATAFORMAS_Y_TIENDAS.md",
-    "tests/platform-readiness.test.mjs"
+    "tests/platform-readiness.test.mjs",
+    "src/campaign-manager.js",
+    "src/campaign-manager.css",
+    "tests/campaign-manager.test.mjs"
   ],
   "requiredScreens": [
     {

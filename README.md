@@ -100,3 +100,9 @@ El diseño elegido se conserva en los bocetos originales de la carpeta assets; e
 ### Referencias visuales exactas
 
 Los cuatro bocetos elegidos se conservan sin modificar en `assets/*-original.jpeg`. Puedes abrir la galería `referencias.html` para comparar la interfaz, el estudio creativo, las pantallas móviles y la pantalla de carga. La vista panorámica de carga usa directamente el boceto 04 con progreso superpuesto; la vista previa central del estudio usa un recorte fiel del boceto 02. **Esto no equivale todavía a una réplica píxel a píxel de la UI funcional en todos los dispositivos.**
+
+## Campañas locales operativas
+
+Desde **Campañas → Planificador de campañas** puedes crear, editar, duplicar, eliminar y exportar CSV con objetivos, plataforma, fechas y presupuesto **previsto**. FREE demo admite hasta 10 campañas locales y PRO demo hasta 150; son límites provisionales de demostración. Estas acciones no activan anuncios, no generan gasto, no requieren cuenta y se guardan en el navegador (también en el respaldo JSON existente).
+
+La interfaz de ejemplo de métricas del boceto se conserva por separado y se identifica como ilustrativa.

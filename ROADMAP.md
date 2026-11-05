@@ -31,6 +31,7 @@
 
 ## v0.3 · Marketing real
 
+- [x] Planificador local de campañas con CRUD, objetivos, fechas, presupuesto previsto, límite FREE/PRO demo y exportación CSV.
 - [ ] OAuth y APIs oficiales para programar y publicar donde lo permita cada red.
 - [ ] Bandeja real según permisos de plataformas.
 - [ ] Analítica unificada y métricas no ficticias.

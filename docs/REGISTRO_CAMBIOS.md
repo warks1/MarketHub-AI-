@@ -1,3 +1,11 @@
+## 2026-11-05 — Planificador local de campañas y corrección móvil
+
+- Corregido el desbordamiento del estudio creativo en móviles de 320–430 px, manteniendo la línea de tiempo desplazable horizontalmente.
+- Añadida creación, edición, duplicación, eliminación confirmada y exportación CSV de campañas locales con validación de objetivos, fechas y presupuestos; sin activar anuncios reales.
+- Campañas guardadas en los datos locales incluidos por el mecanismo de copia JSON; límites demo FREE 10 y PRO 150.
+- Nuevas pruebas unitarias y ampliación de la auditoría visual responsive a la pantalla Campañas.
+- Módulos de campaña incluidos en caché offline con revisión separada de la PWA.
+
 ## 2026-11-05 — v0.4.1 Multiplataforma, fidelidad visual y caché segura
 
 - Conservados en el repositorio los cuatro bocetos originales como referencia inalterable, con visor de comparación y pantalla de carga panorámica usando la imagen elegida.
