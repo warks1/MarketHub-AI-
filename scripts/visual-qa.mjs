@@ -233,6 +233,51 @@ try{
     await page.screenshot({path:'visual-qa/'+id+'-copia-cifrada.png',fullPage:true});
    }else problems.push('Cifrado bloqueado en el navegador de prueba HTTPS/local');
   }
+
+  // Flujos de formularios reales: Oficina y Growth Lab en móvil y escritorio.
+  if(['smartphone-390','pc-1440'].includes(id)){
+   const checkBroken=async section=>{
+    const text=await page.locator('main').innerText();
+    const errors=text.match(/\bNaN\b|\bundefined\b|\[object Object\]/g);
+    if(errors?.length)problems.push('Valores rotos en '+section+': '+errors.join(', '));
+   };
+   await go(page,'oficina',width);
+   await page.locator('[data-office-action="tab-calculadora"]').click();
+   await page.locator('#calcSpend').fill('100');
+   await page.locator('#calcRevenue').fill('250');
+   await page.locator('#calcLeads').fill('10');
+   await page.locator('#calcOrders').fill('2');
+   await page.locator('#office-calc-form button[type="submit"]').click();
+   if(!(await page.locator('.workspace-metrics').innerText()).includes('2.50×'))problems.push('Oficina no calcula ROAS 2.50×');
+   await checkBroken('Oficina / Calculadora');
+   await page.locator('[data-office-action="tab-landing"]').click();
+   await page.locator('#landingTitle').fill('Promoción de prueba con palabras completas');
+   await page.locator('#landingSubtitle').fill('Esta vista previa debe respetar las palabras y los saltos de línea.');
+   await page.locator('#landingUrl').fill('https://example.com/landing');
+   await page.locator('#office-landing-form button[type="submit"]').click();
+   const title=await page.locator('.workspace-landing-preview h2').textContent();
+   if(!title?.includes('Promoción de prueba'))problems.push('La vista previa de la landing no se actualiza');
+   await checkBroken('Oficina / Landing');
+   await page.screenshot({path:'visual-qa/'+id+'-oficina-landing.png',fullPage:true});
+
+   await go(page,'laboratorio',width);
+   await page.locator('#briefName').fill('Campaña de prueba');
+   await page.locator('#briefAudience').fill('Público de prueba');
+   await page.locator('#briefOffer').fill('Servicio de muestra');
+   await page.locator('#briefBudget').fill('125.50');
+   await page.locator('#growth-brief button[type="submit"]').click();
+   if(!(await page.locator('.growth-entry').count()))problems.push('Growth Lab no guarda briefs');
+   await checkBroken('Growth Lab / Briefs');
+   await page.locator('[data-growth-action="tab-utm"]').click();
+   await page.locator('#utmBase').fill('https://example.com/producto');
+   await page.locator('#utmSource').fill('instagram');
+   await page.locator('#utmMedium').fill('social');
+   await page.locator('#utmCampaign').fill('Promocion movil');
+   await page.locator('#growth-utm button[type="submit"]').click();
+   if(!(await page.locator('.growth-entry').count()))problems.push('Growth Lab no genera enlaces UTM');
+   await checkBroken('Growth Lab / UTM');
+   await page.screenshot({path:'visual-qa/'+id+'-growth-utm.png',fullPage:true});
+  }
   results.push({id,width,height,http:response?.status(),home,studio,campaigns,problems});
   await page.close();
  }
