@@ -76,3 +76,17 @@
 .forge-audit li span{font-size:12px;color:#d5dff8;overflow-wrap:anywhere}
 .forge-audit-pass{border-color:#367e82!important}
 .forge-audit-warn{border-color:#bc8b4c!important}
+
+/* Proyectos editables: tarjetas compactas que comparten el estilo NEXUS × PULSE. */
+.forge-project-toolbar{max-width:420px}
+.forge-project-toolbar .forge-file{margin:12px 0}
+.forge-project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,245px),1fr));gap:13px;margin:16px 0}
+.forge-project-item{min-width:0;display:flex;flex-direction:column;gap:9px;padding:12px;border:1px solid #536da7;border-radius:15px;background:linear-gradient(145deg,#0d214c,#1a1744)}
+.forge-project-banner{display:grid;gap:4px;min-height:112px;align-content:end;padding:12px;border:1px solid #50a3c2;border-radius:12px;background:radial-gradient(ellipse at top right,#2b3f9f,#101c40 72%);overflow-wrap:anywhere}
+.forge-project-banner strong{font-size:16px;line-height:1.3}
+.forge-project-banner small{font-size:12px;color:#9af2ff}
+.forge-project-item>p{font-size:12px;color:#c2d6f6;line-height:1.4;overflow-wrap:anywhere;margin:4px 0}
+.forge-project-item .forge-vault-buttons{display:grid;grid-template-columns:1fr 1fr}
+.forge-project-item .forge-vault-buttons button:first-child{grid-column:1/-1}
+.forge-project-item .forge-vault-buttons button{min-height:44px}
+@media(max-width:680px){.forge-project-grid{grid-template-columns:minmax(0,1fr)}.forge-project-banner{min-height:94px}.forge-project-item .forge-vault-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}}
