@@ -9,6 +9,7 @@ on:
       - 'index.html'
       - 'scripts/visual-qa.mjs'
       - 'scripts/cross-browser-qa.mjs'
+      - 'scripts/splash-responsive-qa.mjs'
       - '.github/workflows/visual-qa.yml'
   pull_request:
     paths:
@@ -17,6 +18,7 @@ on:
       - 'assets/**'
       - 'scripts/visual-qa.mjs'
       - 'scripts/cross-browser-qa.mjs'
+      - 'scripts/splash-responsive-qa.mjs'
       - '.github/workflows/visual-qa.yml'
 
 permissions:
@@ -45,6 +47,8 @@ jobs:
           done
           cat /tmp/markethub-vite.log
           exit 1
+      - name: Comprobar banners de carga completos en Chromium y Safari WebKit
+        run: node scripts/splash-responsive-qa.mjs
       - name: Revisar inicio, estudio y menús por tamaños de pantalla
         run: node scripts/visual-qa.mjs
       - name: Revisar Safari WebKit Firefox y pantallas horizontales/UHD
