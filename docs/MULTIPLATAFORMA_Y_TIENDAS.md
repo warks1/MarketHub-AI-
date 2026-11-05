@@ -86,3 +86,13 @@ lecturas de registros anteriores con Blob sin borrarlos. Esta estrategia evita u
 incompatibilidad observada en pruebas WebKit de almacenamiento de archivos.
 Las pruebas de navegador deben seguir verificando persistencia tras recargar en
 Chromium y Safari WebKit. La compatibilidad física aún requiere instalación y prueba.
+
+### Proyectos creativos portables — comprobación Android (5 noviembre 2026)
+El módulo Media Forge conserva en una base IndexedDB independiente el origen de
+cada fotografía y los ajustes editables (máscara, proporción, estilo, texto, guías
+SafeFrame y colores de marca). Incorpora guardado, reapertura tras reiniciar y
+copias individuales .mhub importables en otro dispositivo. Los archivos .mhub
+son copias JSON con imagen original en base64, sin cifrar: se deben custodiar
+como imágenes privadas. Se comprueban navegadores Chromium y WebKit; el siguiente
+paquete Android es únicamente una APK de depuración para probar en teléfonos.
+No existe sincronización automática entre móviles ni cuentas de usuario.
