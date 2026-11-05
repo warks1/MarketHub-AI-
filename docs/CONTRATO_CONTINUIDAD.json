@@ -59,7 +59,14 @@
     "src/live-ui.css",
     "src/studio-scene-export.js",
     "tests/live-ui.test.mjs",
-    "tests/studio-export.test.mjs"
+    "tests/studio-export.test.mjs",
+    "src/studio-video-export.js",
+    "src/secure-backup.js",
+    "src/competitor-local.js",
+    "src/competitor-local.css",
+    "tests/studio-video-export.test.mjs",
+    "tests/secure-backup.test.mjs",
+    "tests/competitor-local.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -615,6 +622,17 @@
         "liveInbox({",
         "liveListening({",
         "storyboard-export-png"
+      ]
+    },
+    {
+      "id": "FUNC-VIDEO-SECURE-BENCHMARK",
+      "title": "Vídeo, copias cifradas y benchmarking local",
+      "file": "src/app.js",
+      "tokens": [
+        "storyboard-export-video",
+        "backup-encrypted-export",
+        "competitorsHTML({",
+        "competitor-export"
       ]
     }
   ]
