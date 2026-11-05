@@ -75,6 +75,30 @@ async function inspect(browser,engine,devices){
    if(measured.scrollHeight>measured.clientHeight+3&&measured.overflowY!=='auto'){
     failures.push('Contenido inferior inaccesible en una pantalla corta');
    }
+   // Reproduce el fallo reportado: 56 % visible pero barra sin relleno.
+   await page.locator('#progressFill').evaluate(el=>{
+    el.style.width='56%';
+    el.parentElement.querySelector('.progress-value').textContent='56%';
+   });
+   await page.waitForTimeout(180); // Transición CSS de 100 ms.
+   const progress=await page.locator('#progressFill').evaluate(el=>{
+    const a=el.getBoundingClientRect(),track=el.parentElement.getBoundingClientRect();
+    return {height:a.height,ratio:track.width?a.width/track.width:0,background:getComputedStyle(el).backgroundImage};
+   });
+   if(progress.height<10||progress.ratio<.49||progress.ratio>.61||!progress.background.includes('gradient')){
+    failures.push('La barra de 56 % no se rellena correctamente: '+JSON.stringify(progress));
+   }
+   // En tablet vertical/horizontal el conjunto debe quedar centrado si cabe.
+   if(width>=700&&width<=1199&&height>=700){
+    const group=await page.evaluate(()=>{
+     const start=document.querySelector('.mh-splash-showcase').getBoundingClientRect();
+     const end=document.querySelector('.mh-splash-bottom').getBoundingClientRect();
+     return {top:start.top,bottom:end.bottom};
+    });
+    if(group.bottom-group.top<height-40&&Math.abs((group.top+group.bottom)/2-height/2)>Math.max(75,height*.13)){
+     failures.push('La composición de tablet está desplazada hacia un extremo: '+JSON.stringify(group));
+    }
+   }
    for(const selector of ['.mh-splash-brand','.mh-splash-track','.mh-splash-status','.mh-splash-bottom','#skipSplash']){
     if(!(await page.locator('.nexus-original-splash '+selector).isVisible()))failures.push('Falta elemento: '+selector);
    }
