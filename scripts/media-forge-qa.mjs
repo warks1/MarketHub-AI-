@@ -70,6 +70,8 @@ for(const [engine,runner,width,height] of [
    if(!zip.includes(Buffer.from('campana-prueba-'+format+'.jpg')))problems.push('Falta formato '+format+' en PULSE PACK');
   // Persistencia real en IndexedDB: guardar, recargar, reabrir y eliminar.
   await page.locator('[data-forge-action="vault-save-photo"]').click();
+  // El guardado es asíncrono; confirmar su finalización antes de abrir otra pestaña.
+  await page.locator('.toast').filter({hasText:'Composición guardada en Mi biblioteca'}).waitFor({state:'visible',timeout:20000});
   await page.locator('[data-forge-tab="vault"]').click();
   await page.locator('.forge-vault-item').first().waitFor({state:'visible',timeout:15000});
   if((await page.locator('.forge-vault-item').count())!==1)problems.push('La biblioteca no guardó exactamente una imagen');
@@ -87,7 +89,10 @@ for(const [engine,runner,width,height] of [
   await page.screenshot({path:'visual-qa/forge/'+engine+'-biblioteca.png'});
   await page.locator('.forge-vault-item [data-forge-action="vault-open"]').first().click();
   await page.locator('#forgeCanvas').waitFor();
-  await page.waitForFunction(()=>document.querySelector('#forgeCanvas')?.width===600,{timeout:10000})
+  // El formato predeterminado tras recargar es 9:16; elegir 1:1 para comprobar
+  // que existe una foto real reabierta y no el canvas de marcador vacío.
+  await page.locator('[data-forge-input="format"]').selectOption('1:1');
+  await page.waitForFunction(()=>document.querySelector('#forgeCanvas')?.width===600,null,{timeout:10000})
    .catch(()=>problems.push('No se reabrió correctamente la imagen guardada'));
   await page.locator('[data-forge-tab="vault"]').click();
   await page.locator('.forge-vault-item').first().waitFor();
