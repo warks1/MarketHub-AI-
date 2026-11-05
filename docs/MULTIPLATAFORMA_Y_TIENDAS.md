@@ -145,3 +145,19 @@ asíncrona de IndexedDB. Los archivos no están cifrados. La protección requier
 guardar copias fuera del dispositivo, especialmente antes de limpiar caché.
 La APK resultante es de depuración; falta instalación y QA en teléfonos reales,
 firma para tiendas, integración comercial de anuncios y suscripciones.
+
+### APK de pruebas: respaldo integral protegido (.mhubsecure) — noviembre 2026
+La aplicación ofrece, además del respaldo integral anterior sin cifrar,
+un formato nuevo **`.mhubsecure`** protegido con contraseña y AES-256-GCM por
+bloques, PBKDF2-SHA256 y autenticación de encabezado y tamaño. La contraseña
+no se guarda y no existe recuperación si el usuario la pierde.
+El cifrado/descifrado se hace en el dispositivo y nunca transmite
+fotografías, documentos ni la contraseña a servidores de MarketHub AI.
+
+**Verificar en teléfonos físicos**: descarga mediante WebView nativa Android,
+exportación/importación de ficheros con extensiones personalizadas, disponibilidad
+Web Crypto, rendimiento en terminales con RAM limitada, reanudación después
+de interrupciones y recuperación con contraseña incorrecta.
+La APK generada en CI es de depuración; no equivale a publicación en
+Google Play o App Store. Las copias sin cifrar siguen admitidas solo
+por compatibilidad.
