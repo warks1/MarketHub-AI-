@@ -321,7 +321,18 @@ document.addEventListener('click',e=>{
  const forgeTabTarget=e.target.closest('[data-forge-tab]');
  if(forgeTabTarget){forgeTab(forgeTabTarget.dataset.forgeTab,render);return}
  const forgeActionTarget=e.target.closest('[data-forge-action]');
- if(forgeActionTarget){void forgeClick(forgeActionTarget,{toast});return}
+ if(forgeActionTarget){
+  void forgeClick(forgeActionTarget,{toast,sendStudioImage:async(blob)=>{
+   const scene=state.storyboard[state.storyboardCurrent];
+   if(!scene)throw Error('Crea una escena en Estudio antes de enviar imágenes');
+   const file=new File([blob],'media-forge.jpg',{type:'image/jpeg'});
+   const data=await imageFileToSceneData(file);
+   if(!canStoreSceneImage(state.storyboard,scene.id,data))throw Error('No hay espacio local suficiente para esta imagen');
+   const previous=scene.imageData;scene.imageData=data;
+   if(!save()){scene.imageData=previous;throw Error('No se pudo guardar el archivo en el dispositivo')}
+   go('estudio');toast('Composición enviada directamente a tu escena de Estudio.');
+  }});return;
+ }
  const growthTarget=e.target.closest('[data-growth-action]');
  if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
  const visualTarget=e.target.closest('[data-visual-action]');
