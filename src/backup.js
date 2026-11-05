@@ -1,4 +1,5 @@
 import {isSceneImageData} from './studio-scene-media.js';
+import {encryptBackupJSON,decryptBackupJSON,ENCRYPTED_BACKUP_FORMAT,encryptedBackupsAvailable,MAX_ENCRYPTED_BACKUP_SIZE} from './secure-backup.js';
 // MarketHub AI — Copia de seguridad local: demo v0.3.
 // Operación explícita del usuario, no sube datos ni hace ninguna red.
 // Las copias JSON no están cifradas; tratar como información privada.
@@ -70,12 +71,33 @@ export function backupExport(ctx){
   return true;
  }catch(e){ctx.toast('No se pudo exportar: '+String(e.message||e).slice(0,130));return false}
 }
+export async function backupEncryptedExport(ctx){
+ if(!encryptedBackupsAvailable()){ctx.toast('Este navegador no permite cifrar: utiliza HTTPS.');return false}
+ try{
+  const payload=readBackup();
+  if(Object.keys(payload.modules).length===0){ctx.toast('No hay datos para respaldar.');return false}
+  const encrypted=await encryptBackupJSON(payload,ctx.password||'');
+  const blob=new Blob([JSON.stringify(encrypted)],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='MarketHub-AI-copia-CIFRADA-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+  ctx.toast('Copia cifrada descargada. No pierdas la contraseña.');return true;
+ }catch(error){ctx.toast('Error al cifrar: '+String(error.message||error).slice(0,145));return false}
+}
 export async function backupImport(file,ctx){
  if(!file){ctx.toast('Selecciona un archivo JSON.');return false}
- if(typeof file.size!=='number'||file.size<=0||file.size>MAX_FILE){ctx.toast('Archivo vacío o superior a 3 MB.');return false}
+ if(typeof file.size!=='number'||file.size<=0||file.size>MAX_ENCRYPTED_BACKUP_SIZE){ctx.toast('Archivo vacío o superior a 5 MB.');return false}
  let modules;
- try{modules=validateBackup(JSON.parse(await file.text()))}
- catch(e){ctx.toast('Copia no válida: '+String(e.message||e).slice(0,110));return false}
+ try{
+  const parsed=JSON.parse(await file.text());
+  if(parsed?.format===ENCRYPTED_BACKUP_FORMAT){
+   if(!ctx.password){ctx.toast('Escribe la contraseña de la copia cifrada antes de restaurarla.');return false}
+   modules=validateBackup(await decryptBackupJSON(parsed,ctx.password));
+  }else{
+   if(file.size>MAX_FILE){ctx.toast('La copia sin cifrar supera los 3 MB.');return false}
+   modules=validateBackup(parsed);
+  }
+ }catch(e){ctx.toast('Copia no válida: '+String(e.message||e).slice(0,125));return false}
  const entries=Object.entries(modules);
  const existing=entries.filter(([key])=>localStorage.getItem(key)!==null).length;
  const warning='Esta copia restaurará '+entries.length+' módulos y sobrescribirá '+existing+' módulos locales existentes. Antes de continuar guarda otra copia si necesitas conservarlos. ¿Confirmas la restauración?';
@@ -93,12 +115,19 @@ export async function backupImport(file,ctx){
  return true;
 }
 export function backupSettingsHTML(){
- return '<div class="card"><div class="card-head"><h2>🗂 Copia de seguridad local</h2><span class="tag">Beta</span></div>'+
- '<div class="notice" style="margin-bottom:13px">Puedes guardar borradores, campañas, fotografías del storyboard, analítica CSV local, Oficina, Estudio Visual y Growth Lab en un solo archivo JSON. <strong>No está cifrado:</strong> protégelo como un documento privado. Restaurar sobreescribe los módulos incluidos, pero no borra los que falten en la copia.</div>'+
+ const available=encryptedBackupsAvailable();
+ return '<div class="card"><div class="card-head"><h2>🗂 Copia de seguridad y protección</h2><span class="tag">Local · Beta</span></div>'+
+ '<div class="notice" style="margin-bottom:13px">Respalda publicaciones, campañas, fotos del storyboard, analítica, mensajes, Oficina, Estudio Visual y Growth Lab. '+
+ '<strong>La copia cifrada con contraseña es la opción recomendada.</strong> Se conserva la opción sin cifrar por compatibilidad.</div>'+
+ '<div class="form-field"><label for="backupPassword">Contraseña para cifrar o restaurar una copia protegida</label>'+
+ '<input class="input" id="backupPassword" type="password" minlength="12" maxlength="256" autocomplete="new-password" placeholder="12 o más caracteres">'+
+ '<p class="tiny muted">No se guarda la contraseña. Si la pierdes, la copia no se puede recuperar.</p></div>'+
  '<div class="workspace-actions">'+
- '<button class="primary" type="button" data-action="backup-export">Descargar copia conjunta (.json)</button>'+
+ '<button class="primary" type="button" data-action="backup-encrypted-export"'+(available?'':' disabled')+'>🔒 Descargar copia cifrada (.json)</button>'+
+ '<button class="secondary" type="button" data-action="backup-export">Descargar copia SIN cifrar</button>'+
  '<label class="secondary" for="localBackupImport" style="cursor:pointer">Restaurar archivo JSON</label>'+
  '<input id="localBackupImport" data-backup-import aria-label="Seleccionar archivo de copia de seguridad" accept="application/json,.json" type="file" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden">'+
- '</div><p class="tiny muted" style="margin-top:12px">Límite de importación: 3 MB. Comprueba la procedencia de los archivos. Esta función es local y no sustituye la sincronización segura entre dispositivos.</p></div>';
+ '</div><p class="tiny muted" style="margin-top:12px">AES-256-GCM y PBKDF2-SHA256. Todo se realiza en el dispositivo, sin subir los archivos. Restaurar requiere confirmación y puede sobrescribir datos locales. Límite: 3 MB para copias normales y 5 MB para cifradas.'+
+ (available?'':' El cifrado necesita HTTPS y un navegador compatible.')+'</p></div>';
 }
 export { keys as backupModuleKeys };
