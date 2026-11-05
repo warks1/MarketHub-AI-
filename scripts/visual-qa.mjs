@@ -55,7 +55,24 @@ try{
    return {width:document.documentElement.scrollWidth,viewport,offenders};
   });
   if(studio.width>studio.viewport+3)faults.push('Estudio desborda horizontalmente');
-  results.push({id,width,height,http:response?.status(),home,studio,faults});
+  // Abrir el gestor de campañas y comprobar formulario, guardado y layout.
+  if(width<=680){
+   await page.locator('.mobile-bottom [data-action="show-mobile-menu"]').click();
+   await page.locator('.mobile-menu-drawer [data-page="campanas"]').click();
+  }else{
+   await page.locator('.sidebar [data-page="campanas"]').click();
+  }
+  await page.locator('#campaignForm').waitFor({state:'visible'});
+  await page.screenshot({path:'visual-qa/'+id+'-campanas.png',fullPage:true});
+  const campaignsBefore=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth}));
+  if(campaignsBefore.width>campaignsBefore.viewport+3)faults.push('Campañas desborda horizontalmente');
+  await page.locator('#campaignName').fill('Campaña local de prueba');
+  await page.locator('#campaignBudget').fill('125.50');
+  await page.locator('#campaignForm [type="submit"]').click();
+  if((await page.locator('.campaign-local-row').count())<1)faults.push('El formulario de campaña no guarda el dato local');
+  const campaign=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth}));
+  if(campaign.width>campaign.viewport+3)faults.push('Campañas después de guardar desborda horizontalmente');
+  results.push({id,width,height,http:response?.status(),home,studio,campaign,faults});
   await page.close();
  }
 }finally{
