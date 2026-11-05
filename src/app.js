@@ -6,6 +6,7 @@ import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visua
 import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
 import {campaignManagerHTML,campaignLimit,validateCampaign,campaignById,campaignsToCSV} from './campaign-manager.js';
+import {analyticsLocalHTML,analyticsCsvTemplate,parseAnalyticsCSV} from './analytics-local.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -20,13 +21,13 @@ let saved={};
 try{saved=JSON.parse(localStorage.getItem(storeKey)||'{}')||{}}catch{saved={}}
 let state={
   page:'inicio',plan:saved.plan==='pro'?'pro':'free',credits:Number.isFinite(saved.credits)?saved.credits:20,
-  posts:Array.isArray(saved.posts)?saved.posts:demoPosts,campaigns:Array.isArray(saved.campaigns)?saved.campaigns:[],modal:null,creativeMode:'Video / Reels',
+  posts:Array.isArray(saved.posts)?saved.posts:demoPosts,campaigns:Array.isArray(saved.campaigns)?saved.campaigns:[],analyticsRows:Array.isArray(saved.analyticsRows)?saved.analyticsRows:[],modal:null,creativeMode:'Video / Reels',
   videoFormat:'9:16',search:'',menuMore:false,consent: saved.consent || 'pending'
 };
 state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
 state.editPostId=null;state.pendingDeleteId=null;
 state.editCampaignId=null;state.pendingDeleteCampaignId=null;
-const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,consent:state.consent}))}catch{}};
+const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,consent:state.consent}))}catch{}};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
  sparkles:'<path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="m19 17 .7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z"/>',
@@ -141,7 +142,7 @@ function campaigns(){
 }
 function analytics(){
  return sectionHeader('Analítica avanzada','Panel visual de demostración. Los datos reales requerirán conectar cuentas autorizadas.')+
- '<div class="grid kpis">'+kpi('Audiencia','128.450','12,6%','👥','#1de7f745')+kpi('Visualizaciones','3,2 M','41,7%','▶','#f341c445')+kpi('Engagement','7,8%','2,1 pp','♡','#af8bff45')+kpi('Clics','84.220','18,4%','↗','#b5fa3645')+'</div><div class="two-cols"><div class="card"><div class="card-head"><h2>📊 Evolución por plataforma</h2><span class="tag">Gráfico de ejemplo</span></div>'+lines()+'</div><div class="card"><h2>Informe profesional</h2><p class="muted" style="margin:12px 0 20px">Conecta tus cuentas para consultar estadísticas reales. Los informes descargables se implementarán después.</p>'+btn('Ver planes disponibles','goto-planes','primary full')+'</div></div>';
+ '<div class="grid kpis">'+kpi('Audiencia','128.450','12,6%','👥','#1de7f745')+kpi('Visualizaciones','3,2 M','41,7%','▶','#f341c445')+kpi('Engagement','7,8%','2,1 pp','♡','#af8bff45')+kpi('Clics','84.220','18,4%','↗','#b5fa3645')+'</div><div class="two-cols"><div class="card"><div class="card-head"><h2>📊 Evolución por plataforma</h2><span class="tag">Gráfico de ejemplo</span></div>'+lines()+'</div><div class="card"><h2>Informe profesional</h2><p class="muted" style="margin:12px 0 20px">Conecta tus cuentas para consultar estadísticas reales. Los informes descargables se implementarán después.</p>'+btn('Ver planes disponibles','goto-planes','primary full')+'</div></div>'+analyticsLocalHTML(state.analyticsRows);
 }
 function inbox(){
  return sectionHeader('Bandeja unificada','Vista simulada de conversaciones, sin acceso a mensajes privados.')+
