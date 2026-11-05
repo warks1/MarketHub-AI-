@@ -1,5 +1,22 @@
 export const catalogueSections = [
   {
+    name:'Media Forge · herramientas integradas',
+    icon:'✦',
+    tools:[
+      {id:'MF-001',name:'Órbita NEXUS · máscara propia',tier:'free',status:'local',mediaTab:'photo',description:'Máscara orbital, estilos y exportación para publicaciones; funciona sin conexión externa.'},
+      {id:'MF-002',name:'Conversor de fotografías PNG/JPG/WebP',tier:'free',status:'local',mediaTab:'photo',description:'Conversión local con cinco formatos sociales. La compatibilidad WebP depende del navegador.'},
+      {id:'MF-003',name:'Reproductor y conversor WAV',tier:'free',status:'local',mediaTab:'audio',description:'Reproduce audio y exporta WAV PCM recortado hasta 10 minutos si el navegador decodifica el original.'},
+      {id:'MF-004',name:'Reproductor de vídeo y fotogramas',tier:'free',status:'local',mediaTab:'video',description:'Reproducción local y captura PNG del fotograma seleccionado.'},
+      {id:'MF-005',name:'Conversor WebM compatible',tier:'free',status:'local',mediaTab:'video',description:'Solo en navegadores con MediaRecorder y captura de flujo soportados; máximo 90 segundos.'},
+      {id:'MF-006',name:'Visor de PDF local',tier:'free',status:'local',mediaTab:'pdf',description:'Abre PDFs dentro de la aplicación si el navegador tiene visor integrado.'},
+      {id:'MF-007',name:'ADN Creativo de Marca',tier:'pro',status:'planned',description:'Sistema propio para guardar estética, tipografías, paleta, restricciones y formatos por marca.'},
+      {id:'MF-008',name:'Una idea → campaña multiformato',tier:'pro',status:'planned',description:'Generar versiones coordinadas de imagen, vídeo, copies y miniaturas desde un brief con revisión humana.'},
+      {id:'MF-009',name:'Máscaras inteligentes multicapa',tier:'pro',status:'planned',description:'Biblioteca ampliada y máscaras editables con seguimiento y herramientas para recortes complejos.'},
+      {id:'MF-010',name:'Conversor avanzado de vídeo y audio',tier:'pro',status:'planned',description:'Motor local/nativo para MP4, MOV, H.264/H.265, MP3, AAC, subtítulos y cambios de resolución cuando exista soporte real.'}
+    ]
+  },
+
+  {
     "name": "IA estratégica y copilotos",
     "icon": "✦",
     "tools": [
