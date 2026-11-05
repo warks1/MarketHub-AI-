@@ -115,3 +115,13 @@ de selección de subtítulos para no presentar `undefined`, con comprobación
 de texto legible en las pestañas de Media Forge.
 Compilar una nueva APK de depuración con esos cambios; la aceptación comercial
 de iOS y Android sigue supeditada a pruebas en dispositivos reales.
+
+### Copia integral de proyectos creativos para pruebas Android (5 noviembre 2026)
+Media Forge añade copia total `.mhubpack` (ZIP con `manifest.json`, fotografías
+originales sin base64 y ajustes editables). La importación valida CRC, nombres,
+referencias, tamaños y estructura, y añade un lote mediante transacción única,
+sin modificar proyectos que ya existan. El usuario ve el alcance: **no incluye
+Mi biblioteca multimedia, ADN de Marca ni datos de Oficina**, que requieren
+sus propios respaldos. Los ZIP no están cifrados.
+La APK generada por este workflow es únicamente una versión de depuración;
+se debe probar importación/exportación en Android físico antes del lanzamiento.
