@@ -95,7 +95,7 @@ function projectsPage(){
  (s.projectError?'<p class="forge-vault-error" role="alert">'+esc(s.projectError)+'</p>':'')+
  (!s.projectsReady?'<div class="forge-empty">Abriendo proyectos de este dispositivo…</div>':
  cards?'<div class="forge-project-grid">'+cards+'</div>':'<div class="forge-empty">Aún no hay proyectos editables. Abre una foto, ajusta su diseño y pulsa «Guardar proyecto editable».</div>')+
- '<p class="forge-meta">Los proyectos permanecen en este navegador. Una copia .mhub respalda un proyecto; .mhubpack guarda todos en un ZIP sin compresión. Restaurar añade proyectos, nunca reemplaza los existentes. Si no hay espacio, no se importa ninguno. Las copias no están cifradas: guárdalas de forma privada.</p></section>';
+ '<p class="forge-meta">Los proyectos permanecen en este navegador. Una copia .mhub respalda un proyecto; .mhubpack guarda todos en un ZIP sin compresión. Restaurar añade proyectos, nunca reemplaza los existentes. Si no hay espacio, no se importa ninguno. No incluye archivos de Mi biblioteca, perfiles ADN ni datos de Oficina; para eso utiliza sus copias específicas. Las copias no están cifradas: guárdalas de forma privada.</p></section>';
 }
 async function forgeProjectLoad(refresh){
  const token=++s.projectLoadToken;s.projectsReady=false;s.projectError='';
