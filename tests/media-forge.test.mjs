@@ -26,13 +26,13 @@ test('Las pestañas mantienen el mismo espacio de trabajo sin cambiar el menú g
  assert.equal(refreshed,3);
  forgeTab('photo',()=>{});
 });
-test('Exportación social mantiene resoluciones y las seis máscaras',()=>{
+test('Exportación social mantiene resoluciones y quince máscaras',()=>{
  assert.deepEqual(outputDimensions('9:16'),[1080,1920]);
  assert.deepEqual(outputDimensions('1:1'),[1080,1080]);
  assert.deepEqual(outputDimensions('16:9'),[1920,1080]);
  assert.deepEqual(outputDimensions('no-valido'),[1080,1920]);
  assert.equal(Object.keys(SIZES).length,5);
- assert.equal(new Set(MASKS).size,6);
+ assert.equal(new Set(MASKS).size,15);
  assert.ok(MASKS.includes('orbita'));
 });
 test('La conversión WAV genera cabecera RIFF válida y respeta tiempos',()=>{
