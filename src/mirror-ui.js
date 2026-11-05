@@ -41,7 +41,8 @@ function desktopHits(page){
    desktopHit('Ver Social Listening','escucha',839,648,249,207),
    desktopHit('Ver bandeja unificada','bandeja',225,865,420,113),
    desktopHit('Gestionar plataformas','ajustes',651,865,726,113),
-   desktopHit('Explorar herramientas de IA','herramientas',40,825,172,37)
+   desktopHit('Explorar herramientas de IA','herramientas',40,825,172,37),
+   desktopHit('Entrar a los controles editables del panel principal','mirror-live',466,990,486,64,true)
   );
  }else{
   all.push(
