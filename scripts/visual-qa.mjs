@@ -167,6 +167,21 @@ try{
   const campaigns=await widths(page,'campanas');
   if(campaigns.total>campaigns.viewport+4)problems.push('Campañas se desborda '+JSON.stringify(campaigns));
   await page.screenshot({path:'visual-qa/'+id+'-campanas.png',fullPage:true});
+  await go(page,'competencia',width);
+  await page.locator('#competitorForm').waitFor({state:'visible'});
+  if(['smartphone-390','pc-1440'].includes(id)){
+   await page.locator('#competitorName').fill('Empresa de prueba');
+   await page.locator('#competitorFollowers').fill('12300');
+   await page.locator('#competitorInteractions').fill('315');
+   await page.locator('#competitorForm button[type="submit"]').click();
+   if(!(await page.locator('.benchmark-row').count()))problems.push('La comparativa local no guarda competidores');
+   const csvDownload=page.waitForEvent('download',{timeout:10000});
+   await page.locator('[data-action="competitor-export"]').click();
+   if(!(await csvDownload).suggestedFilename().endsWith('.csv'))problems.push('No exporta comparativa CSV');
+  }
+  const benchmark=await widths(page,'competencia');
+  if(benchmark.total>benchmark.viewport+4)problems.push('Competencia desborda horizontalmente '+JSON.stringify(benchmark));
+  await page.screenshot({path:'visual-qa/'+id+'-competencia.png',fullPage:true});
   if(['smartphone-390','pc-1440'].includes(id)){
    await go(page,'bandeja',width);
    await page.locator('#lmsg-contact').fill('Contacto prueba');
