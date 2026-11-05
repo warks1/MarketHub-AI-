@@ -133,3 +133,11 @@
 
 ## Política de próximas versiones
 Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalidades añadidas o corregidas, pruebas ejecutadas, cambios de estructura y riesgos conocidos.
+
+## 2026-11-05 · MEDIA FORGE (ampliación original)
+- Conservado el editor y reproductores integrados: fotografía PNG/JPG/WebP, 15 máscaras, PULSE PACK ZIP con cinco formatos, audio WAV, vídeo y fotogramas PNG, visor PDF.
+- Añadido conversor SRT ↔ WebVTT totalmente local con validación de marcas de tiempo, edición y descarga.
+- Añadida función **SafeFrame PULSE**, una guía orientativa de márgenes y posicionamiento de texto que solo se dibuja sobre la vista previa, no sobre los archivos exportados. No se presenta como certificación oficial de ninguna plataforma.
+- Añadida transferencia directa de imagen editada desde Media Forge al Estudio de storyboard, con compresión y comprobaciones de capacidad antes de guardar.
+- Añadidas pruebas unitarias y secuencias visuales de comprobación móvil/escritorio.
+- Pendiente: comprobar resultados finales de integración y compatibilidad en dispositivos físicos, y ampliar decodificadores nativos bajo licencias adecuadas. No se promete conversión universal de MP4/MP3, transcripción automática ni uso de modelos de IA sin proveedores efectivos.
