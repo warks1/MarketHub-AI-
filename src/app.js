@@ -241,8 +241,9 @@ function modalHTML(){
  if(state.modal==='reward'){head='Publicidad recompensada · simulación';body='Aquí se integrará en el futuro un anuncio real con recompensa opcional. En esta demostración puedes recibir 5 créditos ficticios sin visualizar anuncios.';foot=btn('Cancelar','close-modal')+btn('Recibir 5 créditos demo','confirm-reward','primary')}
  if(state.modal==='tools'){head='Función prevista para próximas versiones';body='Esta herramienta todavía no está operativa. La interfaz muestra dónde se incorporará, pero no simula una acción completada.';foot=btn('Entendido','close-modal','primary')}
  if(state.modal==='tool-detail'&&state.selectedTool){head=safe(state.selectedTool.name);body=(state.selectedTool.tier==='pro'?'Herramienta avanzada del plan PRO.':'Prevista en FREE y PRO, con distintos límites de uso.')+' Estado real: '+(state.selectedTool.status==='local'?'funciona localmente en el navegador':state.selectedTool.status==='demo'?'interfaz de demostración':'pendiente de integración')+'.'+(state.selectedTool.description?' '+safe(state.selectedTool.description):'');foot=btn('Cerrar','close-modal')+(state.selectedTool.localTab?btn('Abrir herramienta local','catalogue-open-local','primary'):'')+(state.selectedTool.growthTab?btn('Abrir Growth Lab','catalogue-open-growth','primary'):'')}
- if(state.modal==='reset'){head='Borrar datos locales';body='Se eliminarán los borradores de ejemplo y tu selección de plan de este navegador.';foot=btn('Cancelar','close-modal')+btn('Sí, borrar','confirm-reset','primary')}
+ if(state.modal==='reset'){head='Borrar datos locales';body='Se eliminarán los borradores y campañas locales, y tu selección de plan de este navegador.';foot=btn('Cancelar','close-modal')+btn('Sí, borrar','confirm-reset','primary')}
  if(state.modal==='delete-post'){head='Eliminar borrador local';body='La publicación seleccionada desaparecerá de la biblioteca de este dispositivo. Puedes exportar una copia antes de eliminar.';foot=btn('Cancelar','close-modal')+btn('Eliminar publicación','confirm-delete-post','primary')}
+ if(state.modal==='delete-campaign'){head='Eliminar campaña local';body='Se borrará esta planificación del dispositivo. No afecta a anuncios reales: no hay cuentas conectadas.';foot=btn('Cancelar','close-modal')+btn('Eliminar campaña','confirm-delete-campaign','primary')}
  return '<div class="modal-backdrop" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">'+head+'</h2><p>'+body+'</p><div class="modal-actions">'+foot+'</div></div></div>';
 }
 let toastTimer;
@@ -280,6 +281,35 @@ document.addEventListener('click',e=>{
  case 'show-mobile-menu':state.menuMore=true;render();break;
  case 'close-mobile-menu':state.menuMore=false;render();break;
  case 'backup-export':backupExport({toast});break;
+case 'campaign-edit':{
+ const campaign=campaignById(state.campaigns,target.dataset.id);
+ if(campaign){state.editCampaignId=campaign.id;go('campanas')}break;
+}
+case 'campaign-cancel':state.editCampaignId=null;render();break;
+case 'campaign-duplicate':{
+ const campaign=campaignById(state.campaigns,target.dataset.id);
+ if(!campaign){toast('Campaña no encontrada.');break}
+ if(state.campaigns.length>=campaignLimit(state.plan)){toast('Límite local de campañas del plan demo.');break}
+ state.campaigns.unshift({...campaign,id:String(Date.now())+'-'+Math.random().toString(36).slice(2,9),name:String(campaign.name).slice(0,110)+' copia',status:'Borrador'});
+ save();render();toast('Campaña local duplicada.');break;
+}
+case 'campaign-delete':state.pendingDeleteCampaignId=target.dataset.id;state.modal='delete-campaign';render();break;
+case 'confirm-delete-campaign':{
+ const id=state.pendingDeleteCampaignId;
+ if(id!=null&&campaignById(state.campaigns,id)){
+  state.campaigns=state.campaigns.filter(c=>!(c&&String(c.id)===String(id)));
+  if(String(state.editCampaignId)===String(id))state.editCampaignId=null;
+  save();toast('Campaña local eliminada.');
+ }
+ state.pendingDeleteCampaignId=null;state.modal=null;render();break;
+}
+case 'campaign-export':{
+ const blob=new Blob([campaignsToCSV(state.campaigns)],{type:'text/csv;charset=utf-8'});
+ const url=URL.createObjectURL(blob),link=document.createElement('a');
+ link.href=url;link.download='markethub-campanas-'+todayLocal()+'.csv';
+ document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),900);
+ toast('Campañas exportadas a CSV.');break;
+}
   case 'edit-post':{
    const post=findPost(state.posts,target.dataset.id);
    if(post){state.editPostId=post.id;go('crear');}break;
@@ -324,7 +354,7 @@ document.addEventListener('click',e=>{
  case 'confirm-reward':state.credits+=5;state.modal=null;save();render();toast('+5 créditos ficticios. No se ha visto ningún anuncio.');break;
  case 'close-modal':state.modal=null;render();break;
  case 'reset-data':state.modal='reset';render();break;
- case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.editPostId=null;state.pendingDeleteId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
+ case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.campaigns=[];state.editPostId=null;state.pendingDeleteId=null;state.editCampaignId=null;state.pendingDeleteCampaignId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
  case 'no-op':break;
  }
 });
