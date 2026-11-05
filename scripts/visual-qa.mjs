@@ -26,10 +26,20 @@ try{
   await page.waitForFunction(()=>window.__MARKETHUB_BOOT__?.ready===true,null,{timeout:15000});
   const splash=page.locator('.nexus-original-splash');
   if(await splash.isVisible().catch(()=>false)){
-   const image=page.locator('.nexus-original-splash-board>img');
-   await image.evaluate(el=>el.decode());
-   const name=await image.getAttribute('src');
-   if(!name.includes('boceto-04-carga-original.jpeg'))faults.push('La carga no usa el ORIGINAL 04');
+   const images=page.locator('.nexus-splash img');
+   await images.first().evaluate(el=>el.decode());
+   const sources=await images.evaluateAll(els=>els.map(el=>el.getAttribute('src')));
+   if(!sources.length||sources.some(src=>!src.includes('boceto-04-carga-original.jpeg')))
+    faults.push('La carga no usa exclusivamente el ORIGINAL 04');
+   const portrait=width<=860&&height>width;
+   if(portrait){
+    const logo=page.locator('.mirror-splash-brand');
+    if(!(await logo.isVisible()))faults.push('Nombre MarketHub AI de carga no visible en móvil');
+    const bar=page.locator('.mirror-splash-progress .progress-track');
+    if(!(await bar.isVisible()))faults.push('Progreso de carga no visible en móvil');
+    const r=await logo.boundingBox();
+    if(r&&r.width>width+2)faults.push('La carga móvil excede el ancho');
+   }
    await page.screenshot({path:'visual-qa/'+id+'-carga.png'});
    await page.locator('#skipSplash').click();
   }else faults.push('Falta pantalla de carga original');
