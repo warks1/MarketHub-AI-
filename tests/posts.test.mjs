@@ -48,4 +48,6 @@ test('La página conserva acciones de edición, duplicación, eliminación y exp
   assert.match(app,/const result=validatePost/);
   assert.match(app,/state\.editPostId=null/);
   assert.match(app,/No se envían a las redes sociales/);
+  assert.match(app,/const todayLocal=/);
+  assert.doesNotMatch(app,/toLocaleDateString\('en-CA'\)/);
 });
