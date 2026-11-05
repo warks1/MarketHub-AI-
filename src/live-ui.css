@@ -292,3 +292,11 @@
 .live-calendar-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:9px 0 12px;flex-wrap:wrap}
 .live-calendar-actions .live-link{min-height:34px;border-color:#22d8ef}
 @media(max-width:680px){.live-calendar-actions .live-link{width:100%;min-height:40px}}
+
+
+/* Exportación real de vídeo desde storyboard: estado claro en todas las pantallas. */
+.live-video-info{margin:10px 0 0;color:#b7cdef;font-size:10px;line-height:1.5}
+.live-video-status{margin-top:9px;padding:10px 12px;background:linear-gradient(115deg,#0e4061,#39236b);border:1px solid #3ad4f8;border-radius:10px;color:#e7f9ff;font-size:11px}
+.live-video-cancel{margin-top:8px;width:100%;min-height:39px}
+.live-video-status[hidden],.live-video-cancel[hidden]{display:none!important}
+[data-action="storyboard-export-video"]:disabled{opacity:.6;cursor:not-allowed;box-shadow:none}
