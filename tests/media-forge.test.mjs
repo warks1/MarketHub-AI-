@@ -82,7 +82,7 @@ test('PULSE PACK empaqueta varios formatos sin biblioteca externa',async()=>{
  assert.equal(view.getUint32(0,true),0x04034b50);
  assert.equal(view.getUint32(bytes.length-22,true),0x06054b50);
  assert.equal(view.getUint16(bytes.length-12,true),2);
- assert.equal(view.getUint32(bytes.length-6,true),0);
+ assert.equal(view.getUint16(bytes.length-18,true),0);
  const contents=new TextDecoder().decode(bytes);
  assert.ok(contents.includes('foto-9x16.jpg'));
  assert.ok(contents.includes('foto-1x1.jpg'));
