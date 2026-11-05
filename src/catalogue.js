@@ -13,7 +13,10 @@ export const catalogueSections = [
       {id:'MF-012',name:'SafeFrame PULSE · guía creativa propia',tier:'free',status:'local',mediaTab:'photo',description:'Guías de márgenes orientativas y texto protegido para composiciones sociales. No es certificación de ninguna red.'},
       {id:'MF-013',name:'PULSE PACK · cinco formatos ZIP',tier:'free',status:'local',mediaTab:'photo',description:'Exporta cinco tamaños de imagen en un único ZIP sin salir de la aplicación.'},
       {id:'MF-014',name:'Enviar imagen de Media Forge a Estudio',tier:'free',status:'local',mediaTab:'photo',description:'Transferencia directa al storyboard con compresión y guardado local.'},
-      {id:'MF-007',name:'ADN Creativo de Marca',tier:'pro',status:'planned',description:'Sistema propio para guardar estética, tipografías, paleta, restricciones y formatos por marca.'},
+      {id:'MF-015',name:'Mi biblioteca multimedia privada',tier:'free',status:'local',mediaTab:'vault',description:'Guardado y recuperación persistente de archivos mediante IndexedDB. Se conserva en el dispositivo, no en la nube.'},
+      {id:'MF-016',name:'ADN Creativo · perfiles locales',tier:'free',status:'local',mediaTab:'photo',description:'Guardar y aplicar colores, tono y CTA de hasta doce marcas en el dispositivo.'},
+      {id:'MF-017',name:'Auditor Creativo PULSE',tier:'free',status:'local',mediaTab:'photo',description:'Revisa recortes, resolución, texto y guías SafeFrame. Diagnóstico orientativo sin certificar requisitos oficiales.'},
+      {id:'MF-007',name:'ADN de Marca avanzado PRO',tier:'pro',status:'planned',description:'Ampliación futura con tipografías licenciadas, reglas por marca, variantes automáticas y biblioteca compartida.'},
       {id:'MF-008',name:'Una idea → campaña multiformato',tier:'pro',status:'planned',description:'Generar versiones coordinadas de imagen, vídeo, copies y miniaturas desde un brief con revisión humana.'},
       {id:'MF-009',name:'Máscaras inteligentes multicapa',tier:'pro',status:'planned',description:'Biblioteca ampliada y máscaras editables con seguimiento y herramientas para recortes complejos.'},
       {id:'MF-010',name:'Conversor avanzado de vídeo y audio',tier:'pro',status:'planned',description:'Motor local/nativo para MP4, MOV, H.264/H.265, MP3, AAC, subtítulos y cambios de resolución cuando exista soporte real.'}
