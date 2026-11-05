@@ -170,3 +170,14 @@ Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalida
 - Se conserva la exportación de proyectos individuales `.mhub` y el resto de herramientas del editor. No se altera ni mezcla la biblioteca multimedia anterior.
 - Límites: 12 proyectos, 80 MB de imágenes fuente y 90 MB por respaldo importado. No hay cifrado de .mhubpack ni sincronización automática; custodiar las copias como archivos privados.
 - Pruebas unitarias de ZIP/CRC/integridad y E2E en Chromium/WebKit para copia total, importación y conservación del proyecto previamente restaurado.
+
+## 2026-11-05 · Copia integral `.mhubfull`: proyectos + biblioteca + ADN + módulos locales
+- Añadido un respaldo único accesible desde Configuración y el catálogo de herramientas. Incluye proyectos editables con sus originales, todos los archivos multimedia locales, perfiles ADN de Marca y los cuatro módulos de almacenamiento local: publicaciones/Estudio, Oficina, Estudio Visual y Growth Lab.
+- Se mantiene sin modificar la anterior copia JSON compatible y la opción AES-256-GCM cifrada para esos módulos de menor tamaño.
+- El formato `.mhubfull` es un ZIP **sin compresión, sin cifrado y sin conexión de red** con manifiesto de versión 1 y sumas CRC32 para cada medio original.
+- La recuperación comprueba antes de modificar datos las rutas permitidas, firmas ZIP, tamaños, tipos de archivo, perfiles de marca, módulos conocidos, máscaras y parámetros válidos, así como cantidad y capacidad disponibles.
+- **No sobrescribe el trabajo anterior:** se añaden proyectos y archivos con nuevos IDs; las marcas que ya existan no se modifican; los datos locales de Oficina y otros módulos solo se rellenan cuando faltan.
+- La importación usa transacciones locales por módulo y trata de revertir todos los cambios nuevos si alguna fase falla. No existe una transacción única entre diferentes bases IndexedDB y localStorage ante cierre forzoso o apagado, por lo que el respaldo debe conservarse aparte.
+- Límites: archivo íntegro de hasta 245 MB; 12 proyectos (80 MB), 40 medios (150 MB) y 12 identidades de marca. El importador no permite ZIP con compresión, rutas arbitrarias ni archivos extraños.
+- Añadidas pruebas unitarias y de navegador para exportación, recuperación en un perfil nuevo, protección de datos existentes y rechazo de archivos manipulados (Chromium/WebKit).
+- Pruebas en iOS y Android reales, cifrado del paquete completo y sincronización de proyectos entre dispositivos siguen pendientes. No se presenta como funcionalidad de almacenamiento en la nube.
