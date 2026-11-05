@@ -46,7 +46,14 @@ try{
   }
   await page.locator('.nexus-studio').waitFor({state:'visible'});
   await page.screenshot({path:'visual-qa/'+id+'-estudio.png',fullPage:true});
-  const studio=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth}));
+  const studio=await page.evaluate(()=>{
+   const viewport=document.documentElement.clientWidth;
+   const offenders=[...document.querySelectorAll('main *')].map(el=>{
+    const rect=el.getBoundingClientRect();
+    return {tag:el.tagName,cls:String(el.className).slice(0,80),width:Math.round(rect.width),left:Math.round(rect.left),right:Math.round(rect.right)};
+   }).filter(x=>x.right>viewport+3 && x.left>=0 && x.width>0).slice(0,12);
+   return {width:document.documentElement.scrollWidth,viewport,offenders};
+  });
   if(studio.width>studio.viewport+3)faults.push('Estudio desborda horizontalmente');
   results.push({id,width,height,http:response?.status(),home,studio,faults});
   await page.close();
@@ -56,5 +63,5 @@ try{
 }
 await writeFile('visual-qa/resultados.json',JSON.stringify(results,null,2));
 const fails=results.filter(r=>r.faults.length);
-console.log(JSON.stringify({screens:results.length,issues:fails.map(r=>({screen:r.id,issues:r.faults}))},null,2));
+console.log(JSON.stringify({screens:results.length,issues:fails.map(r=>({screen:r.id,issues:r.faults,studio:r.studio}))},null,2));
 if(fails.length)process.exitCode=1;
