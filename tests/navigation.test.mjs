@@ -25,7 +25,7 @@ test('El menú Más genera enlaces a partir de toda la navegación',()=>{
  assert.ok(app.includes("state.menuMore?mobileDrawer()"));
 });
 test('Los accesos rápidos de móvil son estables por identificador',()=>{
- assert.ok(app.includes("const quickIds=['inicio','estudio','diseño','crear','herramientas'];"));
+ assert.ok(app.includes("const quickIds=['inicio','estudio','crear','bandeja'];"));
  assert.ok(app.includes("nav.find(n=>n[0]===id)"));
  assert.ok(!app.includes('nav[5]'),'No usar índices fijos que se desplazan al añadir pantallas');
 });
