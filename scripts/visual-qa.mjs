@@ -138,7 +138,7 @@ try{
      await videoButton.click();
      const movie=await videoWait;
      if(!/\.(webm|mp4)$/.test(movie.suggestedFilename()))problems.push('El archivo exportado no es MP4 ni WebM');
-     const stat=await import('node:fs/promises').then(fs=>fs.stat(movie.path()));
+     const stat=await import('node:fs/promises').then(async fs=>fs.stat(await movie.path()));
      if(stat.size<3000)problems.push('Vídeo exportado vacío o incompleto');
      await page.screenshot({path:'visual-qa/'+id+'-video-exportado.png',fullPage:true});
     }
