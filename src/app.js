@@ -742,47 +742,62 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(state.menuMore){state.menuMore=false;render()}else if(state.modal){state.modal=null;render()}}});
 function splash(){
+ const original='./assets/boceto-04-carga-original.jpeg';
  const overlay=document.createElement('div');
  overlay.className='splash nexus-splash nexus-original-splash';
  overlay.setAttribute('role','status');
- overlay.setAttribute('aria-label','MarketHub AI iniciando');
- const original='./assets/boceto-04-carga-original.jpeg';
- // En formato panorámico se muestra la fotografía completa y SIN modificar.
- const desktop='<div class="nexus-original-splash-board">'+
-  '<img src="'+original+'" width="1536" height="864" alt="Pantalla de carga 04 original de MarketHub AI" fetchpriority="high" draggable="false">'+
-  '<div class="progress-track" aria-label="Progreso de inicialización">'+
+ overlay.setAttribute('aria-label','Iniciando MarketHub AI');
+ // Pantalla de carga 04 intacta en equipos panorámicos.
+ const wide='<div class="nexus-original-splash-board">'+
+  '<img src="'+original+'" width="1536" height="864" alt="Pantalla de carga original seleccionada MarketHub AI" fetchpriority="high" draggable="false">'+
+  '<div class="progress-track" aria-label="Progreso de inicio">'+
    '<div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
-  '<p id="progressLabel">Preparando paneles, campañas y analítica...</p>'+
-  '<button type="button" class="splash-skip mirror-skip" id="skipSplash" aria-label="Entrar a MarketHub AI"></button>'+
+  '<p id="progressLabel" class="mirror-sr-only">Preparando paneles, campañas y analítica...</p>'+
+  '<button type="button" class="splash-skip mirror-skip" id="skipSplash" aria-label="Entrar directamente en MarketHub AI"></button>'+
  '</div>';
- // En móvil NO se aplica zoom de pantalla completa que corta el nombre.
- // Se muestran fragmentos sin retoque del MISMO archivo aprobado, manteniendo
- // centrada la esfera, el nombre, el progreso y el mensaje original.
- function segment(name,x,y,w,h){
-  return '<div class="mirror-splash-fragment '+name+'" style="aspect-ratio:'+w+'/'+h+'">'+
-   '<img src="'+original+'" width="1536" height="864" alt="" draggable="false" '+
-   'style="width:'+(1536/w*100).toFixed(5)+'%;left:'+(-x/w*100).toFixed(5)+'%;top:'+(-y/h*100).toFixed(5)+'%">'+
-   (name==='mirror-splash-progress'?
-    '<div class="progress-track" aria-label="Progreso de inicialización"><div class="progress-fill" id="progressFill"></div>'+
-    '<span class="progress-value" id="progressPercent">0%</span></div>':'')+
-  '</div>';
- }
- const mobile='<div class="mirror-mobile-splash-shell">'+
-  segment('mirror-splash-hero',410,0,716,405)+
-  segment('mirror-splash-brand',410,400,716,151)+
-  segment('mirror-splash-progress',315,556,910,95)+
-  segment('mirror-splash-status',465,645,650,72)+
-  '<div class="mirror-splash-disclaimer">© '+new Date().getFullYear()+' MarketHub AI · Todos los derechos reservados</div>'+
-  '<button type="button" class="mirror-splash-touch" id="skipSplash" aria-label="Entrar a MarketHub AI">Entrar</button>'+
-  '<span id="progressLabel" class="mirror-sr-only">Preparando paneles, campañas y analítica...</span>'+
- '</div>';
- const portrait=window.matchMedia?.('(max-width:860px) and (orientation:portrait)')?.matches;
- overlay.innerHTML=portrait?mobile:desktop;
+ // Móvil y tablet: SEIS paneles originales, completos, en celdas reales y legibles.
+ // Nunca usamos el centro recortado con banners partidos o fuera de pantalla.
+ const iconPaths={
+  analytics:'<rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/>',
+  campaigns:'<path d="M3 10h5l11-5v14L8 14H3z"/><path d="M8 14l2 7h3l-2-6"/><path d="M21 9v6"/>',
+  content:'<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 12 10 5 10-5M2 17l10 5 10-5"/>',
+  creative:'<path d="m12 2 2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/><path d="m19 1 .7 2.3L22 4l-2.3.7L19 7l-.7-2.3L16 4l2.3-.7z"/>',
+  social:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-2a6.5 6.5 0 0 1 13 0v2z"/><path d="M17.5 5.5a3 3 0 0 1 0 5.5M17 14a5 5 0 0 1 4.5 5v1"/>',
+  planning:'<rect x="3" y="5" width="18" height="17" rx="2"/><path d="M7 2v6M17 2v6M3 11h18M8 15h2M14 15h2M8 19h2"/>'
+ };
+ const cards=[
+  ['analytics','cyan','Analítica inteligente'],
+  ['creative','pink','IA creativa'],
+  ['campaigns','pink','Campañas con IA'],
+  ['social','cyan','Social Listening'],
+  ['content','cyan','Contenido creativo'],
+  ['planning','pink','Planificación y automatización']
+ ].map(([id,tint,label])=>
+  '<div class="mh-splash-feature mh-feature-'+id+' mh-tint-'+tint+'" aria-label="'+label+'">'+
+   '<svg class="mh-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'+iconPaths[id]+'</svg>'+
+   '<span>'+label+'</span></div>').join('');
+ const compact='<div class="mh-splash-compact"><div class="mh-splash-inner">'+
+  '<div class="mh-splash-showcase">'+
+   '<div class="mh-splash-orb-crop" aria-label="Esfera luminosa original MarketHub AI">'+
+    '<img src="'+original+'" width="1536" height="864" draggable="false" alt="Esfera original del diseño de carga seleccionado" fetchpriority="high"></div>'+
+   cards+
+  '</div>'+
+  '<div class="mh-splash-brand"><img src="./logo.svg" alt="" draggable="false"><h1>MarketHub <em>AI</em></h1></div>'+
+  '<p class="mh-splash-subtitle">Iniciando tu centro de marketing digital con IA</p>'+
+  '<div class="mh-splash-track" role="progressbar" aria-label="Cargando MarketHub AI" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">'+
+   '<div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
+  '<p class="mh-splash-status" id="progressLabel"><span class="mh-splash-spinner" aria-hidden="true"></span>Preparando paneles, campañas y analítica...</p>'+
+  '<div class="mh-splash-bottom"><span>© '+new Date().getFullYear()+' MarketHub AI · Todos los derechos reservados</span>'+
+  '<button type="button" id="skipSplash" class="mh-splash-enter">Entrar</button></div>'+
+ '</div></div>';
+ const adapt=window.matchMedia?.('(max-width:1199px), (max-height:640px)')?.matches;
+ overlay.innerHTML=adapt?compact:wide;
  document.body.append(overlay);
- let progress=0,closed=false,timer;
  const bar=overlay.querySelector('#progressFill');
  const value=overlay.querySelector('#progressPercent');
  const current=overlay.querySelector('#skipSplash');
+ const track=overlay.querySelector('[role="progressbar"]');
+ let progress=0,closed=false,timer;
  function finish(){if(closed)return;closed=true;if(timer!=null)clearInterval(timer);overlay.remove()}
  current.addEventListener('click',finish);
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches){finish();return}
@@ -790,6 +805,7 @@ function splash(){
   progress=Math.min(100,progress+8);
   bar.style.width=progress+'%';
   value.textContent=progress+'%';
+  if(track)track.setAttribute('aria-valuenow',String(progress));
   if(progress===100)finish();
  },105);
 }
