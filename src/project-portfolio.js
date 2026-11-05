@@ -43,10 +43,11 @@ export async function createCreativePortfolio(projects){
  const entries=[],manifest={format:PORTFOLIO_FORMAT,version:PORTFOLIO_VERSION,createdAt:new Date().toISOString(),projects:[]};
  let total=0;
  for(let i=0;i<projects.length;i++){
-  const p=await openCreativeProject(projects[i].id),bytes=new Uint8Array(await p.file.arrayBuffer());
+  const p=projects[i],valid=validateCreativeProject(p);
+  const bytes=new Uint8Array(await p.file.arrayBuffer());
   total+=bytes.length;if(total>MAX_PROJECT_TOTAL_BYTES)throw Error('El respaldo supera 80 MB');
-  const filename='images/'+String(i+1).padStart(3,'0')+'.'+extensions[p.type];
-  manifest.projects.push({name:p.name,source:filename,type:p.type,size:bytes.length,checksum:crc32(bytes),settings:p.settings});
+  const filename='images/'+String(i+1).padStart(3,'0')+'.'+extensions[valid.type];
+  manifest.projects.push({name:valid.name,source:filename,type:valid.type,size:bytes.length,checksum:crc32(bytes),settings:valid.settings});
   entries.push({name:filename,bytes});
  }
  const header=enc.encode(JSON.stringify(manifest));
