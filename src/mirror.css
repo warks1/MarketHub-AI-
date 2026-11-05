@@ -35,3 +35,18 @@
  .mirror-menu-list button{min-height:44px}
 }
 @media (prefers-reduced-motion:reduce){.mirror-overlay{scroll-behavior:auto}}
+
+/* Carga 04: siempre el JPEG aprobado; no existe segunda composición recreada. */
+.nexus-splash.nexus-original-splash{display:grid;place-items:center;padding:0;background:#02071e}
+.nexus-original-splash-board{position:relative;display:block;width:min(100vw,177.77778dvh);height:auto;aspect-ratio:1536 / 864;max-height:100dvh;overflow:hidden}
+.nexus-original-splash-board>img{width:100%;height:100%;object-fit:fill;filter:none!important;transform:none!important;opacity:1!important;pointer-events:none}
+.nexus-splash.nexus-original-splash .nexus-original-splash-board>.mirror-skip{position:absolute;display:block;left:32%;right:auto;top:90.8%;bottom:auto;width:36%;height:7.5%;z-index:5;opacity:1;background:transparent!important;box-shadow:none!important;border:0!important;padding:0;border-radius:999px;cursor:pointer}
+.nexus-splash.nexus-original-splash .nexus-original-splash-board>.mirror-skip:focus-visible{outline:2px solid white!important;outline-offset:-3px}
+@media(max-width:860px) and (orientation:portrait){
+ .nexus-splash.nexus-original-splash{overflow:hidden}
+ .nexus-splash.nexus-original-splash .nexus-original-splash-board{position:absolute;left:50%;top:0;transform:translateX(-50%);width:max(100vw,177.7778dvh);height:100dvh;max-height:none;aspect-ratio:1536/864;overflow:hidden}
+ .nexus-splash.nexus-original-splash .nexus-original-splash-board>img{width:100%;height:100%;object-fit:fill}
+ .nexus-splash.nexus-original-splash .nexus-original-splash-board .progress-track{top:65.8%}
+ .nexus-splash.nexus-original-splash .nexus-original-splash-board .progress-value{font-size:clamp(11px,2vw,22px)}
+ .nexus-splash.nexus-original-splash .nexus-original-splash-board #progressLabel{font-size:clamp(12px,2vw,19px)}
+}
