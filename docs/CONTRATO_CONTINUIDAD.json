@@ -86,7 +86,9 @@
     "tests/project-portfolio.test.mjs",
     "src/unified-backup.js",
     "tests/unified-backup.test.mjs",
-    "scripts/unified-backup-qa.mjs"
+    "scripts/unified-backup-qa.mjs",
+    "src/unified-crypto.js",
+    "tests/unified-crypto.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -760,8 +762,10 @@
       "tokens": [
         "unifiedBackupSettingsHTML()",
         "case 'unified-backup-export':",
-        "restoreUnifiedBackup(file)",
-        "data-unified-backup-import"
+        "restoreUnifiedBackup(archive)",
+        "data-unified-backup-import",
+        "case 'unified-backup-encrypted-export':",
+        "decryptUnifiedBlob(file,password)"
       ]
     }
   ]
