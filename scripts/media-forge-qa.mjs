@@ -40,8 +40,8 @@ for(const [engine,runner,width,height] of [
   await page.locator('[data-forge-input="caption"]').fill('CAMPAÑA DE PRUEBA');
   // ADN Creativo: guardar una identidad, aplicar y preservar la composición.
   await page.locator('[data-forge-input="brandName"]').fill('Marca de Prueba');
-  await page.locator('[data-forge-input="brandPrimary"]').fill('#1122aa');
-  await page.locator('[data-forge-input="brandAccent"]').fill('#ff33dd');
+  await page.locator('[data-forge-input="brandPrimary"]').evaluate(el=>{el.value='#1122aa';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))});
+  await page.locator('[data-forge-input="brandAccent"]').evaluate(el=>{el.value='#ff33dd';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))});
   await page.locator('[data-forge-input="brandTone"]').selectOption('Cercano');
   await page.locator('[data-forge-input="brandCta"]').fill('Descubre la campaña');
   await page.locator('[data-forge-action="brand-save"]').click();
