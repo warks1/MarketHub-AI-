@@ -279,6 +279,39 @@ try{
    await checkBroken('Growth Lab / UTM');
    await page.screenshot({path:'visual-qa/'+id+'-growth-utm.png',fullPage:true});
   }
+  // Flujo completo del laboratorio multimedia en móvil y escritorio.
+  if(['smartphone-390','pc-1440'].includes(id)){
+   await go(page,'multimedia',width);
+   await page.locator('[data-forge-tab="subs"]').click();
+   await page.locator('#forgeSubtitleText').fill('1\n00:00:01,000 --> 00:00:03,000\nCampaña preparada');
+   const subsDownload=page.waitForEvent('download',{timeout:10000});
+   await page.locator('[data-forge-action="vtt"]').click();
+   const vtt=await subsDownload;
+   if(!vtt.suggestedFilename().endsWith('.vtt'))problems.push('Media Forge no descarga VTT');
+   const vttText=await readFile(await vtt.path(),'utf8');
+   if(!vttText.startsWith('WEBVTT\n\n')||!vttText.includes('00:00:01.000'))problems.push('Conversión SRT a VTT incorrecta');
+   await page.locator('[data-forge-tab="photo"]').click();
+   const picture=await page.evaluate(()=>{
+    const c=document.createElement('canvas');c.width=120;c.height=120;
+    const ctx=c.getContext('2d');ctx.fillStyle='#ee33dd';ctx.fillRect(0,0,120,120);
+    ctx.fillStyle='#09eeff';ctx.fillRect(22,22,76,76);return c.toDataURL('image/png').split(',')[1];
+   });
+   await page.locator('[data-forge-file="photo"]').setInputFiles({
+    name:'foto-de-prueba.png',mimeType:'image/png',buffer:Buffer.from(picture,'base64')
+   });
+   await page.waitForFunction(()=>!document.querySelector('[data-forge-action="studio"]')?.disabled);
+   await page.locator('[data-forge-input="mask"]').selectOption('orbita');
+   await page.locator('[data-forge-input="safezone"]').selectOption('on');
+   await page.locator('[data-forge-input="caption"]').fill('Creatividad en un solo lugar');
+   await page.screenshot({path:'visual-qa/'+id+'-media-forge.png'});
+   await page.locator('[data-forge-action="studio"]').click();
+   await page.locator('.live-scene-photo').waitFor({state:'visible',timeout:15000});
+   const imagePersisted=await page.evaluate(()=>{
+    const saved=JSON.parse(localStorage.getItem('markethub-ai-demo-v1')||'{}');
+    return saved.storyboard?.some(s=>typeof s.imageData==='string'&&s.imageData.startsWith('data:image/jpeg;base64,'));
+   });
+   if(!imagePersisted)problems.push('Media Forge no transfiere la foto de forma persistente al Estudio');
+  }
   results.push({id,width,height,http:response?.status(),home,studio,campaigns,problems});
   await page.close();
  }
