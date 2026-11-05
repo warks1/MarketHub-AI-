@@ -11,3 +11,5 @@
 .nexus-reference-link{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:12px;border:1px solid #38d9ee;background:linear-gradient(105deg,#06294f,#2f1957);color:#f0f7ff;text-decoration:none;font:700 10px system-ui;white-space:nowrap;box-shadow:0 0 10px #21e7ff2c}
 .nexus-reference-link:hover{border-color:#ee6bfa}
 @media(max-width:900px){.nexus-original-splash-board{width:100vw}}
+
+@media(max-width:680px){.nexus-topbar .nexus-reference-link{font-size:0;min-width:34px;width:34px;height:34px;padding:0;border-radius:11px}.nexus-topbar .nexus-reference-link:before{content:'▧';font-size:17px;line-height:1}}
