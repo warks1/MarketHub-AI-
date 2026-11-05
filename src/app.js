@@ -680,7 +680,7 @@ document.addEventListener('change',e=>{
   }).catch(err=>toast('Error en CSV: '+String(err.message||err).slice(0,150)));
   return;
  }
- if(e.target.matches('[data-backup-import]')){backupImport(e.target.files?.[0],{toast,password:document.querySelector('#backupPassword')?.value||''}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
+ if(e.target.matches('[data-backup-import]')){const field=document.querySelector('#backupPassword'),password=field?.value||'';if(field)field.value='';backupImport(e.target.files?.[0],{toast,password}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
 document.addEventListener('input',e=>{
  if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}
  if(e.target.id==='toolSearch'){
