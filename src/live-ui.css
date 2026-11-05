@@ -223,3 +223,9 @@
  .live-stat strong{font-size:18px}
  .live-stat small{font-size:9px}
 }
+
+
+/* Playback del storyboard: el estado se distingue, también con teclado. */
+.live-editor-transport [aria-pressed="true"]{border-color:#12f5ff;box-shadow:0 0 13px #02e0ff7d;background:linear-gradient(105deg,#1459b4,#a634db)}
+.live-editor-transport [data-action="storyboard-play"]{min-height:37px;font-weight:800}
+@media(prefers-reduced-motion:reduce){.live-editor-canvas,.live-orbit{animation:none!important}}
