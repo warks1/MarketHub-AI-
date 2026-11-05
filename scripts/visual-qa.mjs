@@ -179,6 +179,22 @@ try{
    await page.locator('#liveMentionForm button[type="submit"]').click();
    if(!(await page.locator('.live-message').count()))problems.push('Social Listening no guarda registros');
   }
+  if(['smartphone-390','pc-1440'].includes(id)){
+   await go(page,'ajustes',width);
+   await page.locator('#backupPassword').waitFor({state:'visible'});
+   await page.locator('#backupPassword').fill('Una frase secreta de 25 caracteres!');
+   if(!(await page.locator('[data-action="backup-encrypted-export"]').isDisabled())){
+    const encryptedWait=page.waitForEvent('download',{timeout:18000});
+    await page.locator('[data-action="backup-encrypted-export"]').click();
+    const encrypted=await encryptedWait;
+    const json=JSON.parse(await readFile(await encrypted.path(),'utf8'));
+    if(json.format!=='markethub-ai-encrypted-backup'||json.cipher!=='AES-256-GCM')
+     problems.push('La copia protegida no está cifrada correctamente');
+    if(JSON.stringify(json).includes('Contacto prueba'))
+     problems.push('La copia cifrada ha filtrado datos de clientes en texto legible');
+    await page.screenshot({path:'visual-qa/'+id+'-copia-cifrada.png',fullPage:true});
+   }else problems.push('Cifrado bloqueado en el navegador de prueba HTTPS/local');
+  }
   results.push({id,width,height,http:response?.status(),home,studio,campaigns,problems});
   await page.close();
  }
