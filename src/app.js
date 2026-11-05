@@ -5,6 +5,7 @@ import {backupExport,backupImport,backupSettingsHTML} from './backup.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
+import {nexusHome,nexusStudio} from './nexus-ui.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -46,9 +47,11 @@ const icons={
 };
 function icon(name){return '<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[name]||icons.sparkles)+'</svg>'}
 const nav=[
- ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['diseño','Diseño gráfico','sparkles'],['crear','Crear / Programar','plus'],['oficina','Oficina de marketing','users'],['laboratorio','Growth Lab','chart'],['herramientas','Herramientas','bolt'],
- ['campanas','Campañas','megaphone'],['analitica','Analítica','chart'],
- ['bandeja','Bandeja','inbox'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
+ ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['diseño','Diseño gráfico','sparkles'],['crear','Crear / Programar','plus'],
+ ['campanas','Campañas','megaphone'],['analitica','Analítica','chart'],['escucha','Social Listening','bolt'],
+ ['bandeja','Bandeja','inbox'],['competencia','Competencia','users'],['automatizaciones','Automatizaciones','gear'],
+ ['biblioteca','Biblioteca','laptop'],['oficina','Oficina de marketing','users'],
+ ['laboratorio','Growth Lab','chart'],['herramientas','Herramientas','bolt'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
 function sectionHeader(title,subtitle,action){
  return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.3.2</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
@@ -155,8 +158,42 @@ function settings(){
  '<div class="two-cols"><div class="card"><div class="card-head"><h2>Cuenta y suscripción</h2></div><div class="switch-wrap"><div><b>Tu plan actual (demo)</b><p class="muted tiny">'+(state.plan==='pro'?'PRO · sin publicidad':'FREE · con publicidad')+'</p></div>'+btn('Ver planes','goto-planes','secondary small-btn')+'</div><div class="switch-wrap" style="margin-top:12px"><div><b>Créditos de ejemplo</b><p class="muted tiny">'+state.credits+' créditos guardados localmente</p></div><span class="tag">'+state.credits+'</span></div><div class="notice" style="margin-top:14px">Los datos se almacenan solo en este navegador. No hay cuenta, sincronización, publicidad real ni contratación activa.</div></div>'+
  '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>'+backupSettingsHTML();
 }
+function extraScreen(page){
+ if(page==='biblioteca'){
+  return sectionHeader('Biblioteca de contenidos','Tus publicaciones guardadas en este dispositivo. No se publican automáticamente.')+
+  '<div class="card"><div class="card-head"><h2>Publicaciones locales</h2>'+btn('Crear una publicación','goto-crear','primary')+'</div>'+
+  '<div class="line-list">'+(postsFiltered().length?postsFiltered().map(p=>postRow(p,true)).join(''):'<p class="muted">No hay borradores guardados.</p>')+'</div></div>';
+ }
+ const configs={
+ escucha:['Social Listening','Escucha, tendencias y seguimiento de menciones',
+ 'Las conexiones a redes y el análisis de menciones reales están pendientes. Puedes preparar contenidos y análisis locales sin fingir estadísticas reales.','goto-laboratorio','Explorar Growth Lab'],
+ competencia:['Análisis de competencia','Comparativas y oportunidades',
+ 'Para comparar marcas y cuentas reales necesitaremos fuentes autorizadas, permisos de las plataformas e indicadores comprobables.','goto-analitica','Abrir panel de analítica'],
+ automatizaciones:['Automatizaciones','Flujos supervisados de marketing',
+ 'Las automatizaciones externas aún no están conectadas. Antes de ejecutar acciones reales se requerirán autorizaciones, límites, registros y confirmaciones.','goto-herramientas','Ver herramientas disponibles']
+ };
+ const c=configs[page];
+ if(!c)return home();
+ return sectionHeader(c[0],c[1])+ '<div class="card"><h2>✦ '+c[0]+'</h2><p class="muted" style="margin:12px 0 20px">'+c[2]+'</p>'+
+ btn(c[4],c[3],'primary')+'</div>';
+}
 function content(){
- switch(state.page){case 'estudio':return studio();case 'diseño':return visualPage();case 'crear':return create();case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');case 'laboratorio':return growthPage(state.plan)+adUnit('mobile')+adUnit('desktop');case 'herramientas':return toolsCatalogue();case 'campanas':return campaigns();case 'analitica':return analytics();case 'bandeja':return inbox();case 'planes':return plans();case 'ajustes':return settings();default:return home();}
+ switch(state.page){
+ case 'inicio':return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan})+adUnit('mobile')+adUnit('desktop');
+ case 'estudio':return nexusStudio({mode:state.creativeMode,format:state.videoFormat,posts:state.posts})+adUnit('mobile')+adUnit('desktop');
+ case 'diseño':return visualPage();
+ case 'crear':return create();
+ case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');
+ case 'laboratorio':return growthPage(state.plan)+adUnit('mobile')+adUnit('desktop');
+ case 'herramientas':return toolsCatalogue();
+ case 'campanas':return campaigns();
+ case 'analitica':return analytics();
+ case 'bandeja':return inbox();
+ case 'planes':return plans();
+ case 'ajustes':return settings();
+ case 'biblioteca':case 'escucha':case 'competencia':case 'automatizaciones':return extraScreen(state.page);
+ default:return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan});
+ }
 }
 function navButton(item,kind='side'){
  const cur=state.page===item[0];
@@ -169,10 +206,32 @@ function mobileDrawer(){
 function render(){
  const side=nav.map(n=>navButton(n)).join('');
  const quickIds=['inicio','estudio','crear','bandeja'];
- const mob=quickIds.map(id=>nav.find(n=>n[0]===id)).filter(Boolean).map(n=>navButton(n,'bottom')).join('')+'<button type="button" class="mobile-more-button" data-action="show-mobile-menu" aria-label="Abrir todas las herramientas" aria-expanded="'+state.menuMore+'">'+icon('plus')+'<span>Más</span></button>';
- app.innerHTML='<header class="nexus-masthead"><div class="nexus-title"><img src="./logo.svg" alt=""><span>MarketHub <span class="nexus-gradient-title">AI</span></span></div><p>La plataforma todo-en-uno de marketing digital y redes sociales con IA</p><div class="nexus-benefits">'+['Crea','Planifica','Publica','Analiza','Conversa','Escucha','Automatiza','Escala'].map(t=>'<span>'+t+'</span>').join('')+'</div></header>'+
- '<div class="app-shell"><aside class="sidebar"><div class="brand"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><nav class="nav" aria-label="Navegación principal">'+side+'</nav><div class="sidebar-bottom"><div class="nexus-sidebar-promo"><div class="nexus-chip">✦ IA</div><strong>Potencia tu marketing con IA</strong><ul><li>Ideas de contenido</li><li>Optimización de campañas</li><li>Análisis y planificación</li><li>Automatización futura</li></ul>'+btn('Explorar IA →','goto-herramientas','nexus-cta')+'</div></div></aside>'+
- '<main id="main" class="workspace"><header class="topbar"><div class="brand"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div><div class="nexus-workspace-controls"><div class="nexus-selector">Espacio de trabajo<b>Marketing Global · demo</b></div><div class="nexus-selector">Proyecto<b>Lanzamiento Q1 · demo</b></div></div><input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar contenido y campañas de demo..." value="'+safe(state.search)+'"><div class="topbar-right"><button class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · SIN ANUNCIOS':'FREE · CON ANUNCIOS')+'</button><div class="nexus-profile-demo"><div class="avatar" aria-label="Perfil ficticio de demostración">MH</div><span>Perfil demo</span></div></div></header>'+content()+'</main></div><nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+(state.modal?modalHTML():'')+(state.menuMore?mobileDrawer():'');
+ const mobileLabels={'inicio':'Inicio','estudio':'Crear','crear':'Planificar','bandeja':'Bandeja'};
+ const mob=quickIds.map(id=>nav.find(n=>n[0]===id)).filter(Boolean).map(n=>
+  '<button type="button" data-page="'+n[0]+'" aria-label="'+mobileLabels[n[0]]+'" '+(state.page===n[0]?'aria-current="page"':'')+'>'+
+  icon(n[2])+'<span>'+mobileLabels[n[0]]+'</span></button>').join('')+
+  '<button type="button" class="mobile-more-button" data-action="show-mobile-menu" aria-label="Abrir todas las herramientas" aria-expanded="'+state.menuMore+'">'+icon('plus')+'<span>Más</span></button>';
+ const featureNames=['Crea','Planifica','Publica','Analiza','Conversa','Escucha','Automatiza','Escala'];
+ const brand='<img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span>';
+ app.innerHTML='<div class="nexus-canvas">'+
+ '<header class="nexus-masthead"><div class="nexus-brand-main"><img src="./logo.svg" alt="">MarketHub <em>AI</em></div>'+
+ '<p>La plataforma todo-en-uno de marketing digital y redes sociales con IA</p>'+
+ '<div class="nexus-features">'+featureNames.map(n=>'<span><b>✓</b> '+n+'</span>').join('')+'</div></header>'+
+ '<div class="app-shell nexus-app"><aside class="sidebar"><div class="brand">'+brand+'</div>'+
+ '<nav class="nav" aria-label="Navegación principal">'+side+'</nav>'+
+ '<div class="sidebar-bottom"><div class="plan-widget"><span class="eyebrow">✦ TU PLAN '+state.plan.toUpperCase()+'</span>'+
+ '<h3>Potencia tu marketing con IA</h3><p>'+(state.plan==='free'?'FREE: herramientas locales y espacios publicitarios de demostración.':'PRO de demostración, sin anuncios.')+'</p>'+
+ '<div style="margin-top:12px">'+btn('Explorar herramientas →','goto-herramientas','primary full')+'</div></div></div></aside>'+
+ '<main id="main" class="workspace"><header class="topbar nexus-topbar">'+
+ '<div class="brand">'+brand+'</div>'+
+ '<div class="nexus-header-context"><div class="nexus-context-chip"><span>▥</span><span>Espacio de trabajo<b>Marketing Global · demo</b></span></div>'+
+ '<div class="nexus-context-chip"><span>✧</span><span>Proyecto<b>Lanzamiento Q1 · demo</b></span></div></div>'+
+ '<input class="search" id="globalSearch" aria-label="Filtrar publicaciones" placeholder="Buscar publicaciones guardadas..." value="'+safe(state.search)+'">'+
+ '<div class="topbar-right"><button type="button" class="nexus-bell" data-action="goto-bandeja" aria-label="Abrir bandeja">♧</button>'+
+ '<button type="button" class="plan-pill '+(state.plan==='pro'?'pro':'')+'" data-action="goto-planes">'+(state.plan==='pro'?'✦ PRO · DEMO':'FREE · DEMO')+'</button>'+
+ '<div class="avatar" aria-label="Perfil de demostración">MH</div></div></header>'+content()+'</main></div></div>'+
+ '<nav class="mobile-bottom" aria-label="Navegación móvil">'+mob+'</nav>'+
+ (state.modal?modalHTML():'')+(state.menuMore?mobileDrawer():'');
  if(state.page==='diseño')visualMount();
 }
 function modalHTML(){
@@ -298,46 +357,33 @@ document.addEventListener('input',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(state.menuMore){state.menuMore=false;render()}else if(state.modal){state.modal=null;render()}}});
 function splash(){
  const overlay=document.createElement('div');
- overlay.className='splash nexus-splash';
- overlay.setAttribute('role','status');
- overlay.setAttribute('aria-label','Cargando MarketHub AI');
- const tag=(css,sym,caption)=>'<div class="nexus-splash-tag '+css+'"><b aria-hidden="true">'+sym+'</b><span>'+caption+'</span></div>';
- overlay.innerHTML='<div class="splash-content nexus-splash-content">'+
- '<div class="nexus-orbit-stage">'+
- tag('nexus-tl','▥','Analítica inteligente')+
- tag('nexus-ml','⚑','Campañas con IA')+
- tag('nexus-bl','▱','Contenido creativo')+
- '<div class="nexus-globe splash-orb"><div class="nexus-globe-grid"></div><img class="nexus-globe-mark" src="./logo.svg" alt=""></div>'+
- '<div class="nexus-orbit-platform"></div>'+
- tag('nexus-tr','✧','IA creativa')+
- tag('nexus-mr','♧','Social Listening')+
- tag('nexus-br','▦','Planificación y automatización')+
- '</div>'+
- '<div class="nexus-splash-brand"><img src="./logo.svg" alt=""><strong>MarketHub <span class="nexus-gradient-title">AI</span></strong></div>'+
+ overlay.className='splash nexus-splash';overlay.setAttribute('role','status');
+ const left=[['left-one','▥','Analítica inteligente'],['left-two','♧','Campañas con IA'],['left-three','▤','Contenido creativo']];
+ const right=[['right-one','✧','IA creativa'],['right-two','♧','Social Listening'],['right-three','▦','Planificación y automatización']];
+ const chips=[...left,...right].map(([where,iconText,label])=>'<div class="nexus-float-chip '+where+'"><span>'+iconText+'</span><b>'+label+'</b></div>').join('');
+ overlay.innerHTML='<div class="nexus-splash-layout">'+
+ '<div class="nexus-energy-scene">'+chips+
+ '<div class="nexus-energy-orb"><span class="nexus-orb-glow"></span><img class="nexus-orb-logo" src="./logo.svg" alt=""></div>'+
+ '<div class="nexus-orb-platform"></div></div>'+
+ '<div class="nexus-splash-title"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div>'+
  '<p class="nexus-splash-subtitle">Iniciando tu centro de marketing digital con IA</p>'+
- '<div class="nexus-splash-progress"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><span class="nexus-splash-progress-value" id="progressValue">0%</span></div>'+
- '<div class="nexus-splash-progress-label"><span class="nexus-spinner" aria-hidden="true"></span><span id="progressLabel">Preparando paneles, campañas y analítica…</span></div>'+
- '<div class="nexus-splash-footer">© '+new Date().getFullYear()+' MarketHub AI. Todos los derechos reservados. | Versión prototipo 0.4</div>'+
- '<button class="splash-skip" id="skipSplash" type="button">Entrar ahora</button>'+
- '</div>';
+ '<div class="progress-track"><div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
+ '<p id="progressLabel" class="nexus-splash-subtitle">Preparando paneles, campañas y analítica...</p>'+
+ '<div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI. Todos los derechos reservados. | Versión prototipo 0.4.0</div>'+
+ '<button type="button" class="splash-skip" id="skipSplash">Entrar ahora</button></div>';
  document.body.append(overlay);
  let progress=0,closed=false;
- const bar=overlay.querySelector('#progressFill');
- const percentage=overlay.querySelector('#progressValue');
- const label=overlay.querySelector('#progressLabel');
+ const bar=overlay.querySelector('#progressFill'),percent=overlay.querySelector('#progressPercent');
+ let timer;
  function finish(){
-  if(closed)return;closed=true;clearInterval(timer);overlay.remove();
+  if(closed)return;closed=true;
+  if(timer!=null)clearInterval(timer);
+  overlay.remove();
  }
- const timer=setInterval(()=>{
-  progress=Math.min(100,progress+5);
-  bar.style.width=progress+'%';
-  percentage.textContent=progress+'%';
-  if(progress>=100){label.textContent='Interfaz preparada';finish();}
- },85);
  overlay.querySelector('#skipSplash').addEventListener('click',finish);
- if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)finish();
+ if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){finish();return}
+ timer=setInterval(()=>{progress=Math.min(100,progress+8);bar.style.width=progress+'%';percent.textContent=progress+'%';if(progress===100)finish()},105);
 }
-
 try {
   render();
   if (window.__MARKETHUB_BOOT__) window.__MARKETHUB_BOOT__.ready = true;
