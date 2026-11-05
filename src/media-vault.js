@@ -68,3 +68,43 @@ export async function removeVaultAsset(id){
  await operation('readwrite',store=>store.delete(item.id));
  return true;
 }
+
+/** Guardado por lotes de medios restaurados. Una transacción para no dejar medios a medias. */
+export async function saveVaultAssetsBatch(entries){
+ if(!Array.isArray(entries)||!entries.length||entries.length>VAULT_MAX_ITEMS)
+  throw Error('El lote de biblioteca contiene demasiados archivos');
+ const prepared=[];
+ for(const entry of entries){
+  const valid=validateVaultAsset(entry);
+  prepared.push({...valid,bytes:await entry.blob.arrayBuffer()});
+ }
+ const existing=await listVaultAssets();
+ if(existing.length+prepared.length>VAULT_MAX_ITEMS)throw Error('La biblioteca no tiene espacio para todos los archivos');
+ const total=existing.reduce((n,x)=>n+x.size,0)+prepared.reduce((n,x)=>n+x.size,0);
+ if(total>VAULT_MAX_BYTES)throw Error('El respaldo supera los 150 MB admitidos por la biblioteca');
+ const db=await openDb(),ids=[],createdAt=Date.now();
+ try{
+  return await new Promise((resolve,reject)=>{
+   const tx=db.transaction(STORE,'readwrite'),store=tx.objectStore(STORE);
+   prepared.forEach((p,i)=>{
+    const id=globalThis.crypto?.randomUUID?.()||createdAt.toString(36)+'-'+i+'-'+Math.random().toString(36).slice(2);
+    ids.push(id);store.add({...p,id,createdAt});
+   });
+   tx.oncomplete=()=>resolve(ids);
+   tx.onabort=()=>reject(tx.error||Error('No se guardó el lote multimedia'));
+   tx.onerror=()=>{};
+  });
+ }finally{db.close()}
+}
+export async function removeVaultAssetsBatch(ids){
+ if(!Array.isArray(ids)||ids.some(id=>typeof id!=='string'))throw Error('IDs multimedia incorrectos');
+ if(!ids.length)return;
+ const db=await openDb();
+ try{await new Promise((resolve,reject)=>{
+  const tx=db.transaction(STORE,'readwrite'),store=tx.objectStore(STORE);
+  ids.forEach(id=>store.delete(id));
+  tx.oncomplete=resolve;
+  tx.onabort=()=>reject(tx.error||Error('No se pudieron revertir todos los archivos'));
+  tx.onerror=()=>{};
+ })}finally{db.close()}
+}
