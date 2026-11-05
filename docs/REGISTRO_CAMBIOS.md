@@ -1,3 +1,11 @@
+## 2026-11-05 — v0.7.0 · Vídeo, copias cifradas y competencia
+
+- Exportación de vídeo local desde storyboard (MP4/WebM según navegador), fundidos y zoom suave, 720p, duración máxima 45 s y 12 escenas. Sin audio.
+- Copias locales AES-256-GCM protegidas por contraseña con PBKDF2-SHA256, sal/IV por archivo y restauración compatible con anteriores.
+- Registro de competidores: CRUD, ratios orientativos, CSV protegido de inyección de fórmulas y adaptación móvil.
+- Nuevas pruebas unitarias y visuales con descargas reales y controles de seguridad.
+- Siguen pendientes redes conectadas, IA externa, publicidad y suscripciones comerciales, video profesional completo, publicación en tiendas.
+
 ## 2026-11-05 — v0.6.1 Compatibilidad y funciones de editor
 
 - Interfaz real responsive en vez de una fotografía con zonas transparentes; los cuatro diseños originales siguen intactos como referencia.
