@@ -47,7 +47,13 @@
     "tests/campaign-manager.test.mjs",
     "src/analytics-local.js",
     "src/analytics-local.css",
-    "tests/analytics-local.test.mjs"
+    "tests/analytics-local.test.mjs",
+    "src/mirror-ui.js",
+    "src/mirror.css",
+    "public/assets/boceto-01-inicio-original.jpeg",
+    "public/assets/boceto-02-estudio-original.jpeg",
+    "public/assets/boceto-03-movil-original.jpeg",
+    "public/assets/boceto-04-carga-original.jpeg"
   ],
   "requiredScreens": [
     {
@@ -56,7 +62,8 @@
       "file": "src/app.js",
       "tokens": [
         "function splash()",
-        "nexus-energy-orb",
+        "boceto-04-carga-original.jpeg",
+        "nexus-original-splash",
         "progress-fill",
         "skipSplash"
       ]
@@ -577,6 +584,18 @@
       "tokens": [
         ".mobile-menu-drawer",
         ".mobile-drawer-grid"
+      ]
+    },
+    {
+      "id": "UX-ESPEJO",
+      "title": "Reproducción visual exacta aprobada",
+      "file": "src/mirror-ui.js",
+      "tokens": [
+        "boceto-01-inicio-original.jpeg",
+        "boceto-02-estudio-original.jpeg",
+        "boceto-03-movil-original.jpeg",
+        "mirrorLayer",
+        "mirror-hit"
       ]
     }
   ]
