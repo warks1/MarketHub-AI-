@@ -61,8 +61,21 @@ try{
    await page.screenshot({path:'visual-qa/'+id+'-menu.png'});
    await page.locator('[data-action="mirror-close-menu"]').click();
   }
-  // Pasar del original 01/03 al estudio seleccionado 02/03.
-  await page.locator(scope+' [data-page="estudio"]').first().click();
+  // La barra inferior usa los píxeles originales y debe quedar accesible y anclada.
+  if(isPhone){
+   const footer=page.locator('.mirror-mobile-fixednav');
+   await footer.waitFor({state:'visible'});
+   const footerImage=footer.locator('img');
+   await footerImage.evaluate(el=>el.decode());
+   if(!(await footerImage.getAttribute('src')).includes('boceto-03-movil-original.jpeg'))
+    faults.push('La barra inferior usa iconos o colores distintos al boceto 03');
+   const fbox=await footer.boundingBox();
+   if(!fbox||fbox.y+fbox.height>height+5)
+    faults.push('La barra inferior queda parcialmente fuera de pantalla');
+   await page.locator('.mirror-mobile-fixednav [data-page="estudio"]').click();
+  }else{
+   await page.locator('.mirror-desktop-view [data-page="estudio"]').first().click();
+  }
   await page.locator('.mirror-overlay').waitFor({state:'visible'});
   const studioArt=page.locator(scope+' img').first();
   await studioArt.evaluate(el=>el.decode());
