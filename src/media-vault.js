@@ -42,7 +42,12 @@ export async function listVaultAssets(){
 export async function getVaultAsset(id){
  const item=await operation('readonly',store=>store.get(String(id)));
  if(!item)throw Error('No se encuentra el archivo. Es posible que ya se haya eliminado');
- return item;
+ // Compatibilidad con datos anteriores y Safari: reconstruir el Blob solo al abrir.
+ if(item.bytes instanceof ArrayBuffer){
+  return {...item,blob:new Blob([item.bytes],{type:item.type})};
+ }
+ if(item.blob instanceof Blob)return item; // Formato anterior, no perder archivos existentes.
+ throw Error('Archivo guardado incompleto o dañado');
 }
 export async function saveVaultAsset(name,blob){
  const valid=validateVaultAsset({name,blob});
@@ -51,7 +56,10 @@ export async function saveVaultAsset(name,blob){
  const used=items.reduce((acc,i)=>acc+i.size,0);
  if(used+valid.size>VAULT_MAX_BYTES)throw Error('Biblioteca llena: exporta o elimina archivos antes de añadir más');
  const id=(globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,11));
- const data={...valid,blob,id,createdAt:Date.now()};
+ // WebKit/Safari puede fallar o bloquearse al clonar Blob/File en IndexedDB.
+ // Guardar ArrayBuffer permite reconstruir el archivo sin pérdida de formato.
+ const bytes=await blob.arrayBuffer();
+ const data={...valid,bytes,id,createdAt:Date.now()};
  await operation('readwrite',store=>store.add(data));
  return {id,...valid};
 }
