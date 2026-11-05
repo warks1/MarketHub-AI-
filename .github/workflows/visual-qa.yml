@@ -10,6 +10,7 @@ on:
       - 'scripts/visual-qa.mjs'
       - 'scripts/cross-browser-qa.mjs'
       - 'scripts/splash-responsive-qa.mjs'
+      - 'scripts/media-forge-qa.mjs'
       - '.github/workflows/visual-qa.yml'
   pull_request:
     paths:
@@ -19,6 +20,7 @@ on:
       - 'scripts/visual-qa.mjs'
       - 'scripts/cross-browser-qa.mjs'
       - 'scripts/splash-responsive-qa.mjs'
+      - 'scripts/media-forge-qa.mjs'
       - '.github/workflows/visual-qa.yml'
 
 permissions:
@@ -53,6 +55,8 @@ jobs:
         run: node scripts/visual-qa.mjs
       - name: Revisar Safari WebKit Firefox y pantallas horizontales/UHD
         run: node scripts/cross-browser-qa.mjs
+      - name: Comprobar Media Forge y PULSE PACK en navegadores
+        run: node scripts/media-forge-qa.mjs
       - name: Guardar capturas y resultados incluso si hay diferencias
         if: always()
         uses: actions/upload-artifact@v4
