@@ -89,7 +89,13 @@ export async function backupImport(file,ctx){
  if(typeof file.size!=='number'||file.size<=0||file.size>MAX_ENCRYPTED_BACKUP_SIZE){ctx.toast('Archivo vacío o superior a 5 MB.');return false}
  let modules;
  try{
-  const parsed=JSON.parse(await file.text());
+  const raw=await file.text();
+  // Las copias normales mantienen el límite original de 3 MB; solo el
+  // envoltorio cifrado firmado por nuestra app puede ocupar hasta 5 MB.
+  if(file.size>MAX_FILE&&!/^\s*\{\s*"format"\s*:\s*"markethub-ai-encrypted-backup"/.test(raw.slice(0,256))){
+   ctx.toast('La copia sin cifrar supera los 3 MB.');return false
+  }
+  const parsed=JSON.parse(raw);
   if(parsed?.format===ENCRYPTED_BACKUP_FORMAT){
    if(!ctx.password){ctx.toast('Escribe la contraseña de la copia cifrada antes de restaurarla.');return false}
    modules=validateBackup(await decryptBackupJSON(parsed,ctx.password));
