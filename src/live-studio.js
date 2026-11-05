@@ -1,4 +1,5 @@
 // MarketHub AI · Estudio creativo realmente editable (storyboard local).
+import {isSceneImageData} from './studio-scene-media.js';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const list=x=>Array.isArray(x)?x.filter(z=>z&&typeof z==='object'):[];
 const navigate=(label,page,cls='live-outline')=>'<button type="button" class="'+cls+'" data-page="'+page+'">'+label+'</button>';
@@ -33,8 +34,10 @@ export function liveStudio({scenes=[],current=0,format='9:16',mode='Video / Reel
   ['▣ Duplicar escena','storyboard-duplicate'],['↑ Reordenar','storyboard-move-left'],
   ['↧ Exportar proyecto','storyboard-export']
  ].map(([name,id])=>act(name,id,'live-studio-switch')).join('');
+ const scenePhoto=isSceneImageData(chosen?.imageData);
+ const photo=scenePhoto?'<img class="live-scene-photo" src="'+esc(chosen.imageData)+'" alt="Fotografía añadida a la escena" draggable="false">':'';
  const editor='<div class="live-editor-canvas '+(format==='9:16'?'portrait':'landscape')+' live-style-'+
- ['Neón','Violeta','Océano','Lima'].indexOf(theme)+'">'+
+ ['Neón','Violeta','Océano','Lima'].indexOf(theme)+'">'+photo+
  '<div class="live-orbit" aria-hidden="true"></div><span class="live-editor-corner">MarketHub <b>AI</b> · PROYECTO LOCAL</span>'+
  '<div class="live-editor-text"><span>✦</span><h3>'+esc(chosen?.title||'Crea tu primera escena')+'</h3>'+
  '<p>'+esc(chosen?.caption||'Un storyboard editable para tu próximo lanzamiento')+'</p></div>'+
@@ -59,6 +62,10 @@ export function liveStudio({scenes=[],current=0,format='9:16',mode='Video / Reel
  '<input class="input" id="live-scene-duration" type="number" name="duration" min="1" max="60" required value="'+esc(chosen?.duration||5)+'"></div>'+
  '<div><label for="live-scene-theme">Paleta de colores</label><select class="input" name="theme" id="live-scene-theme">'+
  STUDIO_THEMES.map(x=>option(x,theme)).join('')+'</select></div></div>'+
+ '<div class="live-scene-upload"><label for="live-scene-photo">Fotografía de la escena</label>'+
+ '<input id="live-scene-photo" type="file" data-scene-image accept="image/jpeg,image/png,image/webp"'+(!chosen?' disabled':'')+'>'+
+ '<small>JPG, PNG o WebP, hasta 8 MB. Se comprime y guarda solo en este dispositivo.</small>'+
+ (scenePhoto?act('Quitar fotografía','storyboard-clear-photo','live-outline'):'')+'</div>'+
  '<button class="live-primary" type="submit"'+(!chosen?' disabled':'')+'>Guardar cambios</button></form>';
  const clips='<div class="live-timeline-track">'+(frames.length?frames.map((scene,i)=>
   '<button type="button" class="live-timeline-clip'+(index===i?' selected':'')+'" data-action="storyboard-select" data-index="'+i+'">'+
