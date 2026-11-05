@@ -245,6 +245,7 @@ function modalHTML(){
  if(state.modal==='reset'){head='Borrar datos locales';body='Se eliminarán los borradores y campañas locales, y tu selección de plan de este navegador.';foot=btn('Cancelar','close-modal')+btn('Sí, borrar','confirm-reset','primary')}
  if(state.modal==='delete-post'){head='Eliminar borrador local';body='La publicación seleccionada desaparecerá de la biblioteca de este dispositivo. Puedes exportar una copia antes de eliminar.';foot=btn('Cancelar','close-modal')+btn('Eliminar publicación','confirm-delete-post','primary')}
  if(state.modal==='delete-campaign'){head='Eliminar campaña local';body='Se borrará esta planificación del dispositivo. No afecta a anuncios reales: no hay cuentas conectadas.';foot=btn('Cancelar','close-modal')+btn('Eliminar campaña','confirm-delete-campaign','primary')}
+ if(state.modal==='clear-analytics'){head='Eliminar métricas importadas';body='Se eliminarán las filas CSV guardadas localmente. No afecta a tus cuentas externas.';foot=btn('Cancelar','close-modal')+btn('Borrar métricas locales','confirm-clear-analytics','primary')}
  return '<div class="modal-backdrop" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">'+head+'</h2><p>'+body+'</p><div class="modal-actions">'+foot+'</div></div></div>';
 }
 let toastTimer;
@@ -304,6 +305,14 @@ case 'confirm-delete-campaign':{
  }
  state.pendingDeleteCampaignId=null;state.modal=null;render();break;
 }
+case 'analytics-template':{
+ const blob=new Blob([analyticsCsvTemplate],{type:'text/csv;charset=utf-8'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='markethub-plantilla-analitica.csv';document.body.append(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),900);toast('Plantilla CSV descargada.');break;
+}
+case 'analytics-clear':state.modal='clear-analytics';render();break;
+case 'confirm-clear-analytics':state.analyticsRows=[];state.modal=null;save();render();toast('Métricas locales eliminadas.');break;
 case 'campaign-export':{
  const blob=new Blob([campaignsToCSV(state.campaigns)],{type:'text/csv;charset=utf-8'});
  const url=URL.createObjectURL(blob),link=document.createElement('a');
@@ -355,7 +364,7 @@ case 'campaign-export':{
  case 'confirm-reward':state.credits+=5;state.modal=null;save();render();toast('+5 créditos ficticios. No se ha visto ningún anuncio.');break;
  case 'close-modal':state.modal=null;render();break;
  case 'reset-data':state.modal='reset';render();break;
- case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.campaigns=[];state.editPostId=null;state.pendingDeleteId=null;state.editCampaignId=null;state.pendingDeleteCampaignId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
+ case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.campaigns=[];state.analyticsRows=[];state.editPostId=null;state.pendingDeleteId=null;state.editCampaignId=null;state.pendingDeleteCampaignId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
  case 'no-op':break;
  }
 });
