@@ -36,7 +36,7 @@
       "file": "src/app.js",
       "tokens": [
         "function splash()",
-        "splash-orb",
+        "nexus-energy-orb",
         "progress-fill",
         "skipSplash"
       ]
@@ -141,7 +141,7 @@
       "file": "src/app.js",
       "tokens": [
         "case 'confirm-pro':state.plan='pro'",
-        "PRO · SIN ANUNCIOS"
+        "if(state.plan===\u0027pro\u0027)return \u0027\u0027"
       ]
     },
     {
