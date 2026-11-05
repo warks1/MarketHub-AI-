@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.4.1. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.4.4. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,7 +25,7 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.4.1 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.4.4 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 

@@ -1,3 +1,9 @@
+## 2026-11-05 — v0.4.4 Calendario editorial táctil
+
+- Calendario del panel principal con navegación mensual y selección de un día para preparar una publicación con la fecha precargada.
+- Controles con teclado, ratón y toque adaptados a smartphone, tablet y escritorio.
+- Nueva revisión de caché PWA y pruebas visuales del flujo calendario → formulario.
+
 ## 2026-11-05 — v0.4.3 Analítica local con datos importados
 
 - Añadida importación CSV con validación, plantilla descargable, agregación por plataforma, gráfico por fechas y borrado confirmado de datos importados.

@@ -451,7 +451,7 @@ function splash(){
  '<p class="nexus-splash-subtitle">Iniciando tu centro de marketing digital con IA</p>'+
  '<div class="progress-track"><div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
  '<p id="progressLabel" class="nexus-splash-subtitle">Preparando paneles, campañas y analítica...</p>'+
- '<div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI. Todos los derechos reservados. | Versión prototipo 0.4.1</div>'+
+ '<div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI. Todos los derechos reservados. | Versión prototipo 0.4.4</div>'+
  '<button type="button" class="splash-skip" id="skipSplash">Entrar ahora</button></div>';
  // En pantallas panorámicas, utilizar el boceto 04 ORIGINAL como superficie visual
  // y superponer una barra real. En móvil mantener la composición responsive animada.
