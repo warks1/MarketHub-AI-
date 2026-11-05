@@ -77,7 +77,9 @@
     "tests/media-vault.test.mjs",
     "tests/brand-dna.test.mjs",
     "src/subtitle-tools.js",
-    "tests/subtitle-tools.test.mjs"
+    "tests/subtitle-tools.test.mjs",
+    "src/creative-audit.js",
+    "tests/creative-audit.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -705,6 +707,17 @@
         "convertSubtitles(",
         "data-forge-input=\"subtitle\"",
         "'srt'||action==='vtt'"
+      ]
+    },
+    {
+      "id": "MF-AUDIT",
+      "label": "Auditor geométrico local PULSE",
+      "file": "src/media-forge.js",
+      "tokens": [
+        "auditCreative(",
+        "function auditPanel()",
+        "data-forge-action",
+        "'audit-photo'"
       ]
     }
   ]
