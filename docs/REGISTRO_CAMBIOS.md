@@ -1,3 +1,9 @@
+## 2026-11-05 — v0.4.3 Analítica local con datos importados
+
+- Añadida importación CSV con validación, plantilla descargable, agregación por plataforma, gráfico por fechas y borrado confirmado de datos importados.
+- Los datos se guardan localmente y se distinguen expresamente de métricas ilustrativas; ninguna API externa se consulta.
+- Actualizada caché offline para incluir nuevas herramientas, pruebas unitarias y auditoría visual de CSV.
+
 ## 2026-11-05 — Planificador local de campañas y corrección móvil
 
 - Corregido el desbordamiento del estudio creativo en móviles de 320–430 px, manteniendo la línea de tiempo desplazable horizontalmente.

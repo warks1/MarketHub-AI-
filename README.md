@@ -106,3 +106,7 @@ Los cuatro bocetos elegidos se conservan sin modificar en `assets/*-original.jpe
 Desde **Campañas → Planificador de campañas** puedes crear, editar, duplicar, eliminar y exportar CSV con objetivos, plataforma, fechas y presupuesto **previsto**. FREE demo admite hasta 10 campañas locales y PRO demo hasta 150; son límites provisionales de demostración. Estas acciones no activan anuncios, no generan gasto, no requieren cuenta y se guardan en el navegador (también en el respaldo JSON existente).
 
 La interfaz de ejemplo de métricas del boceto se conserva por separado y se identifica como ilustrativa.
+
+## Analítica CSV real, sin cuentas conectadas
+
+En **Analítica → Analítica con datos propios**, descarga la plantilla CSV, complétala con cifras de tus informes y vuelve a importarla. El módulo valida fechas, plataformas y números, suma las métricas por canal y genera una gráfica de alcance por fecha. No se envía información a ningún servidor. Los datos guardados entran en el respaldo JSON local; no representan datos de cuentas conectadas.

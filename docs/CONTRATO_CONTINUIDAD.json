@@ -44,7 +44,10 @@
     "tests/platform-readiness.test.mjs",
     "src/campaign-manager.js",
     "src/campaign-manager.css",
-    "tests/campaign-manager.test.mjs"
+    "tests/campaign-manager.test.mjs",
+    "src/analytics-local.js",
+    "src/analytics-local.css",
+    "tests/analytics-local.test.mjs"
   ],
   "requiredScreens": [
     {

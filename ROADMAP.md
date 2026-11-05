@@ -34,7 +34,8 @@
 - [x] Planificador local de campañas con CRUD, objetivos, fechas, presupuesto previsto, límite FREE/PRO demo y exportación CSV.
 - [ ] OAuth y APIs oficiales para programar y publicar donde lo permita cada red.
 - [ ] Bandeja real según permisos de plataformas.
-- [ ] Analítica unificada y métricas no ficticias.
+- [x] Importación CSV local con métricas calculadas a partir de datos del usuario, sin simular conexiones.
+- [ ] Analítica unificada y métricas no ficticias conectadas mediante APIs oficiales.
 - [ ] Editor audiovisual real, multimedia, plantillas y exportaciones.
 - [ ] Motor de IA remoto, cuotas verificadas, moderación y control de costes.
 - [ ] Flujo de aprobación de contenido y almacenamiento seguro.
