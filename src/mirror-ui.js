@@ -116,7 +116,7 @@ function mobileImage(page){
  mobileHits(page)+'</div>';
 }
 function fixedMobileNav(page){
- const crop=page==='inicio'?{x:229,y:850,w:271,h:61}:{x:559,y:851,w:300,h:61};
+ const crop=page==='inicio'?{x:229,y:839,w:271,h:83}:{x:559,y:841,w:300,h:84};
  const imgWidth=(IMAGE_W/crop.w*100).toFixed(5);
  const left=(-crop.x/crop.w*100).toFixed(5);
  const top=(-crop.y/crop.h*100).toFixed(5);
