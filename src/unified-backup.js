@@ -61,7 +61,7 @@ function unzip(input){
    throw Error('ZIP cifrado, comprimido o incompatible');
   const name=TD.decode(bytes.subarray(pos+46,pos+46+n));
   if(!RENAME.test(name)||found.has(name))throw Error('ZIP contiene nombres no permitidos o duplicados');
-  const max=name==='manifest.json'?128*1024:name==='workspace.json'?3*1024*1024:
+  const max=name==='manifest.json'?128*1024:name==='workspace.json'?12*1024*1024:
     name==='brands.json'?32*1024:name.startsWith('projects/')?MAX_PROJECT_IMAGE_BYTES:50*1024*1024;
   if(size>max)throw Error('Un archivo de la copia supera su límite');
   used+=size;if(used>MAX_UNIFIED_BYTES)throw Error('Contenido demasiado grande');
@@ -133,7 +133,7 @@ export function parseUnifiedArchive(input){
  if(!Array.isArray(brands)||brands.length>MAX_BRANDS)throw Error('Las marcas del respaldo tienen formato inválido');
  const validBrands=brands.map(normalizeBrandProfile);
  if(new Set(validBrands.map(p=>p.id)).size!==validBrands.length)throw Error('Marcas duplicadas en respaldo');
- const workspace=readJson(files,'workspace.json',3*1024*1024);
+ const workspace=readJson(files,'workspace.json',12*1024*1024);
  const validatedWorkspace=workspace===null?null:validateBackup(workspace);
  const seen=new Set(['manifest.json','brands.json','workspace.json']),projects=[],assets=[];
  let projectSize=0,assetSize=0;
@@ -200,4 +200,15 @@ export async function restoreUnifiedBackup(blob){
   throw Error('No se completó la restauración: '+String(error.message||error)+
    (failures.length?' · Revisa '+failures.join(', ')+'; no se pudo revertir todo.':' · Se han revertido los cambios añadidos.'));
  }
+}
+
+/** Controles de la copia integral, junto a las copias cifradas ya existentes. */
+export function unifiedBackupSettingsHTML(){
+ return '<div class="card"><div class="card-head"><h2>📦 Copia integral de MarketHub AI</h2><span class="tag">Local · ZIP</span></div>'+
+ '<p>Una copia conjunta de: proyectos editables e imágenes fuente, Mi biblioteca multimedia, perfiles ADN de Marca y los cuatro módulos locales de publicaciones/Oficina/Visual/Growth Lab.</p>'+
+ '<div class="workspace-actions"><button class="primary" type="button" data-action="unified-backup-export">Descargar copia integral (.mhubfull)</button>'+
+ '<label class="secondary" for="unifiedBackupImport" style="cursor:pointer">Restaurar copia integral</label>'+
+ '<input id="unifiedBackupImport" data-unified-backup-import type="file" accept=".mhubfull,application/zip" aria-label="Importar copia integral de MarketHub AI" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"></div>'+
+ '<p class="tiny muted">La restauración añade proyectos, archivos y marcas sin reemplazar los que ya tengas. Los datos de Oficina y otros módulos locales existentes también se conservan; solo se recuperan módulos que falten. Si no hay capacidad suficiente, se cancela antes de importar. El archivo no incluye servicios externos ni datos de otras apps.</p>'+
+ '<div class="notice" style="margin-top:12px"><strong>Privacidad:</strong> esta copia contiene fotografías y documentos originales, no está cifrada ni se sube a Internet. Guarda el archivo de forma privada. Puede alcanzar 245 MB y necesitar memoria libre; no sustituye a la copia JSON cifrada disponible arriba. La reversión entre varias bases de datos se intenta si falla una restauración, pero no es una transacción única ante cortes inesperados.</div></div>';
 }
