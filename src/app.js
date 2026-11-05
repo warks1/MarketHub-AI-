@@ -1,7 +1,7 @@
 import { catalogueSections } from './catalogue.js';
 import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './office.js';
 import {growthPage,growthOpenTab,growthClick,growthSubmit} from './growth.js';
-import {backupExport,backupImport,backupSettingsHTML} from './backup.js';
+import {backupExport,backupEncryptedExport,backupImport,backupSettingsHTML} from './backup.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
@@ -346,6 +346,13 @@ document.addEventListener('click',e=>{
   case 'show-mobile-menu':state.menuMore=true;render();break;
  case 'close-mobile-menu':state.menuMore=false;render();break;
  case 'backup-export':backupExport({toast});break;
+ case 'backup-encrypted-export':{
+  const passwordField=document.querySelector('#backupPassword');
+  const password=passwordField?.value||'';
+  if(passwordField)passwordField.value='';
+  backupEncryptedExport({toast,password}).catch(error=>toast('Error al proteger copia: '+String(error.message||error)));
+  break;
+ }
 case 'calendar-prev':state.calendarOffset=Math.max(-12,state.calendarOffset-1);render();break;
 case 'calendar-next':state.calendarOffset=Math.min(12,state.calendarOffset+1);render();break;
 case 'calendar-day':{
@@ -673,7 +680,7 @@ document.addEventListener('change',e=>{
   }).catch(err=>toast('Error en CSV: '+String(err.message||err).slice(0,150)));
   return;
  }
- if(e.target.matches('[data-backup-import]')){backupImport(e.target.files?.[0],{toast}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
+ if(e.target.matches('[data-backup-import]')){backupImport(e.target.files?.[0],{toast,password:document.querySelector('#backupPassword')?.value||''}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
 document.addEventListener('input',e=>{
  if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}
  if(e.target.id==='toolSearch'){
