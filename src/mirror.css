@@ -78,3 +78,12 @@
 @media(max-width:360px) and (max-height:680px){
  .mirror-mobile-splash-shell{transform:scale(.88);transform-origin:center center;width:min(100vw,430px)}
 }
+
+/* No superponer elementos inventados ni ocultar el spinner y el texto ORIGINAL. */
+.nexus-splash.nexus-original-splash::before,
+.nexus-splash.nexus-original-splash::after{display:none!important;content:none!important}
+.nexus-splash.nexus-original-splash .nexus-original-splash-board #progressLabel{
+ position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;
+ clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;overflow:hidden!important;white-space:nowrap!important;
+ background:transparent!important;border:0!important
+}
