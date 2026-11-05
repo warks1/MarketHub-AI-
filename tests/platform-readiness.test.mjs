@@ -26,7 +26,7 @@ test('Se conservan los cuatro bocetos originales y su visor',()=>{
   }
   assert.ok(read('referencias.html').includes('assets/boceto-'+n+'-original.jpeg'));
  }
- assert.match(app,/assets\/boceto-04-carga\.webp/);
+ assert.match(app,/assets\/boceto-04-carga-original\.jpeg/);
  assert.match(html,/src\/reference\.css/);
 });
 
