@@ -42,7 +42,7 @@ export function liveStudio({scenes=[],current=0,format='9:16',mode='Video / Reel
  const transport='<div class="live-editor-transport">'+act('◀','storyboard-prev','live-outline','aria-label="Escena anterior"')+
  '<span>'+ (frames.length?index+1:0)+' / '+frames.length+' · '+duration+' s</span>'+
  act('▶','storyboard-next','live-outline','aria-label="Siguiente escena"')+
- act('9:16 / 16:9','format','live-outline')+'</div>';
+ act('9:16 / 16:9','format','live-outline')+act('⬇ Exportar PNG','storyboard-export-png','live-primary')+'</div>';
  const ai=['Generar guion con IA','Crear copies con IA','Subtítulos automáticos','Eliminación de silencios',
   'Voz en off realista','Redimensionar vídeo'].map(t=>act(esc(t)+' <span>›</span>','studio-unavailable','live-studio-switch')).join('');
  const recommendation='<div class="live-studio-reco"><strong>'+ (chosen?.title?.length>=15?'Texto bien definido':'Añade más detalles')+'</strong>'+
