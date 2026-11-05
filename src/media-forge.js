@@ -21,7 +21,7 @@ function photo(){
  field('Tratamiento visual','look',Object.keys(looks).map(k=>[k,k]))+
  field('SafeFrame PULSE · zona de texto','safezone',[['off','Desactivada'],['on','Mostrar guías y proteger texto']])+
  '<label>Texto sobre la composición<input data-forge-input="caption" maxlength="90" value="'+esc(s.caption)+'" placeholder="Tu mensaje opcional"></label>'+
- actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image)])+
+ actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image),btn('Usar imagen en Estudio','studio',!s.image)])+
  '<p>El editor utiliza recorte centrado y no modifica el original. SafeFrame PULSE marca guías de texto orientativas (no certificadas por las redes sociales). La máscara Órbita combina foto, marcos dobles y formato social.</p>')+
  panel('Vista previa real','<div class="forge-preview"><canvas id="forgeCanvas" role="img" aria-label="Vista previa de composición"></canvas></div>')+'</div>';
 }
@@ -204,6 +204,14 @@ export async function forgeClick(target,ctx){
    const mime='image/'+(action==='jpeg'?'jpeg':action),canvas=document.createElement('canvas');composeImage(canvas,s.image);
    const blob=await asBlob(canvas,mime);if(blob.type!==mime)throw Error('Este navegador no admite '+mime);
    send(blob,safeFileName(s.files.photo.name)+'-'+s.format.replace(':','x')+'.'+(action==='jpeg'?'jpg':action));ctx.toast('Imagen exportada.');
+  }else if(action==='studio'){
+   if(!s.image)throw Error('Primero selecciona una fotografía');
+   if(typeof ctx.sendStudioImage!=='function')throw Error('No está disponible el vínculo con Estudio');
+   const canvas=document.createElement('canvas');
+   composeImage(canvas,s.image);
+   const blob=await asBlob(canvas,'image/jpeg');
+   if(blob.type!=='image/jpeg')throw Error('El navegador no admite exportar JPG');
+   await ctx.sendStudioImage(blob);
   }else if(action==='pack'){
    if(!s.image)throw Error('Primero selecciona una fotografía');
    const files=[];
