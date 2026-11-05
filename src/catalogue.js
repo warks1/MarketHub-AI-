@@ -16,6 +16,7 @@ export const catalogueSections = [
       {id:'MF-015',name:'Mi biblioteca multimedia privada',tier:'free',status:'local',mediaTab:'vault',description:'Guardado y recuperación persistente de archivos mediante IndexedDB. Se conserva en el dispositivo, no en la nube.'},
       {id:'MF-016',name:'ADN Creativo · perfiles locales',tier:'free',status:'local',mediaTab:'photo',description:'Guardar y aplicar colores, tono y CTA de hasta doce marcas en el dispositivo.'},
       {id:'MF-017',name:'Auditor Creativo PULSE',tier:'free',status:'local',mediaTab:'photo',description:'Revisa recortes, resolución, texto y guías SafeFrame. Diagnóstico orientativo sin certificar requisitos oficiales.'},
+      {id:'MF-018',name:'Proyectos editables · MarketHub .mhub',tier:'free',status:'local',mediaTab:'projects',description:'Guarda la foto original, máscara, ajustes y ADN visual. Reanuda la edición y mueve una copia portable .mhub entre dispositivos.'},
       {id:'MF-007',name:'ADN de Marca avanzado PRO',tier:'pro',status:'planned',description:'Ampliación futura con tipografías licenciadas, reglas por marca, variantes automáticas y biblioteca compartida.'},
       {id:'MF-008',name:'Una idea → campaña multiformato',tier:'pro',status:'planned',description:'Generar versiones coordinadas de imagen, vídeo, copies y miniaturas desde un brief con revisión humana.'},
       {id:'MF-009',name:'Máscaras inteligentes multicapa',tier:'pro',status:'planned',description:'Biblioteca ampliada y máscaras editables con seguimiento y herramientas para recortes complejos.'},
