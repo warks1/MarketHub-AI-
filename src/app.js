@@ -649,6 +649,24 @@ document.addEventListener('submit',e=>{
   state.localMentions.unshift({id:Date.now()+'-'+Math.random().toString(36).slice(2,8),text,source,sentiment,date:todayLocal()});
   save();render();toast('Mención guardada localmente.');return;
  }
+ if(e.target.id==='competitorForm'){
+  e.preventDefault();
+  const data=new FormData(e.target);
+  const result=validateCompetitor({name:data.get('name'),network:data.get('network'),
+   followers:data.get('followers'),averageInteractions:data.get('averageInteractions')});
+  if(result.error){toast(result.error);return}
+  const existing=findCompetitor(state.competitors,state.editCompetitorId);
+  if(existing)Object.assign(existing,result.value);
+  else{
+   if(state.competitors.length>=competitorLimit(state.plan)){
+    toast('Límite del plan de demostración: '+competitorLimit(state.plan)+' competidores manuales.');return;
+   }
+   state.competitors.unshift({id:Date.now()+'-'+Math.random().toString(36).slice(2,9),...result.value,createdAt:todayLocal()});
+  }
+  state.editCompetitorId=null;save();render();
+  toast(existing?'Competidor actualizado.':'Competidor guardado localmente (datos sin verificar).');
+  return;
+ }
  if(e.target.id==='campaignForm'){
  e.preventDefault();
  const form=new FormData(e.target);
