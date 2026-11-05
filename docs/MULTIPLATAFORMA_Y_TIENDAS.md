@@ -55,3 +55,13 @@ Diseño y lógica compartidos. La disponibilidad comercial queda supeditada a la
 - La prueba visual de Chromium/Safari WebKit/Firefox está automatizada en GitHub Actions y guarda capturas para inspección.
 - **Compilación web de producción:** `npm run build` ahora ejecuta `vite build`, no el servidor de desarrollo. El flujo de compilación web de GitHub Actions ha concluido correctamente.
 - **Android:** el workflow puede generar una APK de depuración para pruebas internas. No equivale a un paquete AAB comercial ni a su publicación en Google Play. iOS requiere compilación y firma en macOS.
+
+### Media Forge — revisión de paquete Android (5 noviembre 2026)
+La suite web ya incluye edición local de imágenes con 15 máscaras, SafeFrame PULSE orientativo,
+PULSE PACK ZIP en cinco relaciones de aspecto, SRT/VTT, WAV PCM, vídeo y fotogramas PNG,
+visualización PDF y transferencia directa de foto a Estudio.
+
+El paquete Android es una **APK de prueba**, no una publicación comercial. La compatibilidad
+de codecs, WebM, visor PDF y descargas debe comprobarse instalándolo en dispositivos reales.
+Las funciones de IA generativa, seguimiento de sujetos, transcripción y conversión MP4/MP3
+universal siguen siendo objetivos futuros: no se presentan como activas.
