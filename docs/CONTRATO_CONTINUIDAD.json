@@ -525,7 +525,7 @@
       "label": "Menú móvil con IDs en lugar de índices",
       "file": "src/app.js",
       "tokens": [
-        "const quickIds=['inicio','estudio','diseño','crear','herramientas']",
+        "const quickIds=['inicio','estudio','crear','bandeja']",
         "nav.find(n=>n[0]===id)",
         "function mobileDrawer()",
         "const links=nav.map(item=>"
