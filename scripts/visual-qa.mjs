@@ -72,7 +72,23 @@ try{
   if((await page.locator('.campaign-local-row').count())<1)faults.push('El formulario de campaña no guarda el dato local');
   const campaign=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth}));
   if(campaign.width>campaign.viewport+3)faults.push('Campañas después de guardar desborda horizontalmente');
-  results.push({id,width,height,http:response?.status(),home,studio,campaign,faults});
+  // Validar Analítica con datos propios y el importador CSV en las mismas pantallas.
+  if(width<=680){
+    await page.locator('.mobile-bottom [data-action="show-mobile-menu"]').click();
+    await page.locator('.mobile-menu-drawer [data-page="analitica"]').click();
+  }else{
+    await page.locator('.sidebar [data-page="analitica"]').click();
+  }
+  await page.locator('#analyticsCsv').waitFor({state:'visible'});
+  await page.screenshot({path:'visual-qa/'+id+'-analitica.png',fullPage:true});
+  await page.locator('#analyticsCsv').setInputFiles({
+    name:'informe-local.csv',mimeType:'text/csv',
+    buffer:Buffer.from('fecha;plataforma;alcance;impresiones;interacciones;clics\\n2026-11-02;Instagram;100;150;20;10\\n')
+  });
+  await page.locator('.analytics-local-metrics').waitFor({state:'visible'});
+  const analytics=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth}));
+  if(analytics.width>analytics.viewport+3)faults.push('Analítica importada desborda horizontalmente');
+  results.push({id,width,height,http:response?.status(),home,studio,campaign,analytics,faults});
   await page.close();
  }
 }finally{
