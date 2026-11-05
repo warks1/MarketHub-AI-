@@ -233,3 +233,25 @@
 /* Warning shown only when local data cannot be persisted, never silently lost. */
 .storage-warning{padding:12px 14px;margin:8px 0 14px;border:1px solid #fcb34e;border-radius:12px;background:#452e26;color:#ffe6bc;font-size:12px;line-height:1.55}
 @media(max-width:680px){.storage-warning{font-size:13px;margin:6px 0 12px}}
+
+/* FIDELIDAD AL BOCETO 01/02: no convertir escritorio 1440 px en un largo móvil.
+   En PC/Mac hay espacio para seis KPI y todas las columnas de los originales. */
+@media(min-width:1250px){
+ .live-metrics{grid-template-columns:repeat(6,minmax(0,1fr))}
+ .live-top-grid{grid-template-columns:minmax(0,1.24fr) minmax(0,1fr) minmax(0,.78fr)}
+ .live-assistant{grid-column:auto}
+ .live-tips{grid-template-columns:1fr}
+ .live-mid-grid{grid-template-columns:minmax(0,1fr) minmax(0,.96fr) minmax(0,.82fr)}
+ .live-listening{grid-column:auto}
+ .live-bottom-grid{grid-template-columns:minmax(0,.85fr) minmax(0,1.38fr)}
+ .live-studio-grid{grid-template-columns:130px 130px minmax(300px,1fr) 160px 166px}
+ .live-studio-preview{grid-column:auto;grid-row:auto}
+ .live-studio-ia,.live-studio-recommend{grid-column:auto;grid-row:auto}
+ .live-studio-reco-list{display:grid;gap:5px}
+}
+@media(min-width:1250px) and (max-width:1380px){
+ .live-studio-grid{grid-template-columns:112px 112px minmax(280px,1fr) 144px 145px;gap:7px}
+ .live-metrics{gap:7px}
+ .live-stat{padding:10px;min-height:108px}
+ .live-stat strong{font-size:clamp(17px,1.8vw,25px)}
+}
