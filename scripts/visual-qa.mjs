@@ -113,6 +113,36 @@ try{
    await page.locator('[data-action="storyboard-play"]').click();
    if((await page.locator('[data-action="storyboard-play"]').getAttribute('aria-pressed'))!=='false')
     problems.push('El storyboard no se puede pausar');
+
+   // Probar una exportación de vídeo real únicamente en Chromium desktop:
+   // la compatibilidad móvil se detecta desde el navegador, sin suponer códecs.
+   if(id==='pc-1440'){
+    const canRecord=await page.evaluate(()=>typeof MediaRecorder!=='undefined'&&
+      typeof HTMLCanvasElement.prototype.captureStream==='function'&&
+      ['video/mp4','video/webm'].some(t=>MediaRecorder.isTypeSupported(t)));
+    const videoButton=page.locator('[data-action="storyboard-export-video"]');
+    if(!canRecord){
+     if(!(await videoButton.isDisabled()))problems.push('Vídeo aparece activo sin MediaRecorder compatible');
+    }else{
+     // Limitar a dos escenas de un segundo para la prueba y minimizar CPU.
+     await page.locator('[data-action="storyboard-select"][data-index="1"]').click();
+     await page.locator('#live-scene-duration').fill('1');
+     await page.locator('#storyboardForm button[type="submit"]').click();
+     // El proyecto inicial tiene dos escenas y una extra; si existe una tercera se quita.
+     while((await page.locator('.live-timeline-clip').count())>2){
+      await page.locator('[data-action="storyboard-select"]').last().click();
+      await page.locator('[data-action="storyboard-remove"]').click();
+      await page.locator('[data-action="confirm-storyboard-delete"]').click();
+     }
+     const videoWait=page.waitForEvent('download',{timeout:35000});
+     await videoButton.click();
+     const movie=await videoWait;
+     if(!/\.(webm|mp4)$/.test(movie.suggestedFilename()))problems.push('El archivo exportado no es MP4 ni WebM');
+     const stat=await import('node:fs/promises').then(fs=>fs.stat(movie.path()));
+     if(stat.size<3000)problems.push('Vídeo exportado vacío o incompleto');
+     await page.screenshot({path:'visual-qa/'+id+'-video-exportado.png',fullPage:true});
+    }
+   }
    await page.screenshot({path:'visual-qa/'+id+'-edicion.png',fullPage:true});
   }
   if(['iphone-375','pc-1440'].includes(id)){
