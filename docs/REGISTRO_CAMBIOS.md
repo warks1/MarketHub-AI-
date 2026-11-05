@@ -1,3 +1,12 @@
+## 2026-11-05 — v0.6.0 Paneles funcionales y diseño responsive
+
+- Inicio deja de estar cubierto por una captura estática: ahora muestra componentes reales que se redistribuyen en smartphone, tablet y escritorio, conservando azul oscuro, cian, violeta y fucsia.
+- Indicadores con métricas CSV reales del usuario; falta de fuentes marcada como sin datos. Calendario, publicaciones y campañas interactivos.
+- Estudio con storyboard editable: escenas, textos, paletas, duraciones, orden, duplicación, borrado confirmado y exportaciones JSON y PNG 9:16/16:9.
+- Bandeja y Social Listening permiten registros locales; IA externa, cuentas y anuncios siguen sin conectar.
+- Adaptación de menús: barra inferior en móvil, etiquetas de navegación en tablet y paneles multicolumna en PC/Mac.
+- Auditoría automatizada para nueve resoluciones, conservando los cuatro diseños originales como referencia.
+
 ## 2026-11-05 — v0.5.0 Modo ESPEJO: originales sin redibujar
 
 - Carga 04 sustituida por el JPEG original seleccionado en todas las plataformas, con barra real y entrada pulsable sobre la imagen.
