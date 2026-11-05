@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.3.2. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.4.1. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -10,6 +10,7 @@
 - [Comparativa competitiva 2026](docs/COMPARATIVA_COMPETIDORES_2026.md)
 - [Contrato automatizado de continuidad](docs/CONTRATO_CONTINUIDAD.json)
 - [Roadmap técnico](ROADMAP.md)
+- [Plataformas y publicación en tiendas](docs/PLATAFORMAS_Y_TIENDAS.md)
 
 > **Regla del proyecto:** no eliminar funciones solicitadas; corregir, mejorar y ampliar conservando los módulos previos. No confundir prototipo con integración real.
 
@@ -23,7 +24,7 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.3.2 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.4.1 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 
@@ -90,3 +91,7 @@ MarketHub AI es un nombre de trabajo, no implica que se haya registrado una marc
 ### Verificación del arranque (iPhone, Android y navegador)
 
 Si la página no inicia, abre `diagnostico.html` dentro del sitio publicado. El inicio incluye una pantalla de recuperación que muestra fallos de recursos y errores de ejecución; no borra borradores ni preferencias. La publicación GitHub Pages y las pruebas en Node no sustituyen comprobaciones en Safari iOS y Chrome Android.
+
+## Desarrollo para Apple, Android, Microsoft y Mac
+
+El diseño elegido se conserva en los bocetos originales de la carpeta assets; el visor referencias.html permite verlos intactos. El interfaz operativo debe reproducir esos diseños en móvil, tablet y escritorio, no reemplazarlos por una imagen decorativa. Se han preparado los iconos 192/512, el manifiesto y el servicio PWA para Windows/Mac y las configuraciones Capacitor para Android/iOS. El producto sigue siendo un prototipo sin AAB/IPA/MSIX comerciales ni publicación en tiendas. La lista de validación se encuentra en docs/PLATAFORMAS_Y_TIENDAS.md.

@@ -27,7 +27,21 @@
     "tests/visual.test.mjs",
     "src/backup.js",
     "tests/backup.test.mjs",
-    "tests/navigation.test.mjs"
+    "tests/navigation.test.mjs",
+    "src/nexus-ui.js",
+    "src/nexus.css",
+    "src/reference.css",
+    "referencias.html",
+    "assets/boceto-01-inicio.webp",
+    "assets/boceto-02-estudio.webp",
+    "assets/boceto-03-movil.webp",
+    "assets/boceto-04-carga.webp",
+    "icon-192.png",
+    "icon-512.png",
+    "sw.js",
+    "public/sw.js",
+    "docs/PLATAFORMAS_Y_TIENDAS.md",
+    "tests/platform-readiness.test.mjs"
   ],
   "requiredScreens": [
     {
@@ -141,7 +155,7 @@
       "file": "src/app.js",
       "tokens": [
         "case 'confirm-pro':state.plan='pro'",
-        "if(state.plan===\u0027pro\u0027)return \u0027\u0027"
+        "if(state.plan==='pro')return ''"
       ]
     },
     {

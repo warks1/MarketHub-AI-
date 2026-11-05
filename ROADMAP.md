@@ -118,3 +118,15 @@ Se mantiene como referencia el estudio [RADAR_TECNOLOGICO_2026.md](docs/RADAR_TE
 - [ ] Imagen→vídeo y editor audiovisual real por capas, con derechos y cuotas.
 - [ ] Agentes supervisados para campañas, CRM y automatizaciones, sin gasto autónomo no aprobado.
 - [ ] Apps Android/iOS probadas en dispositivos físicos y suscripciones/anuncios reales aprobados.
+
+## Destinos de distribución confirmados por el propietario
+
+- [x] Repositorio con diseños originales 01–04 y referencia visual que no debe sustituirse por una alternativa.
+- [x] Adaptación mediante breakpoints a móvil, tablet, PC y Mac; menú táctil inferior, barra lateral de escritorio.
+- [x] Base web instalable PWA con iconos PNG 192/512, manifiesto, service worker y recuperación sin conexión.
+- [ ] Test real con capturas a 320, 375, 430, 768, 1024, 1440 y 1920 píxeles y comparación exacta con cada boceto.
+- [ ] Apple App Store: iOS/iPadOS nativos con TestFlight, Xcode y firma, calidad y cumplimiento de políticas.
+- [ ] Google Play: crear AAB firmado, API objetivo exigida, pruebas en móviles/tablets y revisión.
+- [ ] Microsoft Store: evaluación PWABuilder, empaquetado Windows y Microsoft Partner Center.
+- [ ] Mac: comprobar Safari/Chrome/Edge e instalación de escritorio y valorar empaquetado nativo adicional.
+- [ ] Integraciones reales de marketing, IA, redes, analítica, cuentas, anuncios FREE y cobro/restauración PRO antes de la publicación.

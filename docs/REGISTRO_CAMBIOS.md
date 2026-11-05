@@ -1,3 +1,11 @@
+## 2026-11-05 — v0.4.1 Multiplataforma, fidelidad visual y caché segura
+
+- Conservados en el repositorio los cuatro bocetos originales como referencia inalterable, con visor de comparación y pantalla de carga panorámica usando la imagen elegida.
+- Corregida una importación ES duplicada que podía impedir el arranque.
+- Service worker con red primero para módulos JS/CSS e imagen, versión nueva y exclusión del webview nativo de Capacitor.
+- Añadidas pruebas automatizadas de imports, assets 01–04, iconos PWA, caché y matriz multiplataforma.
+- Definida ruta de entrega futura a App Store, Google Play y Microsoft Store sin afirmar disponibilidad comercial.
+
 ## 2026-11-05 — v0.3.2 Gestión de contenidos y recuperación de inicio
 
 - Pantalla de recuperación de arranque, caché versionada y acceso al diagnóstico de recursos en GitHub Pages, sin borrar datos locales.
