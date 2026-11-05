@@ -38,6 +38,19 @@ for(const [engine,runner,width,height] of [
   await page.locator('[data-forge-input="mask"]').selectOption('corazon');
   await page.locator('[data-forge-input="format"]').selectOption('1:1');
   await page.locator('[data-forge-input="caption"]').fill('CAMPAÑA DE PRUEBA');
+  // ADN Creativo: guardar una identidad, aplicar y preservar la composición.
+  await page.locator('[data-forge-input="brandName"]').fill('Marca de Prueba');
+  await page.locator('[data-forge-input="brandPrimary"]').fill('#1122aa');
+  await page.locator('[data-forge-input="brandAccent"]').fill('#ff33dd');
+  await page.locator('[data-forge-input="brandTone"]').selectOption('Cercano');
+  await page.locator('[data-forge-input="brandCta"]').fill('Descubre la campaña');
+  await page.locator('[data-forge-action="brand-save"]').click();
+  if(!(await page.locator('#forgeBrandSelect option').allTextContents()).includes('Marca de Prueba'))
+   problems.push('El ADN de marca no se guarda en la lista');
+  await page.locator('#forgeBrandSelect').selectOption('marca-de-prueba');
+  await page.locator('[data-forge-action="brand-apply"]').click();
+  if((await page.locator('[data-forge-input="brandPrimary"]').inputValue()).toLowerCase()!=='#1122aa')
+   problems.push('El perfil de marca no recupera el color principal');
   const canvasInfo=await page.locator('#forgeCanvas').evaluate(el=>({w:el.width,h:el.height}));
   if(canvasInfo.w!==600||canvasInfo.h!==600)problems.push('Vista previa 1:1 incorrecta '+JSON.stringify(canvasInfo));
   await page.screenshot({path:'visual-qa/forge/'+engine+'-foto.png'});
