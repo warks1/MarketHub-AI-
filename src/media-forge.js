@@ -2,8 +2,9 @@
 import {convertSubtitles,parseSubtitles} from './subtitle-tools.js';
 import {listVaultAssets,getVaultAsset,saveVaultAsset,removeVaultAsset,vaultSupported,VAULT_MAX_ITEMS} from './media-vault.js';
 import {readBrandProfiles,saveBrandProfile,removeBrandProfile,normalizeBrandProfile,TONES} from './brand-dna.js';
+import {auditCreative} from './creative-audit.js';
 // Sin subida de archivos a servidores, ni dependencias de servicios externos.
-const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[],brandSelection:'',brandName:'',brandPrimary:'#26E9FB',brandAccent:'#EB4DF5',brandTone:'Profesional',brandCta:'',brandActive:false};
+const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[],brandSelection:'',brandName:'',brandPrimary:'#26E9FB',brandAccent:'#EB4DF5',brandTone:'Profesional',brandCta:'',brandActive:false,audit:null};
 export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9':[1920,1080],'3:2':[1500,1000]};
 // SafeFrame es una orientación visual nuestra, no los requisitos oficiales de las redes sociales.
 export const SAFEFRAME_GUIDES={'9:16':{top:.17,right:.12,bottom:.25,left:.09},'4:5':{top:.10,right:.08,bottom:.18,left:.08},'1:1':{top:.10,right:.08,bottom:.15,left:.08},'16:9':{top:.10,right:.11,bottom:.17,left:.11},'3:2':{top:.10,right:.10,bottom:.15,left:.10}};
@@ -16,6 +17,13 @@ const field=(label,key,opts)=>'<label>'+label+'<select data-forge-input="'+key+'
 const upload=(type,accept)=>'<label class="forge-file">＋ Abrir '+({photo:'fotografía',audio:'audio',video:'vídeo',pdf:'PDF'}[type])+'<input type="file" data-forge-file="'+type+'" accept="'+accept+'"></label><p class="forge-meta">'+(s.files[type]?esc(s.files[type].name)+' · '+(s.files[type].size/1048576).toFixed(1)+' MB':'Sin archivo · procesamiento local')+'</p>';
 const actions=(list)=>'<div class="forge-actions">'+list.join('')+'</div>';
 const panel=(title,body)=>'<section class="forge-panel"><h2>'+title+'</h2>'+body+'</section>';
+function auditPanel(){
+ if(!s.audit)return '';
+ const details=s.audit.findings.map(item=>'<li class="'+(item.pass?'forge-audit-pass':'forge-audit-warn')+'"><strong>'+(item.pass?'✓ ':'! ')+esc(item.label)+'</strong><span>'+esc(item.detail)+'</span></li>').join('');
+ return '<section class="forge-panel forge-audit" aria-live="polite"><h2>Auditor PULSE · '+s.audit.score+'/100</h2>'+
+ '<p>Diagnóstico local de recortes, dimensiones y textos. No comprueba licencias, contraste real en todos los dispositivos ni políticas oficiales de publicación.</p>'+
+ '<ul>'+details+'</ul></section>';
+}
 function brandDnaPanel(){
  const records=readBrandProfiles();
  const options=records.map(item=>'<option value="'+esc(item.id)+'"'+(s.brandSelection===item.id?' selected':'')+'>'+esc(item.name)+'</option>').join('');
@@ -37,9 +45,9 @@ function photo(){
  field('Tratamiento visual','look',Object.keys(looks).map(k=>[k,k]))+
  field('SafeFrame PULSE · zona de texto','safezone',[['off','Desactivada'],['on','Mostrar guías y proteger texto']])+
  '<label>Texto sobre la composición<input data-forge-input="caption" maxlength="90" value="'+esc(s.caption)+'" placeholder="Tu mensaje opcional"></label>'+
- actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image),btn('Guardar en Mi biblioteca','vault-save-photo',!s.image),btn('Usar imagen en Estudio','studio',!s.image)])+
+ actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image),btn('Auditor PULSE · revisar','audit-photo',!s.image),btn('Guardar en Mi biblioteca','vault-save-photo',!s.image),btn('Usar imagen en Estudio','studio',!s.image)])+
  '<p>El editor utiliza recorte centrado y no modifica el original. SafeFrame PULSE marca guías de texto orientativas (no certificadas por las redes sociales). La máscara Órbita combina foto, marcos dobles y formato social.</p>')+
- panel('Vista previa real','<div class="forge-preview"><canvas id="forgeCanvas" role="img" aria-label="Vista previa de composición"></canvas></div>')+'</div>'+brandDnaPanel();
+ panel('Vista previa real','<div class="forge-preview"><canvas id="forgeCanvas" role="img" aria-label="Vista previa de composición"></canvas></div>')+'</div>'+auditPanel()+brandDnaPanel();
 }
 function audio(){
  return '<div class="forge-grid">'+panel('Reproductor y conversor WAV',upload('audio','audio/*')+
@@ -189,6 +197,7 @@ export function forgeInput(target){
   }
  }
  else return false;
+ if(['format','mask','look','safezone','caption'].includes(name))s.audit=null;
  forgeMount();return true;
 }
 export async function forgeFile(target,ctx){
@@ -205,6 +214,7 @@ export async function forgeFile(target,ctx){
  }
  const url=URL.createObjectURL(file);
  if(type==='photo'){
+  s.audit=null;
   try{const img=new Image();img.src=url;await img.decode();if(!img.naturalWidth||img.naturalWidth*img.naturalHeight>50000000)throw Error('Tamaño de imagen excesivo');s.image=img}
   catch{URL.revokeObjectURL(url);ctx.toast('No se puede decodificar esta foto.');return true}
  }
@@ -257,6 +267,13 @@ export function canRecordWebM(video){return !!(video&&video.captureStream&&typeo
 export async function forgeClick(target,ctx){
  const action=target?.dataset?.forgeAction;if(!action)return false;
  try{
+  if(action==='audit-photo'){
+   if(!s.image)throw Error('Selecciona primero una imagen');
+   const [w,h]=outputDimensions(s.format);
+   s.audit=auditCreative({sourceWidth:s.image.naturalWidth,sourceHeight:s.image.naturalHeight,targetWidth:w,targetHeight:h,caption:s.caption,mask:s.mask,safezone:s.safezone});
+   ctx.refresh();ctx.toast('Auditor PULSE: informe geométrico generado.');
+   return true;
+  }
   if(action.startsWith('brand-')){
    const selected=document.getElementById('forgeBrandSelect')?.value||'';
    if(action==='brand-save'){
