@@ -236,9 +236,12 @@ export async function forgeFile(target,ctx){
  const type=target?.dataset?.forgeFile;
  if(type==='portfolio'){
   const file=target.files?.[0];if(!file)return true;
+  // Permite seleccionar la misma copia otra vez y no conserva el archivo en el formulario.
+  target.value='';
   if(!file.name.toLowerCase().endsWith('.mhubpack')||file.size>MAX_PORTFOLIO_BYTES||file.size<100){
    ctx.toast('Selecciona una copia .mhubpack válida, de hasta 90 MB.');return true;
   }
+  ctx.toast('Comprobando integridad de la copia de proyectos...');
   try{
    const response=await importCreativePortfolio(file);
    await forgeProjectLoad(ctx.refresh);
