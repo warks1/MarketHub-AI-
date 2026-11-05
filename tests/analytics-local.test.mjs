@@ -43,7 +43,7 @@ test('Los totales se calculan exclusivamente a partir de filas importadas',()=>{
 test('La vista real aparece separada de los KPI ilustrativos y con etiquetas honestas',()=>{
  const h=analyticsLocalHTML(parseAnalyticsCSV(csv));
  assert.match(h,/Analítica con datos propios/);
- assert.match(h,/1.500/);
+ assert.match(h,/<strong>(?:1\.500|1500)<\/strong>/);
  assert.match(h,/Instagram/);
  assert.match(h,/TikTok/);
  assert.match(h,/datos a ningún servidor/);
