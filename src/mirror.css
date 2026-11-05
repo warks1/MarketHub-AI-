@@ -50,3 +50,12 @@
  .nexus-splash.nexus-original-splash .nexus-original-splash-board .progress-value{font-size:clamp(11px,2vw,22px)}
  .nexus-splash.nexus-original-splash .nexus-original-splash-board #progressLabel{font-size:clamp(12px,2vw,19px)}
 }
+
+/* La navegación inferior es una segunda ventana al JPEG ORIGINAL, no iconos recreados. */
+.mirror-mobile-fixednav{display:none}
+@media (max-width:860px) and (orientation:portrait){
+ .mirror-mobile-fixednav{display:block;position:fixed;z-index:12;bottom:env(safe-area-inset-bottom);left:50%;transform:translateX(-50%);width:min(100vw,430px);height:auto;overflow:hidden;isolation:isolate;background:#040a22;box-shadow:0 -6px 22px #071439a8}
+ .mirror-fixednav-original{position:absolute;height:auto;max-width:none;display:block;pointer-events:none;filter:none!important;transform:none!important;opacity:1!important}
+ .mirror-mobile-fixednav .mirror-hit{z-index:2}
+ .mirror-a11y-note{padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+}
