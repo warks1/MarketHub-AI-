@@ -11,6 +11,7 @@ import {mirrorLayer} from './mirror-ui.js';
 import {liveHome,liveInbox,liveListening} from './live-ui.js';
 import {liveStudio,createScene,parseScene,STUDIO_THEMES} from './live-studio.js';
 import {imageFileToSceneData,canStoreSceneImage} from './studio-scene-media.js';
+import {exportEditorialICS} from './calendar-export.js';
 import {downloadScenePNG} from './studio-scene-export.js';
 
 const app=document.querySelector('#app');
@@ -159,7 +160,7 @@ function create(){
  const platforms=['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'];
  const selected=platforms.map(name=>'<option '+(platform===name?'selected':'')+'>'+name+'</option>').join('');
  return sectionHeader('Crear y programar','Prepara, edita y organiza publicaciones en tu dispositivo. No se envían a las redes sociales.',
-  btn('Exportar biblioteca CSV','export-posts','secondary'))+
+  '<div class="workspace-actions">'+btn('Exportar biblioteca CSV','export-posts','secondary')+btn('Exportar calendario .ics','export-calendar','secondary')+'</div>')+
  '<div class="notice"><strong>Planificador local.</strong> Una fecha asignada sirve para organizarte: esta versión no publica automáticamente en Instagram, TikTok ni otras redes.</div>'+
  '<div class="two-cols"><div class="card"><div class="card-head"><h2>✦ '+(editing?'Editar publicación':'Nueva publicación')+'</h2><span class="tag">Local · demo</span></div>'+
  '<form id="postForm"><div class="form-field"><label for="title">Título o texto</label><textarea class="input" id="title" name="title" required maxlength="240" placeholder="Escribe el contenido de tu publicación">'+safe(editing?.title||'')+'</textarea></div>'+
@@ -411,7 +412,18 @@ case 'campaign-export':{
    }
    state.pendingDeleteId=null;state.modal=null;render();break;
   }
-  case 'export-posts':{
+  case 'export-calendar':{
+  const result=exportEditorialICS(state.posts);
+  if(result.error){toast(result.error);break}
+  const blob=new Blob([result.content],{type:'text/calendar;charset=utf-8'});
+  const url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download='markethub-calendario-editorial-'+todayLocal()+'.ics';
+  document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  toast(result.count+' recordatorios de publicaciones exportados. No se han publicado anuncios.');
+  break;
+ }
+ case 'export-posts':{
    const blob=new Blob([postsToCSV(state.posts)],{type:'text/csv;charset=utf-8'});
    const url=URL.createObjectURL(blob),link=document.createElement('a');
    link.href=url;link.download='markethub-publicaciones-'+new Date().toISOString().slice(0,10)+'.csv';
