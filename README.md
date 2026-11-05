@@ -5,6 +5,7 @@
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
 - [ESPECIFICACIONES MAESTRAS — todos los requisitos acumulados](docs/ESPECIFICACIONES_MAESTRAS.md)
+- [Bocetos originales y contrato de fidelidad visual](docs/REFERENCIAS_VISUALES.md)
 - [Registro de cambios y política de continuidad](docs/REGISTRO_CAMBIOS.md)
 - [Matriz de funciones FREE y PRO](docs/MATRIZ_FREE_PRO.md)
 - [Comparativa competitiva 2026](docs/COMPARATIVA_COMPETIDORES_2026.md)
@@ -95,3 +96,7 @@ Si la página no inicia, abre `diagnostico.html` dentro del sitio publicado. El 
 ## Desarrollo para Apple, Android, Microsoft y Mac
 
 El diseño elegido se conserva en los bocetos originales de la carpeta assets; el visor referencias.html permite verlos intactos. El interfaz operativo debe reproducir esos diseños en móvil, tablet y escritorio, no reemplazarlos por una imagen decorativa. Se han preparado los iconos 192/512, el manifiesto y el servicio PWA para Windows/Mac y las configuraciones Capacitor para Android/iOS. El producto sigue siendo un prototipo sin AAB/IPA/MSIX comerciales ni publicación en tiendas. La lista de validación se encuentra en docs/PLATAFORMAS_Y_TIENDAS.md.
+
+### Referencias visuales exactas
+
+Los cuatro bocetos elegidos se conservan sin modificar en `assets/*-original.jpeg`. Puedes abrir la galería `referencias.html` para comparar la interfaz, el estudio creativo, las pantallas móviles y la pantalla de carga. La vista panorámica de carga usa directamente el boceto 04 con progreso superpuesto; la vista previa central del estudio usa un recorte fiel del boceto 02. **Esto no equivale todavía a una réplica píxel a píxel de la UI funcional en todos los dispositivos.**
