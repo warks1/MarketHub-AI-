@@ -8,6 +8,8 @@ import {nexusHome,nexusStudio} from './nexus-ui.js';
 import {campaignManagerHTML,campaignLimit,validateCampaign,campaignById,campaignsToCSV} from './campaign-manager.js';
 import {analyticsLocalHTML,analyticsCsvTemplate,parseAnalyticsCSV} from './analytics-local.js';
 import {mirrorLayer} from './mirror-ui.js';
+import {liveHome,liveInbox,liveListening} from './live-ui.js';
+import {liveStudio,createScene,parseScene,STUDIO_THEMES} from './live-studio.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -22,15 +24,16 @@ let saved={};
 try{saved=JSON.parse(localStorage.getItem(storeKey)||'{}')||{}}catch{saved={}}
 let state={
   page:'inicio',plan:saved.plan==='pro'?'pro':'free',credits:Number.isFinite(saved.credits)?saved.credits:20,
-  posts:Array.isArray(saved.posts)?saved.posts:demoPosts,campaigns:Array.isArray(saved.campaigns)?saved.campaigns:[],analyticsRows:Array.isArray(saved.analyticsRows)?saved.analyticsRows:[],modal:null,creativeMode:'Video / Reels',
+  posts:Array.isArray(saved.posts)?saved.posts:demoPosts,campaigns:Array.isArray(saved.campaigns)?saved.campaigns:[],analyticsRows:Array.isArray(saved.analyticsRows)?saved.analyticsRows:[],localMessages:Array.isArray(saved.localMessages)?saved.localMessages:[],localMentions:Array.isArray(saved.localMentions)?saved.localMentions:[],storyboard:Array.isArray(saved.storyboard)?saved.storyboard:[{id:'demo-scene-1',title:'Nuevo lanzamiento',caption:'Presenta tu producto o servicio',duration:5,theme:'Neón'},{id:'demo-scene-2',title:'Contenido que convierte',caption:'Describe el valor de tu marca',duration:5,theme:'Violeta'}],modal:null,creativeMode:'Video / Reels',
   videoFormat:'9:16',search:'',menuMore:false,consent: saved.consent || 'pending'
 };
 state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
 state.editPostId=null;state.pendingDeleteId=null;
 state.editCampaignId=null;state.pendingDeleteCampaignId=null;
 state.calendarOffset=0;state.preselectedDate=null;
-state.mirrorLive=false;state.mirrorMenu=false;
-const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,consent:state.consent}))}catch{}};
+state.mirrorLive=true;state.mirrorMenu=false;
+state.storyboardCurrent=0;
+const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,localMessages:state.localMessages,localMentions:state.localMentions,storyboard:state.storyboard,consent:state.consent}))}catch{}};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
  sparkles:'<path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="m19 17 .7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z"/>',
@@ -184,8 +187,8 @@ function extraScreen(page){
 }
 function content(){
  switch(state.page){
- case 'inicio':return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan,calendarOffset:state.calendarOffset})+adUnit('mobile')+adUnit('desktop');
- case 'estudio':return nexusStudio({mode:state.creativeMode,format:state.videoFormat,posts:state.posts})+adUnit('mobile')+adUnit('desktop');
+ case 'inicio':return liveHome({posts:postsFiltered(),campaigns:state.campaigns,analyticsRows:state.analyticsRows,messages:state.localMessages,mentions:state.localMentions,plan:state.plan,calendarOffset:state.calendarOffset})+adUnit('mobile')+adUnit('desktop');
+ case 'estudio':return liveStudio({scenes:state.storyboard,current:state.storyboardCurrent,mode:state.creativeMode,format:state.videoFormat,posts:state.posts})+adUnit('mobile')+adUnit('desktop');
  case 'diseño':return visualPage();
  case 'crear':return create();
  case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');
@@ -193,10 +196,11 @@ function content(){
  case 'herramientas':return toolsCatalogue();
  case 'campanas':return campaigns();
  case 'analitica':return analytics();
- case 'bandeja':return inbox();
+ case 'bandeja':return liveInbox({messages:state.localMessages});
+ case 'escucha':return liveListening({mentions:state.localMentions});
  case 'planes':return plans();
  case 'ajustes':return settings();
- case 'biblioteca':case 'escucha':case 'competencia':case 'automatizaciones':return extraScreen(state.page);
+ case 'biblioteca':case 'competencia':case 'automatizaciones':return extraScreen(state.page);
  default:return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan,calendarOffset:state.calendarOffset});
  }
 }
@@ -263,7 +267,7 @@ function toast(msg){
  const elem=document.createElement('div');elem.className='toast';elem.setAttribute('role','status');elem.textContent=msg;document.body.append(elem);
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>elem.remove(),3300);
 }
-function go(page){if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=false;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
+function go(page){if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=true;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
  const growthTarget=e.target.closest('[data-growth-action]');
  if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
