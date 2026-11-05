@@ -30,7 +30,7 @@ test('En ausencia de datos no aparece una falsa curva de rendimiento',()=>{
 test('Los textos del usuario quedan escapados en todos los módulos',()=>{
  const hostile='<img src=x onerror=alert(1)>';
  for(const html of [
-  liveHome({posts:[{id:1,title:hostile}],campaigns:[]}),
+  liveHome({posts:[{id:1,title:hostile,date:'2026-11-22',platform:'Instagram',status:'Borrador'}],campaigns:[]}),
   liveInbox({messages:[{id:1,contact:hostile,network:'Otro',body:hostile}]}),
   liveListening({mentions:[{id:1,text:hostile,source:'Blog',sentiment:'Neutra'}]}),
   liveStudio({scenes:[{id:'s',title:hostile,caption:hostile,theme:'Neón',duration:5}]})
