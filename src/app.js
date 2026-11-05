@@ -370,6 +370,17 @@ function splash(){
  '<p id="progressLabel" class="nexus-splash-subtitle">Preparando paneles, campañas y analítica...</p>'+
  '<div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI. Todos los derechos reservados. | Versión prototipo 0.4.0</div>'+
  '<button type="button" class="splash-skip" id="skipSplash">Entrar ahora</button></div>';
+ // En pantallas panorámicas, utilizar el boceto 04 ORIGINAL como superficie visual
+ // y superponer una barra real. En móvil mantener la composición responsive animada.
+ if(window.matchMedia?.('(min-width:900px) and (min-aspect-ratio:14/10)').matches){
+  overlay.classList.add('nexus-original-splash');
+  overlay.innerHTML='<div class="nexus-original-splash-board">'+
+   '<img src="./assets/boceto-04-carga.webp" alt="Pantalla de carga original seleccionada: esfera neón, seis módulos y logo MarketHub AI">'+
+   '<div class="progress-track"><div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
+   '<p id="progressLabel">Preparando paneles, campañas y analítica...</p>'+
+   '<button type="button" class="splash-skip" id="skipSplash">Entrar ahora</button>'+
+   '</div>';
+ }
  document.body.append(overlay);
  let progress=0,closed=false;
  const bar=overlay.querySelector('#progressFill'),percent=overlay.querySelector('#progressPercent');
