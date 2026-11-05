@@ -1,5 +1,6 @@
 // MarketHub AI · Estudio creativo realmente editable (storyboard local).
 import {isSceneImageData} from './studio-scene-media.js';
+import {videoSupported,VIDEO_LIMITS} from './studio-video-export.js';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const list=x=>Array.isArray(x)?x.filter(z=>z&&typeof z==='object'):[];
 const navigate=(label,page,cls='live-outline')=>'<button type="button" class="'+cls+'" data-page="'+page+'">'+label+'</button>';
@@ -46,7 +47,11 @@ export function liveStudio({scenes=[],current=0,format='9:16',mode='Video / Reel
  '<span>'+ (frames.length?index+1:0)+' / '+frames.length+' · '+duration+' s</span>'+
  act('▶','storyboard-next','live-outline','aria-label="Siguiente escena"')+
  act(playing?'Ⅱ Pausar':'▶ Reproducir','storyboard-play',playing?'live-primary':'live-outline','aria-pressed="'+playing+'"')+
- act('9:16 / 16:9','format','live-outline')+act('⬇ Exportar PNG','storyboard-export-png','live-primary')+'</div>';
+ act('9:16 / 16:9','format','live-outline')+act('⬇ Exportar PNG','storyboard-export-png','live-primary')+
+act(videoSupported()?'⬇ Exportar vídeo':'Vídeo no compatible','storyboard-export-video','live-primary',''+(videoSupported()?'':'disabled title="Este navegador no permite grabar vídeo local"'))+'</div>'+
+'<div class="live-video-status" id="liveVideoExportStatus" role="status" aria-live="polite" hidden></div>'+
+'<button class="live-outline live-video-cancel" type="button" data-action="storyboard-video-cancel" hidden>Cancelar exportación</button>'+
+'<p class="live-video-info">Vídeo local sin audio, hasta '+VIDEO_LIMITS.maxScenes+' escenas / '+VIDEO_LIMITS.maxSeconds+' s. Resolución 720p; MP4 o WebM según el navegador. No utiliza IA externa.</p>';
  const ai=['Generar guion con IA','Crear copies con IA','Subtítulos automáticos','Eliminación de silencios',
   'Voz en off realista','Redimensionar vídeo'].map(t=>act(esc(t)+' <span>›</span>','studio-unavailable','live-studio-switch')).join('');
  const recommendation='<div class="live-studio-reco"><strong>'+ (chosen?.title?.length>=15?'Texto bien definido':'Añade más detalles')+'</strong>'+
