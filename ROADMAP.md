@@ -141,3 +141,29 @@ Se mantiene como referencia el estudio [RADAR_TECNOLOGICO_2026.md](docs/RADAR_TE
 - [ ] Vídeo multicapa profesional, audio con licencia, subtítulos automáticos y codificación de alta calidad.
 - [ ] Conexiones OAuth verificadas, base de datos sincronizada, IA generativa, suscripciones y anuncios reales.
 - [ ] Certificación en dispositivos iPhone/iPad, Android, macOS y Windows; publicación en las tiendas oficiales.
+
+## Ampliación 2026-11-05 · Media Forge y suite creativa autónoma
+
+**Prioridad del producto:** crear, previsualizar, editar, adaptar y exportar contenidos sin usar otras aplicaciones. Mantener todos los módulos existentes y respetar los cuatro bocetos aprobados.
+
+### Primera base multimedia (implementada en web; falta validación nativa)
+- [x] Nueva sección **Media Forge**, visible en menú y catálogo.
+- [x] Reproductor de audio/vídeo y visor de PDF local.
+- [x] **15 máscaras** de imagen, estilos de color, texto de campaña y formatos sociales editables.
+- [x] Exportación de imágenes PNG, JPG y WebP (si el navegador lo admite).
+- [x] Audio WAV PCM con recorte por tiempo, hasta 10 minutos.
+- [x] Captura PNG de fotograma y grabación WebM limitada según soporte del motor.
+- [x] **PULSE PACK** (desarrollo propio): una fotografía → cinco formatos de imagen JPEG dentro de un ZIP local.
+- [x] Pruebas unitarias y recorrido E2E automatizado de foto/WAV/ZIP en Chromium y WebKit; sus resultados deben verificarse en GitHub Actions.
+
+### Próxima fase: producto diferencial
+- [ ] ADN Creativo de Marca, paletas y máscaras reutilizables entre proyectos.
+- [ ] Editor multicapa real con timeline y herramientas de vídeo/audio/foto centralizadas.
+- [ ] Conversor nativo profesional con motores y códecs permitidos para MP4/MOV/WebM, MP3/AAC/WAV, subtítulos y resoluciones.
+- [ ] Catálogo extenso de máscaras, tipografías, efectos y plantillas con licencias verificadas.
+- [ ] Flujo «Una idea → campaña completa», con variantes de foto, vídeo, copy y calendario y aprobación humana antes de publicar.
+- [ ] Biblioteca multimedia por proyecto, versiones, undo/redo, backups y exportaciones en lote.
+- [ ] Auditoría de imágenes/video antes de publicar, zonas seguras, legibilidad, tamaños y derechos.
+- [ ] Pruebas físicas iPhone/iPad/Android, gestión de memoria y operaciones largas con cancelación.
+
+**Importante:** no convertir propuestas en etiquetas «operativas» sin implementación y pruebas. La versión web, la APK de depuración y los paquetes comerciales tienen validaciones diferentes.
