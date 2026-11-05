@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.3.0. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.3.2. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -23,7 +23,7 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.3.1 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.3.2 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 
@@ -64,9 +64,9 @@ Una vez creados los proyectos nativos, tras cambiar el código web usa `npm run 
 ## Funciones visibles y operativas localmente en v0.3
 
 - Identidad NEXUS + PULSE: cian, magenta, violeta y neón.
-- Pantalla de carga animada, saltable y adaptable a movimiento reducido.
+- Pantalla de carga animada, saltable y adaptable a movimiento reducido; recuperación de inicio y diagnóstico sin borrar datos.
 - Panel principal, estudio creativo ilustrativo, campañas, analítica, bandeja, ajustes y centro de herramientas planificadas por plan.
-- Crear y programar **borradores locales** con fecha; no publica en redes reales.
+- Crear y organizar **borradores locales** con fecha y estado; editarlos, duplicarlos, eliminarlos con confirmación y exportarlos en CSV (con protección contra fórmulas); no publica en redes reales.
 - Editor conceptual de vídeo 9:16 y 16:9, sin exportación audiovisual.
 - Modo FREE con espacios publicitarios ficticios y créditos de ejemplo.
 - Modo PRO activable sin pagar en demo; desaparecen los espacios de anuncios.
@@ -86,3 +86,7 @@ Consulta [ROADMAP.md](ROADMAP.md).
 
 ---
 MarketHub AI es un nombre de trabajo, no implica que se haya registrado una marca.
+
+### Verificación del arranque (iPhone, Android y navegador)
+
+Si la página no inicia, abre `diagnostico.html` dentro del sitio publicado. El inicio incluye una pantalla de recuperación que muestra fallos de recursos y errores de ejecución; no borra borradores ni preferencias. La publicación GitHub Pages y las pruebas en Node no sustituyen comprobaciones en Safari iOS y Chrome Android.
