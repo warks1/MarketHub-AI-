@@ -132,3 +132,12 @@ Se mantiene como referencia el estudio [RADAR_TECNOLOGICO_2026.md](docs/RADAR_TE
 - [ ] Microsoft Store: evaluación PWABuilder, empaquetado Windows y Microsoft Partner Center.
 - [ ] Mac: comprobar Safari/Chrome/Edge e instalación de escritorio y valorar empaquetado nativo adicional.
 - [ ] Integraciones reales de marketing, IA, redes, analítica, cuentas, anuncios FREE y cobro/restauración PRO antes de la publicación.
+
+## v0.7.0 · Avances técnicos comprobables
+
+- [x] Clips de vídeo local (720p, sin audio, 45 s máximos, MP4/WebM según navegador).
+- [x] Copias cifradas con contraseña, sin enviarlas a servidores.
+- [x] Comparativa manual de competidores con CSV.
+- [ ] Vídeo multicapa profesional, audio con licencia, subtítulos automáticos y codificación de alta calidad.
+- [ ] Conexiones OAuth verificadas, base de datos sincronizada, IA generativa, suscripciones y anuncios reales.
+- [ ] Certificación en dispositivos iPhone/iPad, Android, macOS y Windows; publicación en las tiendas oficiales.
