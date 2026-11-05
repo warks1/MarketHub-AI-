@@ -402,7 +402,20 @@ if(e.target.id!=='postForm')return;
  state.editPostId=null;
  save();render();toast(editing?'Publicación local actualizada.':'Borrador local guardado. No se ha publicado en ninguna red.');
 });
-document.addEventListener('change',e=>{if(e.target.matches('[data-backup-import]')){backupImport(e.target.files?.[0],{toast}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
+document.addEventListener('change',e=>{
+ if(e.target.matches('[data-analytics-file]')){
+  const file=e.target.files?.[0];
+  if(!file)return;
+  if(file.size>1500000){toast('El archivo CSV supera el límite de 1,5 MB.');e.target.value='';return}
+  file.text().then(text=>{
+   const rows=parseAnalyticsCSV(text);
+   state.analyticsRows=rows;
+   save();render();
+   toast(rows.length+' filas importadas y resumidas localmente.');
+  }).catch(err=>toast('Error en CSV: '+String(err.message||err).slice(0,150)));
+  return;
+ }
+ if(e.target.matches('[data-backup-import]')){backupImport(e.target.files?.[0],{toast}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
 document.addEventListener('input',e=>{
  if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}
  if(e.target.id==='toolSearch'){
