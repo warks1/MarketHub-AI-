@@ -140,6 +140,29 @@ try{
      if(!/\.(webm|mp4)$/.test(movie.suggestedFilename()))problems.push('El archivo exportado no es MP4 ni WebM');
      const stat=await import('node:fs/promises').then(async fs=>fs.stat(await movie.path()));
      if(stat.size<3000)problems.push('Vídeo exportado vacío o incompleto');
+     if(stat.size>=3000){
+      const payload=await readFile(await movie.path());
+      const videoInfo=await page.evaluate(async({base64,mime})=>{
+       const source=atob(base64),bytes=new Uint8Array(source.length);
+       for(let i=0;i<source.length;i++)bytes[i]=source.charCodeAt(i);
+       const blob=new Blob([bytes],{type:mime});
+       const url=URL.createObjectURL(blob),video=document.createElement('video');
+       video.preload='metadata';video.muted=true;
+       try{
+        return await new Promise((resolve,reject)=>{
+         const timeout=setTimeout(()=>reject(Error('Tiempo de lectura agotado')),12000);
+         video.onloadedmetadata=()=>{
+          clearTimeout(timeout);
+          resolve({width:video.videoWidth,height:video.videoHeight,duration:video.duration});
+         };
+         video.onerror=()=>{clearTimeout(timeout);reject(Error('Códec de vídeo no reproducible'))};
+         video.src=url;
+        });
+       }finally{video.removeAttribute('src');video.load();URL.revokeObjectURL(url)}
+      },{base64:payload.toString('base64'),mime:movie.suggestedFilename().endsWith('.mp4')?'video/mp4':'video/webm'});
+      if(videoInfo.width<320||videoInfo.height<320)problems.push('Vídeo descargado ilegible o dimensiones inválidas');
+     }
+
      await page.screenshot({path:'visual-qa/'+id+'-video-exportado.png',fullPage:true});
     }
    }
