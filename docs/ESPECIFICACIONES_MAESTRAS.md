@@ -210,3 +210,33 @@ Estas funciones son **utilizables localmente en navegador** y se añaden a las a
 - **RADAR-06** Evaluación trimestral de plataformas, tendencias y SDKs sin retirar funciones anteriores.
 
 Referencias y fechas: [RADAR_TECNOLOGICO_2026.md](RADAR_TECNOLOGICO_2026.md).
+
+## S. MEDIA FORGE y capacidades diferenciales · solicitud 2026-11-05
+
+**Objetivo rector:** MarketHub AI será una suite creativa de marketing casi autónoma. El usuario debe poder diseñar, editar, previsualizar, convertir, adaptar y exportar contenidos dentro de la aplicación; recurrir a otro software solo ante necesidades excepcionales. La especificación es acumulativa: no sustituye ningún módulo previo.
+
+### Núcleo multimedia integrado — MF
+
+- **MF-01 [implementado en web, requiere prueba nativa]:** Media Forge accesible desde navegación PC/Mac, menú móvil y catálogo de herramientas.
+- **MF-02 [implementado]:** visor de imágenes y editor de composición local con máscaras originales de MarketHub AI y estilos de color: Órbita NEXUS, círculo, redondeada, estrella, hexágono y completa.
+- **MF-03 [implementado]:** redimensionamiento centrado para redes 9:16, 4:5, 1:1, 16:9 y 3:2; exportación PNG/JPEG/WebP basada en Canvas. La exportación WebP exige soporte del navegador y no debe simular éxito.
+- **MF-04 [implementado]:** reproductor de audio local, recorte por segundos y exportación WAV PCM 16 bits con Web Audio API, según códecs disponibles. No se afirma exportación MP3 ni AAC sin motor real.
+- **MF-05 [implementado con restricciones]:** reproductor de vídeo, captura de fotogramas PNG y conversor WebM mediante MediaRecorder/captureStream donde el motor del navegador lo soporte; límite de 90 segundos. No promete MP4 nativo, compatibilidad universal ni procesamiento en segundo plano.
+- **MF-06 [implementado con dependencia del sistema]:** visor integrado de PDF y enlace alternativo para sistemas sin visor.
+- **MF-07 [obligatorio]:** procesamiento local prioritario, sin subir imágenes/audio/vídeo/PDF por defecto; límites de tamaño, comprobación de formatos, mensajes de incompatibilidad y ausencia de pérdida de los proyectos previos.
+- **MF-08 [obligatorio]:** mismo flujo táctil con iPhone/iPad/Android y ratón/teclado en Mac/PC; tamaños adaptables, controles accesibles, rendimiento y memoria limitados para móviles.
+
+### Propiedades diferenciales a diseñar — UNI (todavía no implementadas)
+
+- **UNI-01 — ADN Creativo de Marca:** motor propio que conserva tono, paleta, estilos, logos, máscaras y zona de seguridad de cada marca, y lo aplica de forma reproducible a cualquier formato.
+- **UNI-02 — Una idea → campaña completa:** el usuario introduce objetivo, producto y público una sola vez; recibe propuesta de copy, creatividades, vídeos, miniaturas, formatos y calendario editable desde la misma pantalla. No se publicará nada sin aprobación explícita.
+- **UNI-03 — Máscaras vivas:** máscaras geométricas propias, máscaras por sujeto/objeto, seguimiento de máscaras en clips y recortes reutilizables en todas las herramientas, con motores locales cuando sean técnicamente viables.
+- **UNI-04 — Conversión universal certificada:** motor multimedia local/nativo robusto (según licencia de códecs) para imágenes, sonido, GIF, SVG, audio MP3/AAC/WAV/FLAC, vídeo MOV/MP4/WebM, subtítulos SRT/VTT, diferentes resoluciones y perfiles. Cada par de entrada/salida debe verificarse.
+- **UNI-05 — Editor único:** timeline multicapa para vídeo, audio, subtítulos, máscaras, efectos, transiciones, voz, gráficos y plantillas; reproductores y visores embebidos, sin abrir herramientas externas.
+- **UNI-06 — Laboratorio creativo masivo:** colecciones de máscaras, plantillas, escenas, fondos, filtros, pinceles, tipografías legalmente licenciadas, LUTs y efectos, organizados por estilo y marca.
+- **UNI-07 — Auditor visual automático:** inspección de zona segura, márgenes, contraste, resolución, texto ilegible, marca, licencia de audio y cumplimiento de formatos de publicación.
+- **UNI-08 — Continuidad entre módulos:** archivos editados desde Media Forge podrán emplearse en Estudio, Diseño, Campañas, Planificador y Social Listening, sin importar manualmente lo mismo varias veces.
+- **UNI-09 — Biblioteca de proyectos y medios:** carpetas y etiquetas, miniaturas, versiones, deshacer/rehacer, recuperación, exportación, backups y sincronización segura opcional cuando exista backend real.
+- **UNI-10 — IA y automatización supervisada:** sugerencias con contexto de campaña y permisos, creación de variantes, transcripción, subtítulos, resumen, traducción, programación y optimización; gestionar derechos de autor, privacidad, créditos y coste de los modelos.
+
+**Criterio de originalidad:** construir flujos y diseños propios. No afirmar que ninguna otra aplicación ofrece una característica sin estudiar el mercado y sus patentes; la diferenciación real exige calidad, integración y fiabilidad. Los módulos nuevos se prueban, no se etiquetan «completos» hasta su validación.
