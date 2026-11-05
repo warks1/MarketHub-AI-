@@ -68,7 +68,10 @@
     "tests/secure-backup.test.mjs",
     "tests/competitor-local.test.mjs",
     "src/local-insights.js",
-    "tests/local-insights.test.mjs"
+    "tests/local-insights.test.mjs",
+    "src/media-forge.js",
+    "src/media-forge.css",
+    "scripts/media-forge-qa.mjs"
   ],
   "requiredScreens": [
     {
@@ -635,6 +638,32 @@
         "backup-encrypted-export",
         "competitorsHTML({",
         "competitor-export"
+      ]
+    },
+    {
+      "id": "MF-CORE",
+      "title": "Media Forge integrado: 15 máscaras, conversores y PULSE PACK",
+      "file": "src/media-forge.js",
+      "tokens": [
+        "forgePage",
+        "MASKS",
+        "composeImage",
+        "encodeWav",
+        "createMediaZip",
+        "data-forge-action",
+        "PULSE PACK"
+      ]
+    },
+    {
+      "id": "MF-NAV",
+      "title": "Acceso a Media Forge desde escritorio, tablet, móvil y catálogo",
+      "file": "src/app.js",
+      "tokens": [
+        "['multimedia','Media Forge'",
+        "case 'multimedia':return forgePage()",
+        "forgeMount()",
+        "forgeClick(",
+        "case 'catalogue-open-media'"
       ]
     }
   ]
