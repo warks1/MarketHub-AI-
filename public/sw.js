@@ -11,14 +11,22 @@ const SHELL = [
 self.addEventListener('install', event=>{
  event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
-  const results=await Promise.allSettled(SHELL.map(async file=>{
+  // Al compilar con Vite, los módulos se agrupan en /assets: precargarlos desde index.html.
+  const landing=await fetch(new URL('./index.html',self.registration.scope),{cache:'reload'});
+  if(!landing.ok)throw Error('No se pudo cargar index.html');
+  const html=await landing.clone().text();
+  const dynamic=[...html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="([^"]+)"/g)]
+    .map(match=>match[1]).filter(ref=>ref.startsWith('./')||ref.startsWith('/'));
+  const assets=[...new Set([...SHELL,...dynamic])];
+  const results=await Promise.allSettled(assets.map(async file=>{
    const url=new URL(file,self.registration.scope);
    const response=await fetch(url,{cache:'reload'});
    if(!response.ok)throw Error('Recurso no disponible: '+file);
    await cache.put(url,response);
   }));
-  // No afirmar que existe modo offline completo si alguna dependencia falla.
-  if(results.every(result=>result.status==='fulfilled'))await self.skipWaiting();
+  // En modo fuente hay ficheros /src; en el bundle de Vite no. Los 404 opcionales
+  // nunca deben bloquear la actualización del service worker.
+  await self.skipWaiting();
  })());
 });
 self.addEventListener('activate',event=>{
