@@ -152,6 +152,21 @@ for(const [engine,runner,width,height] of [
   const countAfterFullImport=await page.locator('.forge-project-item').count();
   if(countAfterFullImport!==2)problems.push('El respaldo completo ha reemplazado o duplicado mal los proyectos');
 
+  // Un respaldo manipulado debe ser rechazado ANTES de añadir nada.
+  const damaged=Buffer.from(fullBytes);
+  const manifestAt=damaged.indexOf(Buffer.from('{"format":"markethub-creative-portfolio"'));
+  if(manifestAt<0)problems.push('No se encuentra el manifiesto del paquete de proyectos');
+  else{
+   damaged[manifestAt+5]^=1;
+   await page.locator('[data-forge-file="portfolio"]').setInputFiles({
+    name:'copia-danada.mhubpack',mimeType:'application/zip',buffer:damaged
+   });
+   await page.locator('.toast').filter({hasText:'Restauración cancelada:'}).waitFor({state:'visible',timeout:12000});
+   if(await page.locator('.forge-project-item').count()!==2)
+    problems.push('ZIP corrupto alteró los proyectos ya guardados');
+  }
+
+
 
   await page.locator('[data-forge-tab="audio"]').click();
   await page.locator('[data-forge-file="audio"]').setInputFiles({
