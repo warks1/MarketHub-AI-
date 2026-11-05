@@ -107,3 +107,11 @@ La APK que se compile ahora sigue siendo de depuración: antes de publicar en
 tiendas se necesita probar almacenamiento persistente, selector de archivos
 personalizados, exportación/compartición y recuperación de proyectos en
 teléfonos y tabletas Android reales e iPhone/iPad con Xcode.
+
+### Verificación de versión de prueba (5 noviembre 2026)
+El flujo E2E de proyectos `.mhub` ha superado pruebas de guardar, descargar,
+reimportar y reabrir en Chromium y WebKit. Se ha corregido además la etiqueta
+de selección de subtítulos para no presentar `undefined`, con comprobación
+de texto legible en las pestañas de Media Forge.
+Compilar una nueva APK de depuración con esos cambios; la aceptación comercial
+de iOS y Android sigue supeditada a pruebas en dispositivos reales.
