@@ -105,8 +105,9 @@ for(const [engine,runner,width,height] of [
   }else await page.locator('.sidebar [data-page="multimedia"]').click();
   await page.locator('[data-forge-tab="vault"]').click();
   await page.locator('.forge-vault-item').first().waitFor({state:'visible',timeout:15000});
-  if(!(await page.locator('.forge-vault-item strong').first().textContent()).includes('campana-prueba'))
-   problems.push('La imagen de la biblioteca no sobrevivió a la recarga');
+  const storedType=await page.locator('.forge-vault-item .forge-vault-info small').first().innerText();
+  if(!storedType.includes('image/jpeg'))
+   problems.push('La imagen de la biblioteca no sobrevivió a la recarga como JPG');
   await page.screenshot({path:'visual-qa/forge/'+engine+'-biblioteca.png'});
   await page.locator('.forge-vault-item [data-forge-action="vault-open"]').first().click();
   await page.locator('#forgeCanvas').waitFor();
