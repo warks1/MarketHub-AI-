@@ -193,3 +193,21 @@
 .mh-splash-feature span{font-size:clamp(10px,1.65vw,14px)}
 .mh-feature-icon{width:20px;height:20px;flex-basis:20px}
 }
+
+/* Teléfonos verticales bajos: mostrar toda la composición sin miniaturas ilegibles. */
+@media(max-height:700px) and (max-width:699px) and (orientation:portrait){
+ .mh-splash-inner{gap:5px}
+ .mh-splash-showcase{grid-template-rows:auto repeat(3,minmax(53px,auto));gap:5px}
+ .mh-splash-orb-crop{width:min(44vw,160px)}
+ .mh-splash-feature{min-height:53px;padding:5px 6px;gap:5px}
+ .mh-feature-icon{width:21px;height:21px;flex-basis:21px}
+ .mh-splash-brand{gap:7px}
+ .mh-splash-brand img{width:26px;height:26px}
+ .nexus-splash.nexus-original-splash .mh-splash-brand h1{font-size:clamp(23px,6vw,28px)}
+ .mh-splash-subtitle{font-size:11px}
+ .mh-splash-track{height:30px;min-height:30px;margin-top:0}
+ .mh-splash-status{min-height:21px;font-size:11px;gap:6px}
+ .mh-splash-spinner{width:15px;height:15px;flex-basis:15px;border-width:2px}
+ .mh-splash-bottom{gap:5px;font-size:9px}
+ .nexus-splash.nexus-original-splash .mh-splash-enter{min-height:32px;padding:7px 16px}
+}
