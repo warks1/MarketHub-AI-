@@ -147,10 +147,13 @@ for(const [engine,runner,width,height] of [
   await page.locator('[data-forge-file="portfolio"]').setInputFiles({
    name:'respaldo-de-campanas.mhubpack',mimeType:'application/zip',buffer:fullBytes
   });
-  await page.waitForFunction(async()=>{
-   const {listCreativeProjects}=await import('./src/creative-projects.js');
-   return (await listCreativeProjects()).length===2;
-  },null,{timeout:15000}).catch(()=>{});
+  // La operación hace validación y escritura asíncronas; esperar la notificación
+  // de confirmación (posterior al commit), no una Promise en waitForFunction.
+  await page.locator('.toast').filter({hasText:'proyectos restaurados sin sustituir los anteriores.'})
+   .waitFor({state:'visible',timeout:20000}).catch(async()=>{
+    const info=await page.locator('.toast').last().textContent().catch(()=>'(sin aviso)');
+    problems.push('No se confirmó la restauración completa: '+info);
+   });
   const countAfterFullImport=await page.evaluate(async()=>{
    const {listCreativeProjects}=await import('./src/creative-projects.js');
    return (await listCreativeProjects()).length;
