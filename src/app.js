@@ -281,7 +281,14 @@ document.addEventListener('click',e=>{
  if(page){go(page.dataset.page);return}
  const filter=e.target.closest('[data-filter]');if(filter){state.toolsFilter=filter.dataset.filter;render();return}
  const mode=e.target.closest('[data-mode]');
- if(mode){state.creativeMode=mode.dataset.mode;render();return}
+ if(mode){
+  const choice=mode.dataset.mode;state.creativeMode=choice;
+  if(choice==='Imagen'||choice==='Diseño'||choice==='Plantillas'){go('diseño');return}
+  if(choice==='Texto / Copy'){officeOpenTab('copys');go('oficina');return}
+  if(choice==='Ideas'){growthOpenTab('reutilizar');go('laboratorio');return}
+  if(choice==='Voz IA'){state.modal='tools';render();return}
+  render();return;
+ }
  const target=e.target.closest('[data-action]');
  if(!target)return;
  const action=target.dataset.action;
