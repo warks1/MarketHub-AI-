@@ -25,3 +25,13 @@ test('La galería multimedia forma parte del mismo espacio, no sustituye los dem
  assert.match(forgePage(),/data-forge-action="vault-save-photo"/);
 });
 function awaitPage(){return forgePage()}
+
+test('Safari guarda bytes en vez de objetos File/Blob y recupera archivos antiguos',async()=>{
+ const {readFileSync}=await import('node:fs');
+ const source=readFileSync(new URL('../src/media-vault.js',import.meta.url),'utf8');
+ assert.match(source,/const bytes=await blob\.arrayBuffer\(\)/);
+ assert.match(source,/data=\{\.\.\.valid,bytes,id,createdAt:/);
+ assert.match(source,/new Blob\(\[item\.bytes\],\{type:item\.type\}\)/);
+ assert.match(source,/if\(item\.blob instanceof Blob\)return item/);
+ assert.doesNotMatch(source,/data=\{\.\.\.valid,blob,id,createdAt:/);
+});
