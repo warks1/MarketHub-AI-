@@ -44,3 +44,16 @@ test('El estudio soporta 16:9 y opciones de modo sin perder controles',()=>{
  assert.match(html,/aria|data-mode="Imagen"/);
  assert.match(html,/>1<\/strong>/);
 });
+
+test('El calendario permite cambiar de mes y prepara fechas seleccionables por toque',()=>{
+ const now=nexusHome({posts:[],calendarOffset:0});
+ const later=nexusHome({posts:[],calendarOffset:1});
+ assert.match(now,/data-action="calendar-prev"/);
+ assert.match(now,/data-action="calendar-next"/);
+ assert.match(now,/data-action="calendar-day"/);
+ assert.match(now,/data-date="\d{4}-\d{2}-\d{2}"/);
+ assert.match(now,/aria-label="Crear publicación para/);
+ const monthsInCurrent=now.match(/nexus-cal-month">([^<]+)</)?.[1];
+ const monthsInNext=later.match(/nexus-cal-month">([^<]+)</)?.[1];
+ assert.notEqual(monthsInCurrent,monthsInNext);
+});
