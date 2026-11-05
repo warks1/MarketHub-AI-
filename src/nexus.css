@@ -323,3 +323,34 @@ button:focus-visible,a:focus-visible{outline:2px solid #b8faff;outline-offset:3p
  .nexus-studio .nexus-studio-stats{grid-template-columns:minmax(0,1fr)}
  .nexus-studio .nexus-studio-stats>.nexus-panel{min-width:0;width:100%}
 }
+
+/* Confinar herramientas anchas dentro de desplazamiento horizontal intencionado.
+   Los clips de vídeo/audio necesitan anchura de edición, pero nunca pueden
+   ensanchar la página en iPhone, Android o tablet. */
+.nexus-studio,.nexus-studio-body,.nexus-studio-body>.nexus-panel,
+.nexus-timeline,.nexus-timeline-scroller,.nexus-templates,
+.nexus-templates>div,.nexus-studio-stats,.nexus-studio-stats>.nexus-panel,
+.nexus-prompt-row,.nexus-prompt-group{min-width:0;max-width:100%}
+.nexus-studio{overflow-x:clip}
+.nexus-timeline{width:100%;overflow:hidden}
+.nexus-timeline-scroller{display:block;width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x}
+.nexus-timeline-ruler{margin-left:0;padding-left:95px}
+.nexus-templates>div{min-width:0}
+.nexus-studio-body .nexus-panel-title{min-width:0;flex-wrap:wrap}
+.nexus-studio-body .nexus-panel-title>strong{min-width:0;overflow-wrap:anywhere}
+.nexus-studio .nexus-page-head{min-width:0;flex-wrap:wrap}
+.nexus-studio .nexus-page-head>div{min-width:0;flex:1 1 210px}
+.nexus-studio .nexus-page-head>.nexus-cta{flex:0 1 auto;white-space:normal}
+.nexus-studio .nexus-link,.nexus-studio .nexus-quiet{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:680px){
+  .nexus-studio-body{width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nexus-studio-body>.nexus-panel{min-width:0;max-width:100%}
+  .nexus-studio-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nexus-timeline-header{align-items:flex-start;flex-wrap:wrap;gap:5px}
+  .nexus-templates>strong{white-space:normal;overflow-wrap:anywhere}
+  .nexus-templates>div{overflow-x:auto;max-width:100%;flex-wrap:nowrap}
+  .nexus-templates .nexus-template{flex:0 0 128px}
+}
+@media(max-width:385px){
+  .nexus-studio-body{display:block}
+}
