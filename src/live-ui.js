@@ -8,7 +8,7 @@ const page=(label,id,cls='live-link')=>'<button type="button" class="'+cls+'" da
 const action=(label,id,cls='live-link',props='')=>'<button type="button" class="'+cls+'" data-action="'+id+'" '+props+'>'+label+'</button>';
 const panel=(title,more,content,cls='')=>'<section class="live-panel '+cls+'"><div class="live-panel-heading"><h2>'+title+'</h2>'+(more||'')+'</div>'+content+'</section>';
 const dateKey=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
-const displayDate=s=>/^\d{4}-\d\d-\d\d$/.test(String(s))?new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short'}).format(new Date(s+'T12:00:00')):esc(s);
+const displayDate=s=>/^\d{4}-\d\d-\d\d$/.test(String(s))?new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short'}).format(new Date(s+'T12:00:00')):(s?esc(s):'Sin fecha');
 function stat(name,value,hint,ico,tint,route){
  return '<button type="button" class="live-stat '+tint+'" data-page="'+route+'" aria-label="'+name+': '+value+'">'+
  '<span><i>'+ico+'</i>'+name+'</span><strong>'+value+'</strong><small>'+hint+'</small><b class="live-stat-light"></b></button>';
@@ -59,7 +59,7 @@ function graph(rows){
 }
 export function liveHome({posts=[],campaigns=[],analyticsRows=[],messages=[],mentions=[],calendarOffset=0,plan='free'}={}){
  const p=clean(posts),c=clean(campaigns),a=clean(analyticsRows),m=clean(messages),mentionsArr=clean(mentions),t=summarizeAnalytics(a);
- const next=[...p].filter(x=>x.date).sort((x,y)=>String(x.date).localeCompare(String(y.date))).slice(0,4);
+ const next=[...p].sort((x,y)=>String(x.date||'9999-12-31').localeCompare(String(y.date||'9999-12-31'))).slice(0,4);
  const metrics=[
   stat('Alcance',a.length?fmt(t.alcance):'—',a.length?'Datos importados':'Sin datos de redes','◉','cyan','analitica'),
   stat('Interacciones',a.length?fmt(t.interacciones):'—',a.length?'Datos importados':'Sin datos de redes','♡','pink','analitica'),
