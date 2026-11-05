@@ -65,6 +65,9 @@ for(const [name,engine,width,height] of [['chromium-desktop',chromium,1440,900],
    await restored.waitForTimeout(300);
   }
   if(restoredProjects!==2)errors.push('La restauración integral no agregó el proyecto esperado: '+restoredProjects);
+  // La app recarga al terminar la recuperación; dejar que vuelva a inicializarse.
+  await restored.waitForTimeout(550);
+  await restored.waitForFunction(()=>window.__MARKETHUB_BOOT__?.ready===true,null,{timeout:20000});
   const check=await restored.evaluate(async()=>{
    const p=await import('./src/creative-projects.js'),v=await import('./src/media-vault.js'),
     b=await import('./src/brand-dna.js');
