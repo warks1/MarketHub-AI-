@@ -14,7 +14,8 @@ test('Los seis banners de carga aparecen completos y nunca se omiten en teléfon
  for(const id of ['analytics','creative','campaigns','social','content','planning'])
   assert.ok(css.includes('.mh-feature-'+id+'{grid-area:'+id+'}'),id+' sin celda visible');
  assert.match(app,/const compact=/);
- assert.match(app,/const adapt=window.matchMedia/);
+ assert.match(app,/overlay.innerHTML=compact/);
+ assert.doesNotMatch(app,/const wide=/);
  assert.doesNotMatch(app,/segment\('mirror-splash-(?:hero|brand|status)'/);
 });
 
