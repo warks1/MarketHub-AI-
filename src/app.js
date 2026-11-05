@@ -27,6 +27,7 @@ let state={
 state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
 state.editPostId=null;state.pendingDeleteId=null;
 state.editCampaignId=null;state.pendingDeleteCampaignId=null;
+state.calendarOffset=0;state.preselectedDate=null;
 const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,consent:state.consent}))}catch{}};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
@@ -94,7 +95,7 @@ function rewardUnit(){
 }
 function home(){
  // Boceto 01: panel funcional NEXUS × PULSE con datos de ejemplo claramente identificados.
- return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan})+(state.plan==='free'?adUnit('mobile'):'');
+ return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan,calendarOffset:state.calendarOffset})+(state.plan==='free'?adUnit('mobile'):'');
 }
 function toolsCatalogue(){
  const term=state.toolsQuery.trim().toLocaleLowerCase('es');
@@ -114,7 +115,7 @@ function studio(){
 function create(){
  const editing=findPost(state.posts,state.editPostId);
  const status=editing?.status==='Borrador'?'Borrador':'Programada';
- const date=editing?.date||todayLocal();
+ const date=editing?.date||state.preselectedDate||todayLocal();
  const platform=editing?.platform||'Instagram';
  const platforms=['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'];
  const selected=platforms.map(name=>'<option '+(platform===name?'selected':'')+'>'+name+'</option>').join('');
@@ -181,7 +182,7 @@ function extraScreen(page){
 }
 function content(){
  switch(state.page){
- case 'inicio':return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan})+adUnit('mobile')+adUnit('desktop');
+ case 'inicio':return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan,calendarOffset:state.calendarOffset})+adUnit('mobile')+adUnit('desktop');
  case 'estudio':return nexusStudio({mode:state.creativeMode,format:state.videoFormat,posts:state.posts})+adUnit('mobile')+adUnit('desktop');
  case 'diseño':return visualPage();
  case 'crear':return create();
@@ -194,7 +195,7 @@ function content(){
  case 'planes':return plans();
  case 'ajustes':return settings();
  case 'biblioteca':case 'escucha':case 'competencia':case 'automatizaciones':return extraScreen(state.page);
- default:return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan});
+ default:return nexusHome({posts:postsFiltered(),chart:lines(),plan:state.plan,calendarOffset:state.calendarOffset});
  }
 }
 function navButton(item,kind='side'){
@@ -254,7 +255,7 @@ function toast(msg){
  const elem=document.createElement('div');elem.className='toast';elem.setAttribute('role','status');elem.textContent=msg;document.body.append(elem);
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>elem.remove(),3300);
 }
-function go(page){state.page=page;state.modal=null;state.menuMore=false;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
+function go(page){if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
  const growthTarget=e.target.closest('[data-growth-action]');
  if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
@@ -283,6 +284,15 @@ document.addEventListener('click',e=>{
  case 'show-mobile-menu':state.menuMore=true;render();break;
  case 'close-mobile-menu':state.menuMore=false;render();break;
  case 'backup-export':backupExport({toast});break;
+case 'calendar-prev':state.calendarOffset=Math.max(-12,state.calendarOffset-1);render();break;
+case 'calendar-next':state.calendarOffset=Math.min(12,state.calendarOffset+1);render();break;
+case 'calendar-day':{
+ const date=target.dataset.date;
+ if(/^\d{4}-\d{2}-\d{2}$/.test(date||'')){
+  state.preselectedDate=date;state.editPostId=null;go('crear');
+ }
+ break;
+}
 case 'campaign-edit':{
  const campaign=campaignById(state.campaigns,target.dataset.id);
  if(campaign){state.editCampaignId=campaign.id;go('campanas')}break;
@@ -399,7 +409,7 @@ if(e.target.id!=='postForm')return;
   if(state.posts.length>=draftLimit(state.plan)){toast('Límite local de '+draftLimit(state.plan)+' borradores alcanzado en el modo demo.');return}
   state.posts.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,9),...result.value});
  }
- state.editPostId=null;
+ state.editPostId=null;state.preselectedDate=null;
  save();render();toast(editing?'Publicación local actualizada.':'Borrador local guardado. No se ha publicado en ninguna red.');
 });
 document.addEventListener('change',e=>{
