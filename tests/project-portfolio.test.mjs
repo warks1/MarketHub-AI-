@@ -46,7 +46,8 @@ test('No permite formatos peligrosos, estructuras inválidas ni paquetes vacíos
 test('El catálogo conserva proyectos individuales y añade copias completas no destructivas',()=>{
  forgeTab('projects',()=>{});
  const html=forgePage();
- assert.match(html,/data-forge-action="project-export"/);
+ const src=readFileSync(new URL('../src/media-forge.js',import.meta.url),'utf8');
+ assert.match(src,/data-forge-action="project-export"/);
  assert.match(html,/data-forge-action="project-batch-export"/);
  assert.match(html,/data-forge-file="portfolio"/);
  assert.match(html,/data-forge-file="project"/);
