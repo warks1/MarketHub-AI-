@@ -59,3 +59,11 @@
 .forge-vault-error{border:1px solid #fb9f78;border-radius:12px;padding:10px;color:#ffe4d6}
 @media(max-width:680px){.forge-vault-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.forge-vault-item{padding:8px}.forge-vault-item>img,.forge-vault-icon{height:108px}.forge-vault-buttons button{width:100%}}
 @media(max-width:360px){.forge-vault-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ADN Creativo: perfiles de marca editables y visuales, sin overlay estático. */
+.forge-brand{margin-top:15px}
+.forge-brand-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px}
+.forge-brand-fields label:last-child{grid-column:1/-1}
+.forge-brand-fields input[type=color]{min-height:48px;padding:4px;cursor:pointer}
+.forge-brand select{display:block;max-width:100%;min-height:44px}
+@media(max-width:680px){.forge-brand-fields{grid-template-columns:minmax(0,1fr)}.forge-brand-fields label:last-child{grid-column:auto}}
