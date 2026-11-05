@@ -34,7 +34,10 @@
 .mh-splash-orb-crop{
  grid-area:orb;position:relative;isolation:isolate;align-self:center;justify-self:center;
  width:min(100%,440px);aspect-ratio:425/380;overflow:hidden;min-width:0;
- filter:drop-shadow(0 0 22px #125ed188)
+ filter:drop-shadow(0 0 22px #125ed188);
+ /* Difumina únicamente el borde del recorte, sin cambiar el JPEG ni sus colores. */
+ -webkit-mask-image:radial-gradient(ellipse 53% 55% at 50% 52%,#000 72%,transparent 100%);
+ mask-image:radial-gradient(ellipse 53% 55% at 50% 52%,#000 72%,transparent 100%)
 }
 .mh-splash-orb-crop>img{
  position:absolute;display:block;width:361.41176%;max-width:none;height:auto;
