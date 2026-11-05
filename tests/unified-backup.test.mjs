@@ -56,13 +56,15 @@ test('Se conserva la copia cifrada JSON y la nueva interfaz explica la privacida
  const page=unifiedBackupSettingsHTML();
  assert.match(page,/data-action="unified-backup-export"/);
  assert.match(page,/data-unified-backup-import/);
- assert.match(page,/no está cifrada/);
+ assert.match(page,/SIN cifrar/);
+ assert.match(page,/data-action="unified-backup-encrypted-export"/);
  assert.match(page,/sin reemplazar/);
  const app=readFileSync(new URL('../src/app.js',import.meta.url),'utf8');
  assert.match(app,/backupSettingsHTML\(\)\+unifiedBackupSettingsHTML\(\)/);
  assert.match(app,/case 'backup-encrypted-export'/);
  assert.match(app,/case 'unified-backup-export'/);
- assert.match(app,/restoreUnifiedBackup\(file\)/);
+ assert.match(app,/restoreUnifiedBackup\(archive\)/);
+ assert.match(app,/decryptUnifiedBlob\(file,password\)/);
  const db=readFileSync(new URL('../src/media-vault.js',import.meta.url),'utf8');
  assert.match(db,/saveVaultAssetsBatch/);
  assert.match(db,/removeVaultAssetsBatch/);
