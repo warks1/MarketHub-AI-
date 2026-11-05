@@ -77,6 +77,17 @@ try{
    if(!png.suggestedFilename().endsWith('.png'))problems.push('El estudio no exporta una imagen PNG real');
    await page.screenshot({path:'visual-qa/'+id+'-edicion.png',fullPage:true});
   }
+  if(['iphone-375','pc-1440'].includes(id)){
+   await page.locator('[data-mode="Imagen"]').first().click();
+   await page.locator('#visual-headline').waitFor({state:'visible'});
+   await go(page,'estudio',width);
+   await page.locator('[data-mode="Texto / Copy"]').first().click();
+   await page.locator('#office-copy-form').waitFor({state:'visible'});
+   await go(page,'estudio',width);
+   await page.locator('[data-mode="Ideas"]').first().click();
+   await page.locator('.workspace-tabs').waitFor({state:'visible'});
+   await go(page,'estudio',width);
+  }
   await go(page,'campanas',width);
   await page.locator('#campaignForm').waitFor({state:'visible'});
   if(id==='smartphone-390'){
