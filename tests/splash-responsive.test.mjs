@@ -56,6 +56,8 @@ test('La animación respeta el boceto y es accesible',()=>{
 test('El relleno de progreso tiene altura real y el conjunto se centra en tablet',()=>{
  assert.match(css,/\.mh-splash-track > \.progress-fill/);
  assert.match(css,/height:calc\(100% - 8px\)!important/);
+ assert.match(css,/transform:scaleX\(var\(--splash-progress,0\)\)!important/);
+ assert.match(app,/bar\.style\.setProperty\('--splash-progress'/);
  assert.match(css,/@media\(min-width:700px\) and \(max-width:1199px\)/);
  assert.match(css,/min-height:100dvh;justify-content:center/);
 });
