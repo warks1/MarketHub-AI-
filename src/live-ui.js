@@ -1,5 +1,6 @@
 // MarketHub AI · paneles reales, sin fotografías sobre los controles.
 import {summarizeAnalytics} from './analytics-local.js';
+import {localRecommendations} from './local-insights.js';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean=xs=>Array.isArray(xs)?xs.filter(x=>x&&typeof x==='object'):[];
 const fmt=x=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:1}).format(x||0);
@@ -72,11 +73,8 @@ export function liveHome({posts=[],campaigns=[],analyticsRows=[],messages=[],men
   stat('ROI','—','Sin datos de gasto','◎','lime','campanas'),
   stat('Campañas',fmt(c.length),'Presupuesto '+money(c.reduce((s,x)=>s+(Number(x.budget)||0),0)),'▥','green','campanas')
  ].join('');
- const assistant=[
-  ['✦','Crear contenido para la semana','crear'],['◎','Revisar campañas y presupuestos','campanas'],
-  ['▥',a.length?'Consultar resultados reales':'Importar analítica de redes','analitica'],
-  ['▣','Abrir el diseñador gráfico','diseño']
- ].map(([ic,label,route])=>page('<span>'+ic+'</span>'+label+' <b>›</b>',route,'live-tip')).join('');
+ const assistant=localRecommendations({posts:p,campaigns:c,rows:a}).slice(0,4)
+ .map(({icon,label,page:route})=>page('<span>'+icon+'</span>'+esc(label)+' <b>›</b>',route,'live-tip')).join('');
  const pPanel=panel('▥ Rendimiento por plataforma',page('Ver informes','analitica'),graph(a),'live-performance');
  const cPanel=panel('▦ Calendario de contenidos',page('Programar','crear'),calendar(p,calendarOffset)+
  '<div class="live-calendar-actions">'+action('↓ Exportar al calendario','export-calendar','live-link')+'</div>'+
