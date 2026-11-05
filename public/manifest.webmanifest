@@ -1,18 +1,38 @@
 {
   "name": "MarketHub AI",
   "short_name": "MarketHub",
-  "description": "Marketing digital, redes sociales y estudio creativo",
+  "id": "./",
+  "lang": "es",
+  "dir": "ltr",
+  "description": "Plataforma de creación, planificación y gestión de marketing digital. Funciones conectadas según disponibilidad.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#090e27",
-  "theme_color": "#090e27",
+  "orientation": "any",
+  "background_color": "#050b24",
+  "theme_color": "#060d2a",
+  "categories": [
+    "business",
+    "productivity"
+  ],
   "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "./logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
