@@ -2,7 +2,7 @@
 .growth-entry{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border:1px solid #34507a;background:#152448;border-radius:14px;padding:14px}
 .growth-entry>div:first-child{min-width:0;flex:1}
 .growth-entry p{font-size:12px;color:#9bb2d8;line-height:1.5;margin-top:5px;overflow-wrap:anywhere}
-.growth-clip p{word-break:break-all}
+.growth-clip p{overflow-wrap:anywhere;word-break:normal;hyphens:none}
 .growth-score{display:grid;justify-items:center;gap:6px;padding:21px 12px;background:radial-gradient(circle at center,#2c387b 0,#121d41 75%);border:1px solid #516b9d;border-radius:18px}
 .growth-score strong{font:800 43px 'Space Grotesk',sans-serif;color:#24dded}
 .growth-score span{font-size:12px;color:#adbedf}
@@ -20,3 +20,9 @@
 .growth-link-row{border:1px solid #334a78;border-radius:14px;padding:11px;margin-bottom:9px;display:grid;grid-template-columns:1fr 1fr;gap:9px;background:#101e42}
 .growth-link-row .form-field{margin-bottom:0}
 @media(max-width:700px){.growth-link-row{grid-template-columns:1fr}.growth-score strong{font-size:35px}.growth-entry{align-items:stretch}.growth-entry .workspace-actions{width:100%}}
+
+/* Evitar cortes arbitrarios de palabras y textos largos en vistas previas. */
+.growth-email-preview,.growth-bio-preview,.growth-email-preview h2,
+.growth-bio-preview h2,.growth-bio-button{
+ min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:normal;
+}
