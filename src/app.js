@@ -3,6 +3,7 @@ import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './
 import {growthPage,growthOpenTab,growthClick,growthSubmit} from './growth.js';
 import {backupExport,backupImport,backupSettingsHTML} from './backup.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
+import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -19,6 +20,7 @@ let state={
   videoFormat:'9:16',search:'',menuMore:false,consent: saved.consent || 'pending'
 };
 state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
+state.editPostId=null;state.pendingDeleteId=null;
 const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,consent:state.consent}))}catch{}};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
@@ -64,8 +66,12 @@ function calendar(){
  }
  return '<div class="card"><div class="card-head"><h2>📅 Calendario de contenidos</h2>'+btn('Programar','goto-crear','secondary small-btn')+'</div><p class="muted tiny" style="margin-bottom:10px">'+new Intl.DateTimeFormat('es',{month:'long',year:'numeric'}).format(now)+'</p><div class="calendar-days">'+cells.join('')+'</div></div>';
 }
-function postRow(p){
- return '<div class="list-row"><div><b>'+safe(p.title)+'</b><p>'+safe(p.platform)+' · '+safe(p.date)+'</p></div><span class="tag '+(p.status==='Programada'?'green':'')+'">'+safe(p.status)+'</span></div>';
+function postRow(p, managed=false){
+ const actions=managed?'<div class="post-actions">'+
+  '<button type="button" class="secondary small-btn" data-action="edit-post" data-id="'+safe(p.id)+'" aria-label="Editar '+safe(p.title)+'">Editar</button>'+
+  '<button type="button" class="secondary small-btn" data-action="duplicate-post" data-id="'+safe(p.id)+'" aria-label="Duplicar '+safe(p.title)+'">Duplicar</button>'+
+  '<button type="button" class="secondary small-btn" data-action="delete-post" data-id="'+safe(p.id)+'" aria-label="Eliminar '+safe(p.title)+'">Eliminar</button></div>':'';
+ return '<div class="list-row post-list-row"><div class="post-main"><b>'+safe(p.title)+'</b><p>'+safe(p.platform)+' · '+safe(p.date)+'</p></div><div class="post-right"><span class="tag '+(p.status==='Programada'?'green':'')+'">'+safe(p.status)+'</span>'+actions+'</div></div>';
 }
 function postsFiltered(){
  const query=state.search.toLowerCase();
@@ -104,9 +110,28 @@ function studio(){
  '<div class="card studio-aside"><div class="card-head"><h2>✦ IA Creativa</h2><span class="tag pink">Prototipo</span></div><div class="form-field"><label for="creativePrompt">Describe tu contenido</label><textarea class="input" id="creativePrompt" placeholder="Ej.: Anuncio dinámico de un lanzamiento para Instagram..."></textarea></div>'+btn('Crear borrador con mi idea','draft-from-studio','primary full')+'<p class="tiny muted" style="margin-top:10px">Crea un borrador local a partir de tu texto. No envía datos ni llama a una IA.</p><div class="card-head" style="margin-top:24px"><h2>Opciones del estudio</h2></div><div class="studio-tools-grid">'+['Subtítulos IA','Voz en off','Recortar','Redimensionar','Estilos','Exportar'].map(t=>'<button data-action="studio-unavailable">'+t+'</button>').join('')+'</div></div></div>';
 }
 function create(){
- return sectionHeader('Crear y programar','Guarda borradores en tu dispositivo. Todavía no se publica en redes reales.')+
- '<div class="two-cols"><div class="card"><div class="card-head"><h2>✦ Nueva publicación</h2><span class="tag">Local · demo</span></div><form id="postForm"><div class="form-field"><label for="title">Título o texto</label><textarea class="input" id="title" name="title" required maxlength="240" placeholder="Escribe el contenido de tu publicación"></textarea></div><div class="form-field"><label for="platform">Plataforma</label><select class="input" name="platform" id="platform"><option>Instagram</option><option>TikTok</option><option>YouTube</option><option>Facebook</option><option>LinkedIn</option><option>X</option></select></div><div class="form-field"><label for="date">Fecha prevista</label><input class="input" type="date" name="date" id="date" required value="'+new Date().toLocaleDateString('en-CA')+'"></div><div class="platforms" style="margin:0 0 16px"><span class="tag">✓ Borrador local</span><span class="tag pink">Sin publicar</span></div><button type="submit" class="primary full">Guardar publicación de demostración</button></form></div>'+
- '<div class="section-stack"><div class="card"><div class="card-head"><h2>Publicaciones guardadas</h2><span class="tag">'+state.posts.length+' en demo</span></div><div class="line-list">'+(postsFiltered().length?postsFiltered().map(postRow).join(''):'<div class="empty">No hay publicaciones.</div>')+'</div></div>'+calendar()+'</div></div>';
+ const editing=findPost(state.posts,state.editPostId);
+ const status=editing?.status==='Borrador'?'Borrador':'Programada';
+ const date=editing?.date||new Date().toLocaleDateString('en-CA');
+ const platform=editing?.platform||'Instagram';
+ const platforms=['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'];
+ const selected=platforms.map(name=>'<option '+(platform===name?'selected':'')+'>'+name+'</option>').join('');
+ return sectionHeader('Crear y programar','Prepara, edita y organiza publicaciones en tu dispositivo. No se envían a las redes sociales.',
+  btn('Exportar biblioteca CSV','export-posts','secondary'))+
+ '<div class="notice"><strong>Planificador local.</strong> Una fecha asignada sirve para organizarte: esta versión no publica automáticamente en Instagram, TikTok ni otras redes.</div>'+
+ '<div class="two-cols"><div class="card"><div class="card-head"><h2>✦ '+(editing?'Editar publicación':'Nueva publicación')+'</h2><span class="tag">Local · demo</span></div>'+
+ '<form id="postForm"><div class="form-field"><label for="title">Título o texto</label><textarea class="input" id="title" name="title" required maxlength="240" placeholder="Escribe el contenido de tu publicación">'+safe(editing?.title||'')+'</textarea></div>'+
+ '<div class="form-field"><label for="platform">Plataforma</label><select class="input" name="platform" id="platform">'+selected+'</select></div>'+
+ '<div class="form-field"><label for="date">Fecha prevista</label><input class="input" type="date" name="date" id="date" required value="'+safe(date)+'"></div>'+
+ '<div class="form-field"><label for="postStatus">Estado local</label><select class="input" id="postStatus" name="status"><option value="Borrador" '+(status==='Borrador'?'selected':'')+'>Borrador</option><option value="Programada" '+(status==='Programada'?'selected':'')+'>Planificada (sin publicación automática)</option></select></div>'+
+ '<div class="platforms" style="margin:0 0 16px"><span class="tag">✓ Archivo local</span><span class="tag pink">Sin publicar</span></div>'+
+ '<button type="submit" class="primary full">'+(editing?'Guardar cambios locales':'Guardar publicación local')+'</button>'+
+ (editing?'<div class="post-actions" style="margin-top:12px">'+btn('Cancelar edición','cancel-edit','secondary full')+'</div>':'')+
+ '</form></div>'+
+ '<div class="section-stack"><div class="card"><div class="card-head"><h2>Biblioteca local</h2><span class="tag">'+state.posts.filter(p=>p&&typeof p==='object').length+' / '+draftLimit(state.plan)+' borradores</span></div>'+
+ '<div class="line-list">'+(postsFiltered().length?postsFiltered().map(p=>postRow(p,true)).join(''):'<div class="empty">No hay publicaciones.</div>')+'</div>'+
+ '<p class="tiny muted" style="margin-top:14px">Puedes editar, duplicar y eliminar tus borradores. Exporta una copia CSV para trabajar fuera de MarketHub AI.</p></div>'+
+ calendar()+'</div></div>';
 }
 function campaigns(){
  return sectionHeader('Campañas','Panel de preparación de campañas. Las cifras son ilustrativas.')+
@@ -159,6 +184,7 @@ function modalHTML(){
  if(state.modal==='tools'){head='Función prevista para próximas versiones';body='Esta herramienta todavía no está operativa. La interfaz muestra dónde se incorporará, pero no simula una acción completada.';foot=btn('Entendido','close-modal','primary')}
  if(state.modal==='tool-detail'&&state.selectedTool){head=safe(state.selectedTool.name);body=(state.selectedTool.tier==='pro'?'Herramienta avanzada del plan PRO.':'Prevista en FREE y PRO, con distintos límites de uso.')+' Estado real: '+(state.selectedTool.status==='local'?'funciona localmente en el navegador':state.selectedTool.status==='demo'?'interfaz de demostración':'pendiente de integración')+'.'+(state.selectedTool.description?' '+safe(state.selectedTool.description):'');foot=btn('Cerrar','close-modal')+(state.selectedTool.localTab?btn('Abrir herramienta local','catalogue-open-local','primary'):'')+(state.selectedTool.growthTab?btn('Abrir Growth Lab','catalogue-open-growth','primary'):'')}
  if(state.modal==='reset'){head='Borrar datos locales';body='Se eliminarán los borradores de ejemplo y tu selección de plan de este navegador.';foot=btn('Cancelar','close-modal')+btn('Sí, borrar','confirm-reset','primary')}
+ if(state.modal==='delete-post'){head='Eliminar borrador local';body='La publicación seleccionada desaparecerá de la biblioteca de este dispositivo. Puedes exportar una copia antes de eliminar.';foot=btn('Cancelar','close-modal')+btn('Eliminar publicación','confirm-delete-post','primary')}
  return '<div class="modal-backdrop" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">'+head+'</h2><p>'+body+'</p><div class="modal-actions">'+foot+'</div></div></div>';
 }
 let toastTimer;
@@ -196,6 +222,35 @@ document.addEventListener('click',e=>{
  case 'show-mobile-menu':state.menuMore=true;render();break;
  case 'close-mobile-menu':state.menuMore=false;render();break;
  case 'backup-export':backupExport({toast});break;
+  case 'edit-post':{
+   const post=findPost(state.posts,target.dataset.id);
+   if(post){state.editPostId=post.id;go('crear');}break;
+  }
+  case 'cancel-edit':state.editPostId=null;render();break;
+  case 'duplicate-post':{
+   const post=findPost(state.posts,target.dataset.id);
+   if(!post){toast('No se ha encontrado el borrador.');break}
+   if(state.posts.length>=draftLimit(state.plan)){toast('Has alcanzado el límite local de borradores de tu plan de demostración.');break}
+   const copy={...post,id:String(Date.now())+'-'+Math.random().toString(36).slice(2,9),title:String(post.title||'Sin título').slice(0,240),status:'Borrador'};
+   state.posts.unshift(copy);save();render();toast('Copia creada como borrador local.');break;
+  }
+  case 'delete-post':state.pendingDeleteId=target.dataset.id;state.modal='delete-post';render();break;
+  case 'confirm-delete-post':{
+   const id=state.pendingDeleteId;
+   if(id!=null&&findPost(state.posts,id)){
+    state.posts=state.posts.filter(p=>!(p&&String(p.id)===String(id)));
+    if(String(state.editPostId)===String(id))state.editPostId=null;
+    save();toast('Publicación local eliminada.');
+   }
+   state.pendingDeleteId=null;state.modal=null;render();break;
+  }
+  case 'export-posts':{
+   const blob=new Blob([postsToCSV(state.posts)],{type:'text/csv;charset=utf-8'});
+   const url=URL.createObjectURL(blob),link=document.createElement('a');
+   link.href=url;link.download='markethub-publicaciones-'+new Date().toISOString().slice(0,10)+'.csv';
+   document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+   toast('Archivo CSV generado en este dispositivo.');break;
+  }
  case 'format':state.videoFormat=state.videoFormat==='9:16'?'16:9':'9:16';render();break;
  case 'draft-from-studio':{
   const input=document.querySelector('#creativePrompt'),val=input?.value.trim();
@@ -211,7 +266,7 @@ document.addEventListener('click',e=>{
  case 'confirm-reward':state.credits+=5;state.modal=null;save();render();toast('+5 créditos ficticios. No se ha visto ningún anuncio.');break;
  case 'close-modal':state.modal=null;render();break;
  case 'reset-data':state.modal='reset';render();break;
- case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
+ case 'confirm-reset':localStorage.removeItem(storeKey);state.plan='free';state.credits=20;state.posts=demoPosts.slice();state.editPostId=null;state.pendingDeleteId=null;state.modal=null;state.search='';render();toast('Se han restablecido los datos de ejemplo.');break;
  case 'no-op':break;
  }
 });
@@ -220,11 +275,16 @@ document.addEventListener('submit',e=>{
  if(e.target.id?.startsWith('office-')){e.preventDefault();officeSubmit(e.target,state.plan,{refresh:render,toast});return}
  if(e.target.id!=='postForm')return;
  e.preventDefault();const form=new FormData(e.target);
- const title=String(form.get('title')||'').trim(),date=String(form.get('date')||'');
- if(!title||!date){toast('Completa el título y la fecha.');return}
- if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores del modo FREE demo.');return}
- state.posts.unshift({id:Date.now(),title:title.slice(0,240),platform:String(form.get('platform')||'Instagram'),date:date,status:'Programada'});
- save();render();toast('Publicación guardada localmente. No se ha publicado en ninguna red.');
+ const result=validatePost({title:form.get('title'),platform:form.get('platform'),date:form.get('date'),status:form.get('status')});
+ if(result.error){toast(result.error);return}
+ const editing=findPost(state.posts,state.editPostId);
+ if(editing){Object.assign(editing,result.value)}
+ else{
+  if(state.posts.length>=draftLimit(state.plan)){toast('Límite local de '+draftLimit(state.plan)+' borradores alcanzado en el modo demo.');return}
+  state.posts.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,9),...result.value});
+ }
+ state.editPostId=null;
+ save();render();toast(editing?'Publicación local actualizada.':'Borrador local guardado. No se ha publicado en ninguna red.');
 });
 document.addEventListener('change',e=>{if(e.target.matches('[data-backup-import]')){backupImport(e.target.files?.[0],{toast}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
 document.addEventListener('input',e=>{
