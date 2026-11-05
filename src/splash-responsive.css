@@ -183,3 +183,13 @@
  .mh-splash-spinner{animation:none}
  .mh-splash-track .progress-fill{transition:none}
 }
+
+/* Un solo diseño para todas las pantallas; soporte para móviles apaisados. */
+@media(max-height:520px) and (orientation:landscape){
+.mh-splash-inner{justify-content:flex-start;gap:5px;padding-top:7px}
+.mh-splash-showcase{grid-template-columns:1fr 1.1fr 1fr;grid-template-rows:repeat(3,minmax(42px,auto));grid-template-areas:"analytics orb creative" "campaigns orb social" "content orb planning";gap:5px}
+.mh-splash-orb-crop{width:min(100%,180px)}
+.mh-splash-feature{min-height:42px;padding:5px 7px}
+.mh-splash-feature span{font-size:clamp(10px,1.65vw,14px)}
+.mh-feature-icon{width:20px;height:20px;flex-basis:20px}
+}
