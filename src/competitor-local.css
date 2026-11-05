@@ -1,0 +1,32 @@
+/* MarketHub AI · competencia local al estilo NEXUS × PULSE. */
+.benchmark{min-width:0;max-width:100%;display:grid;gap:12px;padding-bottom:15px}
+.benchmark-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.benchmark-head>div{flex:1 1 240px;min-width:0}
+.benchmark-head h1{font:800 clamp(21px,2.1vw,30px) 'Space Grotesk',system-ui;margin:3px 0 7px}
+.benchmark-head p{color:#bed0ec;font-size:12px;line-height:1.5}
+.benchmark-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.benchmark-stats>div{display:grid;align-content:center;gap:5px;min-width:0;padding:15px;border:1px solid #18cbf4;border-radius:13px;background:linear-gradient(145deg,#112f64,#171640);box-shadow:0 0 10px #0cdcf04b}
+.benchmark-stats>div:nth-child(2){border-color:#e84cda;box-shadow:0 0 10px #f043d04b}
+.benchmark-stats>div:nth-child(3){border-color:#b4e74d;box-shadow:0 0 10px #a8df5340}
+.benchmark-stats span{font-size:11px;color:#bdcceb}
+.benchmark-stats strong{font:800 clamp(18px,2vw,27px) 'Space Grotesk',system-ui}
+.benchmark-layout{display:grid;grid-template-columns:minmax(0,.83fr) minmax(0,1.3fr);gap:11px;align-items:start}
+.benchmark-layout>.card{min-width:0}
+.benchmark-layout h2{font-size:15px;margin-bottom:13px}
+.benchmark-form{display:grid;gap:9px}
+.benchmark-form label{font-size:11px;font-weight:750;color:#d8e8ff}
+.benchmark-form .input{width:100%;min-width:0}
+.benchmark-note{margin-top:15px;padding:10px;border:1px solid #575e94;border-radius:10px;background:#101e46;color:#b9c8e8;font-size:11px;line-height:1.6}
+.benchmark-records{display:grid;gap:8px}
+.benchmark-row{display:grid;grid-template-columns:minmax(125px,1.2fr) repeat(3,minmax(75px,.8fr));gap:9px;padding:12px;border:1px solid #3b76bd;border-radius:12px;background:linear-gradient(145deg,#12305c,#161644);min-width:0}
+.benchmark-name{display:grid;gap:5px;min-width:0}
+.benchmark-name strong{font-size:12px;overflow-wrap:anywhere}
+.benchmark-name small{font-size:10px;color:#b8c9ed;overflow-wrap:anywhere}
+.benchmark-value{display:grid;gap:5px;min-width:0}
+.benchmark-value>span{font-size:9px;color:#b4c8e7}
+.benchmark-value b{font-size:13px;overflow-wrap:anywhere}
+.benchmark-row-actions{grid-column:1/-1;display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap}
+.benchmark-row-actions button{min-height:34px}
+@media(max-width:1160px){.benchmark-layout{grid-template-columns:1fr}.benchmark-row{grid-template-columns:minmax(140px,1fr) repeat(3,minmax(75px,.7fr))}}
+@media(max-width:680px){.benchmark-stats{grid-template-columns:1fr 1fr}.benchmark-stats>div:last-child{grid-column:1/-1}.benchmark-row{grid-template-columns:1fr 1fr}.benchmark-name{grid-column:1/-1}.benchmark-form input,.benchmark-form select{font-size:16px}}
+@media(max-width:360px){.benchmark-stats{grid-template-columns:1fr}.benchmark-stats>div:last-child{grid-column:auto}.benchmark-row{gap:8px}}
