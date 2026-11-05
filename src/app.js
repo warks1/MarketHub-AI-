@@ -387,6 +387,10 @@ try {
   render();
   if (window.__MARKETHUB_BOOT__) window.__MARKETHUB_BOOT__.ready = true;
   splash();
+  // PWA instalable en HTTPS (Windows, Mac y navegadores); Capacitor conserva su propia capa nativa.
+  if (typeof navigator!=='undefined' && 'serviceWorker' in navigator && location.protocol==='https:') {
+    navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+  }
 } catch (error) {
   if (window.__MARKETHUB_BOOT__) window.__MARKETHUB_BOOT__.ready = false;
   document.querySelector('.splash')?.remove();
