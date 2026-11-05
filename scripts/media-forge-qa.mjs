@@ -81,6 +81,11 @@ for(const [engine,runner,width,height] of [
   if(!projectDownload.suggestedFilename().endsWith('.mhub'))problems.push('Copia de proyecto no usa .mhub');
   let portable;
   try{portable=JSON.parse(projectBytes.toString('utf8'))}catch{problems.push('Copia de proyecto no es JSON válido')}
+  const fullBackupWait=page.waitForEvent('download',{timeout:20000});
+  await page.locator('[data-forge-action="project-batch-export"]').click();
+  const fullDownload=await fullBackupWait,fullBytes=await readFile(await fullDownload.path());
+  if(!fullDownload.suggestedFilename().endsWith('.mhubpack')||
+      fullBytes.subarray(0,4).toString('hex')!=='504b0304')problems.push('Copia completa .mhubpack ZIP inválida');
   if(portable?.format!=='mhub-creative-project'||portable?.settings?.mask!=='corazon'||
      portable?.settings?.format!=='1:1'||!portable?.sourceBase64)
    problems.push('La copia editable no incluye foto original y ajustes de campaña');
@@ -136,6 +141,17 @@ for(const [engine,runner,width,height] of [
   await page.locator('[data-forge-input="format"]').waitFor();
   if(await page.locator('[data-forge-input="format"]').inputValue()!=='1:1')
    problems.push('La copia portable no restaura el formato de la campaña');
+  // La copia completa añade sin sobreescribir la copia .mhub recuperada.
+  await page.locator('[data-forge-tab="projects"]').click();
+  await page.locator('.forge-project-item').first().waitFor();
+  await page.locator('[data-forge-file="portfolio"]').setInputFiles({
+   name:'respaldo-de-campanas.mhubpack',mimeType:'application/zip',buffer:fullBytes
+  });
+  await page.waitForFunction(()=>document.querySelectorAll('.forge-project-item').length===2,
+   null,{timeout:15000}).catch(()=>problems.push('La copia completa no restauró el proyecto adicional'));
+  const countAfterFullImport=await page.locator('.forge-project-item').count();
+  if(countAfterFullImport!==2)problems.push('El respaldo completo ha reemplazado o duplicado mal los proyectos');
+
 
   await page.locator('[data-forge-tab="audio"]').click();
   await page.locator('[data-forge-file="audio"]').setInputFiles({
