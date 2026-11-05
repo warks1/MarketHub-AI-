@@ -354,3 +354,13 @@ button:focus-visible,a:focus-visible{outline:2px solid #b8faff;outline-offset:3p
 @media(max-width:385px){
   .nexus-studio-body{display:block}
 }
+
+/* Calendario navegable con el ratón o la pantalla táctil. */
+.nexus-cal-nav{display:grid;grid-template-columns:28px minmax(0,1fr) 28px;align-items:center;gap:5px;margin-bottom:7px}
+.nexus-cal-nav .nexus-cal-month{margin:0;min-width:0;text-align:center;overflow-wrap:anywhere}
+.nexus-cal-nav button{display:grid;place-items:center;width:28px;height:28px;font-size:19px;line-height:1;color:#f3f5ff;background:linear-gradient(130deg,#132e66,#521c81);border:1px solid #8d58d9;border-radius:8px;cursor:pointer}
+.nexus-cal-nav button:disabled{opacity:.35}
+.nexus-cal-nav button:hover:not(:disabled),.nexus-day:hover{border-color:#54e9ff;box-shadow:0 0 7px #22dff85c}
+.nexus-day{border:1px solid transparent;padding:0;background:transparent;cursor:pointer;font-family:inherit;min-height:28px}
+.nexus-day.active{border-color:#d670fe}
+.nexus-day:focus-visible{outline:2px solid #79f4ff;outline-offset:1px}
