@@ -181,3 +181,12 @@ Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalida
 - Límites: archivo íntegro de hasta 245 MB; 12 proyectos (80 MB), 40 medios (150 MB) y 12 identidades de marca. El importador no permite ZIP con compresión, rutas arbitrarias ni archivos extraños.
 - Añadidas pruebas unitarias y de navegador para exportación, recuperación en un perfil nuevo, protección de datos existentes y rechazo de archivos manipulados (Chromium/WebKit).
 - Pruebas en iOS y Android reales, cifrado del paquete completo y sincronización de proyectos entre dispositivos siguen pendientes. No se presenta como funcionalidad de almacenamiento en la nube.
+
+## 2026-11-05 · Protección de la copia integral cifrada (.mhubsecure)
+- Añadida una opción **recomendada con contraseña** en Configuración: exportar/restaurar todos los datos locales de trabajo en el nuevo formato binario `.mhubsecure`.
+- Cifrado de todo el ZIP integral mediante **AES-256-GCM** por bloques de 1 MiB, con sal e identificador de nonce aleatorios, derivación **PBKDF2-SHA256** (310.000 iteraciones) y autenticación del encabezado, secuencia y tamaño de cada bloque.
+- Ninguna contraseña se guarda, se envía a servidores ni se incorpora al archivo. No existe recuperación si el usuario la olvida. Una contraseña errónea, encabezado alterado, bloque modificado o archivo incompleto provoca rechazo ANTES de llamar a restauración.
+- Se conserva la opción `.mhubfull` SIN cifrar para compatibilidad, además de `.mhubpack`, `.mhub` y la copia JSON pequeña cifrada existente.
+- El cifrado utiliza Web Crypto en contexto seguro; si falta compatibilidad no se presenta el botón como operativo.
+- Pruebas unitarias de cifrado/descifrado multibloque, autenticidad, contraseñas, aleatoriedad por archivo y controles de interfaz. Pruebas visuales de exportación cifrada, recuperación y rechazo de archivos manipulados en Chromium y Safari WebKit.
+- Limitaciones: copias potencialmente de hasta 245 MB requieren memoria libre; es necesario probar descargas/compartición en iPhone y Android físicos. No implica que exista sincronización automática ni almacenamiento en la nube.
