@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.7.0. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.7.2. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -136,3 +136,7 @@ Las pruebas abarcan Chromium y una auditoría separada de WebKit y Firefox. Las 
 **Copias protegidas.** Ajustes permite exportar y restaurar archivos cifrados con contraseña mediante AES-256-GCM y PBKDF2-SHA256, sal e IV aleatorios. La contraseña no se almacena y no se puede recuperar. Las copias JSON sin cifrar siguen disponibles para no perder compatibilidad.
 
 **Competencia.** Registro manual de cuentas, seguidores e interacciones por publicación; comparación, edición y descarga CSV. Hasta 3 competidores en FREE demo y 30 en PRO demo. No se simulan consultas a APIs ni se afirman métricas oficiales.
+
+## v0.7.1–0.7.2 · Recomendaciones y compatibilidad
+
+Las recomendaciones del panel usan alcance por plataforma importado, fechas de publicaciones y presupuestos previstos. No son análisis generados por una IA externa. La versión 0.7.2 corrige la precarga de estilos de la pantalla de carga adaptable en la PWA, manteniendo los cuatro originales de referencia.
