@@ -1,3 +1,13 @@
+## 2026-11-05 — v0.6.1 Compatibilidad y funciones de editor
+
+- Interfaz real responsive en vez de una fotografía con zonas transparentes; los cuatro diseños originales siguen intactos como referencia.
+- Escritorio PC/Mac desde 1250 px: seis indicadores en una fila, tres columnas en paneles y estudio amplio como en el boceto elegido.
+- Textos y controles más legibles en smartphone, manteniendo todos los módulos mediante desplazamiento y barra inferior.
+- Storyboard con reproducción temporizada y pausa, edición de escenas y exportación PNG 9:16/16:9; integración de modos Imagen, Copy e Ideas con herramientas locales operativas.
+- Aviso visible si falla el guardado local, en vez de perder cambios silenciosamente.
+- Auditoría de navegadores WebKit/Safari, Firefox, Chromium horizontal y UHD, más las nueve resoluciones responsive existentes.
+- Preparación de APK Android de depuración para pruebas: no equivale a una publicación de Google Play.
+
 ## 2026-11-05 — v0.6.0 Paneles funcionales y diseño responsive
 
 - Inicio deja de estar cubierto por una captura estática: ahora muestra componentes reales que se redistribuyen en smartphone, tablet y escritorio, conservando azul oscuro, cian, violeta y fucsia.

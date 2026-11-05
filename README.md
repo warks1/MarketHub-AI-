@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.6.0. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.6.1. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,7 +25,7 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.6.0 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.6.1 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 
@@ -117,8 +117,14 @@ La versión 0.6.0 conserva intactos los cuatro JPEG aprobados, pero **las vistas
 
 Las áreas transparentes sobre los originales permiten navegar y abrir funciones locales. Desde la placa inferior del escritorio, las zonas de edición del estudio o la opción «Abrir controles editables» del menú móvil se entra a los controles funcionales. Los KPI, conexiones y cifras fotografiados forman parte del boceto y **no representan mediciones ni conexiones reales**. La reproducción pixel a pixel de una imagen no equivale todavía a haber implementado todas sus funciones. Se debe mantener este diseño literal mientras se sustituyen progresivamente las zonas estáticas por componentes vivos con geometría y paleta coincidentes.
 
-## Interfaz adaptable y funcional (v0.6.0)
+## Interfaz adaptable y funcional (v0.6.1)
 
 El panel principal se construye con componentes reales: seis indicadores, gráfico de alcance basado en CSV, calendario, publicaciones, campañas, bandeja, Social Listening y accesos funcionales. Los datos sin conectar se presentan como no disponibles, sin fingir ROI ni conexiones. En móviles todos los bloques se reordenan verticalmente y la navegación permanece accesible en la barra inferior; en tablet el menú lateral muestra sus etiquetas; en PC/Mac aparecen varias columnas.
 
 El Estudio creativo ahora incluye storyboard con edición de escenas, orden, duración, textos, formato, paleta, vista previa, exportación JSON y descarga **PNG auténtica** de 1080×1920 o 1920×1080. El editor gráfico PNG previo se mantiene. **Todavía no renderiza vídeo**, ni genera imágenes con IA externa, ni publica en redes. Los cuatro bocetos originales siguen guardados como referencia de fidelidad; la composición dinámica aún necesita ajustes visuales para igualar exactamente cada elemento.
+
+### Controles del estudio 0.6.1
+
+La previsualización del storyboard reproduce escenas con su duración configurada y permite pausar. Su imagen estática puede exportarse como PNG auténtico en 9:16/16:9; el proyecto se exporta en JSON. El editor completo de vídeo con audio, exportación MP4, generación IA y publicaciones automáticas todavía están pendientes. Imagen/Diseño/Plantillas abren el diseñador local, Texto/Copy las plantillas de Oficina y Ideas las utilidades locales Growth Lab.
+
+Las pruebas abarcan Chromium y una auditoría separada de WebKit y Firefox. Las pruebas de navegador **no sustituyen** Safari iOS ni dispositivos físicos. Se puede generar un APK Android de **depuración** mediante GitHub Actions, pero no hay todavía paquete comercial firmado ni versión publicada en tiendas.

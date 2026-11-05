@@ -55,3 +55,7 @@ Los originales se pueden consultar en referencias.html sin modificaciones. La in
 ## Regla adicional de fidelidad estricta — v0.5.0
 
 No volver a generar diseños alternativos. Los cuatro JPEG originales son la única fuente de verdad de la apariencia elegida. No aplicar `flip`, filtros cromáticos ni cambios de composición. Para apps nativas, las imágenes deben copiarse a `public/assets` conservando el hash del original; la navegación real se implementa mediante controles accesibles sobre las vistas aprobadas mientras se completa el componente dinámico equivalente. Las métricas fotografiadas son ilustrativas.
+
+### Revisión técnica v0.6.1
+
+Se añadió auditoría Playwright de WebKit (simulación del motor Safari en Linux), Firefox y Chromium, incluidos formatos horizontal y UHD. Las capturas y resultados se guardan en los artefactos `markethub-visual-qa` de GitHub Actions. Se ensaya también compilación Android de depuración para validar el empaquetado Capacitor. Esta cobertura no demuestra compatibilidad final en iPhone, iPad, Android y macOS físicos; hacen falta pruebas reales antes de cualquier envío comercial.
