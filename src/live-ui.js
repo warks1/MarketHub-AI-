@@ -79,6 +79,7 @@ export function liveHome({posts=[],campaigns=[],analyticsRows=[],messages=[],men
  ].map(([ic,label,route])=>page('<span>'+ic+'</span>'+label+' <b>›</b>',route,'live-tip')).join('');
  const pPanel=panel('▥ Rendimiento por plataforma',page('Ver informes','analitica'),graph(a),'live-performance');
  const cPanel=panel('▦ Calendario de contenidos',page('Programar','crear'),calendar(p,calendarOffset)+
+ '<div class="live-calendar-actions">'+action('↓ Exportar al calendario','export-calendar','live-link')+'</div>'+
  '<div class="live-calendar-next"><strong>Publicaciones previstas</strong>'+
  (next.length?next.slice(0,2).map(post).join(''):'<p>Aún no hay publicaciones.</p>')+'</div>','live-calendar-panel');
  const iaPanel=panel('✦ Asistente de marketing <small>LOCAL</small>','',
