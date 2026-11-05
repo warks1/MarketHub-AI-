@@ -1,11 +1,11 @@
 /* MarketHub AI · service worker PWA para modo básico sin conexión.
    La estrategia de navegación es network-first: no inmovilizar versiones antiguas ni ocultar fallos de publicación. */
-const CACHE = 'markethub-nexus-pulse-shell-v0.6.1';
+const CACHE = 'markethub-nexus-pulse-shell-v0.7.0';
 const SHELL = [
  './','./index.html','./logo.svg','./manifest.webmanifest',
- './src/app.js','./src/catalogue.js','./src/nexus-ui.js','./src/mirror-ui.js','./src/live-ui.js','./src/live-studio.js','./src/studio-scene-export.js','./src/post-manager.js','./src/campaign-manager.js','./src/analytics-local.js',
- './src/office.js','./src/growth.js','./src/visual.js','./src/backup.js',
- './src/style.css','./src/nexus-ui.css','./src/nexus.css','./src/mirror.css','./src/live-ui.css','./src/reference.css','./src/campaign-manager.css','./src/analytics-local.css',
+ './src/app.js','./src/catalogue.js','./src/nexus-ui.js','./src/mirror-ui.js','./src/live-ui.js','./src/live-studio.js','./src/studio-scene-export.js','./src/studio-video-export.js','./src/studio-scene-media.js','./src/post-manager.js','./src/campaign-manager.js','./src/analytics-local.js',
+ './src/office.js','./src/growth.js','./src/visual.js','./src/backup.js','./src/secure-backup.js','./src/competitor-local.js',
+ './src/style.css','./src/nexus-ui.css','./src/nexus.css','./src/mirror.css','./src/live-ui.css','./src/reference.css','./src/campaign-manager.css','./src/analytics-local.css','./src/competitor-local.css',
  './assets/boceto-01-inicio.webp','./assets/boceto-02-estudio.webp',
  './assets/boceto-01-inicio-original.jpeg','./assets/boceto-02-estudio-original.jpeg',
  './assets/boceto-03-movil-original.jpeg','./assets/boceto-04-carga-original.jpeg',
