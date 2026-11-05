@@ -121,3 +121,32 @@ export async function importPortableCreativeProject(blob){
  const contents=parsePortableCreativeProject(await blob.text());
  return saveCreativeProject(contents);
 }
+
+/** Importar un lote validado en UNA transacción. Si falta espacio, no sobrescribe nada. */
+export async function importCreativeProjectBatch(entries){
+ if(!Array.isArray(entries)||!entries.length||entries.length>MAX_PROJECTS)throw Error('El lote contiene un número de proyectos no admitido');
+ const prepared=[];
+ for(const entry of entries){
+  const valid=validateCreativeProject(entry);
+  prepared.push({...valid,bytes:await entry.file.arrayBuffer()});
+ }
+ const existing=await listCreativeProjects();
+ const total=prepared.reduce((sum,item)=>sum+item.size,existing.reduce((sum,item)=>sum+item.size,0));
+ if(existing.length+prepared.length>MAX_PROJECTS)throw Error('No hay suficientes huecos: exporta y elimina proyectos antes de importar el lote');
+ if(total>MAX_PROJECT_TOTAL_BYTES)throw Error('El lote supera la capacidad de proyectos de 80 MB');
+ const db=await openDb(),now=Date.now();
+ try{
+  return await new Promise((resolve,reject)=>{
+   const tx=db.transaction(STORE,'readwrite'),store=tx.objectStore(STORE);
+   const ids=[];
+   prepared.forEach((entry,i)=>{
+    const id=globalThis.crypto?.randomUUID?.()||now.toString(36)+'-'+i+'-'+Math.random().toString(36).slice(2);
+    ids.push(id);
+    store.add({...entry,id,createdAt:now,updatedAt:now});
+   });
+   tx.oncomplete=()=>resolve(ids);
+   tx.onabort=()=>reject(tx.error||Error('La restauración no se completó; no se han sustituido los proyectos anteriores'));
+   tx.onerror=()=>{};
+  });
+ }finally{db.close()}
+}
