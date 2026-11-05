@@ -38,6 +38,10 @@ for(const [engine,runner,width,height] of [
   await page.locator('[data-forge-input="mask"]').selectOption('corazon');
   await page.locator('[data-forge-input="format"]').selectOption('1:1');
   await page.locator('[data-forge-input="caption"]').fill('CAMPAÑA DE PRUEBA');
+  // Auditor PULSE: debe analizar una creatividad local sin bloquear el editor.
+  await page.locator('[data-forge-action="audit-photo"]').click();
+  await page.locator('.forge-audit h2').waitFor({state:'visible'});
+  if(!(await page.locator('.forge-audit li').count()))problems.push('Auditor PULSE no presenta hallazgos');
   // ADN Creativo: guardar una identidad, aplicar y preservar la composición.
   await page.locator('[data-forge-input="brandName"]').fill('Marca de Prueba');
   await page.locator('[data-forge-input="brandPrimary"]').evaluate(el=>{el.value='#1122aa';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))});
