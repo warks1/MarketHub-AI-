@@ -1,4 +1,5 @@
 // Exportación de imagen auténtica desde el storyboard local.
+import {isSceneImageData,loadSceneImage,drawImageCover} from './studio-scene-media.js';
 // No envía contenido a servidores ni afirma que exporta vídeo.
 const PALETTES={
  'Neón':['#071536','#14dffe','#ed31dd'],
@@ -17,13 +18,19 @@ function wrap(ctx,text,maxWidth,maxLines=5){
  if(line&&lines.length<maxLines)lines.push(line);
  return lines;
 }
-export function drawScene(ctx,scene={},format='9:16'){
+export function drawScene(ctx,scene={},format='9:16',photo=null){
  const [w,h]=sceneDimensions(format);
  const colors=PALETTES[scene.theme]||PALETTES.Neón;
  ctx.clearRect(0,0,w,h);
  const bg=ctx.createLinearGradient(0,0,w,h);
  bg.addColorStop(0,colors[0]);bg.addColorStop(.53,'#19114b');bg.addColorStop(1,colors[2]);
  ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+ if(photo){
+  drawImageCover(ctx,photo,w,h);
+  // Capa tenue para conservar legibilidad del texto y colores NEXUS + PULSE.
+  ctx.fillStyle='rgba(4,8,32,.48)';
+  ctx.fillRect(0,0,w,h);
+ }
  const circles=[
   [w*.12,h*.22,w*.64,colors[1]],
   [w*.87,h*.72,w*.6,colors[2]]
@@ -63,7 +70,8 @@ export async function downloadScenePNG(scene,format){
  canvas.width=w;canvas.height=h;
  const context=canvas.getContext('2d');
  if(!context)throw Error('No se pudo iniciar el editor gráfico.');
- drawScene(context,scene,format);
+ const photo=isSceneImageData(scene.imageData)?await loadSceneImage(scene.imageData):null;
+ drawScene(context,scene,format,photo);
  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('No se pudo convertir el diseño a PNG.')),'image/png'));
  const url=URL.createObjectURL(blob),link=document.createElement('a');
  link.href=url;link.download='markethub-escena-'+new Date().toISOString().slice(0,10)+'.png';
