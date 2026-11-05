@@ -249,7 +249,7 @@
  width:calc(100% - 8px)!important;max-width:none!important;
  min-width:0;z-index:1;visibility:visible!important;opacity:1!important;
  transform:scaleX(var(--splash-progress,0))!important;
- transform-origin:left center!important;transition:transform .1s linear!important;pointer-events:none;
+ transform-origin:left center!important;transition:none!important;pointer-events:none;
 }
 .nexus-splash.nexus-original-splash .mh-splash-track > .progress-value{z-index:2}
 @media(min-width:700px) and (max-width:1199px) and (min-height:541px){
