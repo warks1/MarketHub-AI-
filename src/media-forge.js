@@ -1,10 +1,11 @@
 // MEDIA FORGE · Herramientas multimedia locales originales de MarketHub AI.
+import {convertSubtitles,parseSubtitles} from './subtitle-tools.js';
 // Sin subida de archivos a servidores, ni dependencias de servicios externos.
-const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:''};
+const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:''};
 export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9':[1920,1080],'3:2':[1500,1000]};
 export const MASKS=['orbita','circulo','ovalada','redondeada','estrella','hexagono','pentagono','octagono','triangulo','diamante','corazon','banda-horizontal','banda-vertical','ventana','completa'];
 const looks={neon:['contrast(1.1) saturate(1.3)','#26e9fb','#eb4df5'],editorial:['contrast(1.06) saturate(.85)','#ffcfa2','#ef9bcd'],noir:['grayscale(1) contrast(1.25)','#f0f4ff','#8190dd'],natural:['none','#ffffff','#8acde9']};
-const tabNames={photo:'Foto y máscaras',audio:'Audio y WAV',video:'Vídeo y fotogramas',pdf:'Visor PDF'};
+const tabNames={photo:'Foto y máscaras',audio:'Audio y WAV',video:'Vídeo y fotogramas',pdf:'Visor PDF',subs:'Subtítulos SRT / VTT'};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const btn=(label,action,disabled=false)=>'<button type="button" data-forge-action="'+action+'" '+(disabled?'disabled':'')+'>'+label+'</button>';
 const field=(label,key,opts)=>'<label>'+label+'<select data-forge-input="'+key+'">'+opts.map(([v,n])=>'<option value="'+v+'" '+(s[key]===v?'selected':'')+'>'+n+'</option>').join('')+'</select></label>';
@@ -38,10 +39,22 @@ function pdf(){
  return '<div class="forge-grid">'+panel('Visor de documentos',upload('pdf','application/pdf')+'<p>PDF local. Si tu navegador no permite mostrarlo aquí, puedes abrirlo en otra pestaña.</p>'+(s.urls.pdf?'<a href="'+s.urls.pdf+'" target="_blank" rel="noopener noreferrer">Abrir PDF</a>':''))+
  panel('Documento',s.urls.pdf?'<iframe title="PDF local" class="forge-pdf" src="'+s.urls.pdf+'"></iframe>':'<div class="forge-empty">Abre un PDF.</div>')+'</div>';
 }
+function subtitles(){
+ const summary=(()=>{try{return parseSubtitles(s.subtitle).length+' fragmentos reconocidos';}catch{return 'Pega un archivo SRT o WebVTT para convertirlo';}})();
+ return '<div class="forge-grid">'+panel('Subtítulos y conversor offline',
+ '<p>Convierte SRT ↔ WebVTT sin subir textos ni vídeos. Corrige el formato de los tiempos y numera automáticamente.</p>'+
+ upload('subs','.srt,.vtt,text/vtt,application/x-subrip,text/plain')+
+ '<label>Texto editable de subtítulos<textarea id="forgeSubtitleText" data-forge-input="subtitle" rows="12" placeholder="1&#10;00:00:01,000 --> 00:00:03,000&#10;Tu primera frase">'+esc(s.subtitle)+'</textarea></label>'+
+ '<p class="forge-meta" id="forgeSubtitleStatus">'+summary+'</p>'+
+ actions([btn('Descargar SRT','srt',!s.subtitle.trim()),btn('Descargar VTT','vtt',!s.subtitle.trim())])+
+ '<p>Compatible con subtítulos de hasta 1 MB y 2000 fragmentos. No traduce ni transcribe audio automáticamente.</p>')+
+ panel('Flujo creativo PULSE',
+ '<div class="forge-empty">Prepara subtítulos aquí y guárdalos para utilizarlos con tus vídeos y campañas. Los tiempos se comprueban antes de exportar.</div>')+'</div>';
+}
 export function forgePage(){
  return '<section class="media-forge"><header class="forge-head"><div><span class="eyebrow">NEXUS + PULSE · HERRAMIENTAS INTEGRADAS</span><h1>MEDIA FORGE ✦</h1><p>Visualiza, edita y convierte sin salir de MarketHub AI.</p></div><span class="forge-private">◎ Sin subir archivos</span></header>'+
  '<nav class="forge-tabs" aria-label="Laboratorio multimedia">'+Object.entries(tabNames).map(([k,n])=>'<button type="button" data-forge-tab="'+k+'" aria-current="'+(s.tab===k?'page':'false')+'">'+n+'</button>').join('')+'</nav>'+
- (s.tab==='audio'?audio():s.tab==='video'?video():s.tab==='pdf'?pdf():photo())+'</section>';
+ (s.tab==='audio'?audio():s.tab==='video'?video():s.tab==='pdf'?pdf():s.tab==='subs'?subtitles():photo())+'</section>';
 }
 export function forgeTab(name,refresh){if(!tabNames[name])return false;s.tab=name;refresh();return true}
 export const outputDimensions=format=>SIZES[format]||SIZES['9:16'];
@@ -100,16 +113,22 @@ export function forgeInput(target){
  else if(name==='mask'&&MASKS.includes(target.value))s.mask=target.value;
  else if(name==='look'&&looks[target.value])s.look=target.value;
  else if(name==='caption')s.caption=String(target.value).slice(0,90);
+ else if(name==='subtitle')s.subtitle=String(target.value).slice(0,1000000);
  else return false;
  forgeMount();return true;
 }
 export async function forgeFile(target,ctx){
  const type=target?.dataset?.forgeFile;if(!tabNames[type==='photo'?'photo':type])return false;
  const file=target.files?.[0];if(!file)return true;
- const max=type==='video'?250:type==='audio'?60:type==='pdf'?30:25;
+ const max=type==='video'?250:type==='audio'?60:type==='pdf'?30:type==='subs'?1:25;
  if(!file.size||file.size>max*1048576){ctx.toast('Archivo demasiado grande o vacío (máximo '+max+' MB).');return true}
- const mimeOk=type==='photo'?['image/png','image/jpeg','image/webp','image/gif'].includes(file.type):type==='pdf'?file.type==='application/pdf':file.type.startsWith(type+'/');
+ const mimeOk=type==='photo'?['image/png','image/jpeg','image/webp','image/gif'].includes(file.type):type==='pdf'?file.type==='application/pdf':type==='subs'?/\.(srt|vtt)$/i.test(file.name):file.type.startsWith(type+'/');
  if(!mimeOk){ctx.toast('Formato de archivo no admitido.');return true}
+ if(type==='subs'){
+  try{s.subtitle=(await file.text()).slice(0,1000000);s.files.subs=file;ctx.refresh();ctx.toast('Subtítulos cargados y listos para editar.');}
+  catch{ctx.toast('No se pudo leer el archivo de subtítulos.');}
+  return true;
+ }
  const url=URL.createObjectURL(file);
  if(type==='photo'){
   try{const img=new Image();img.src=url;await img.decode();if(!img.naturalWidth||img.naturalWidth*img.naturalHeight>50000000)throw Error('Tamaño de imagen excesivo');s.image=img}
@@ -181,6 +200,10 @@ export async function forgeClick(target,ctx){
    }
    send(createMediaZip(files),safeFileName(s.files.photo.name)+'-PULSE-PACK.zip');
    ctx.toast('PULSE PACK: cinco formatos exportados en un ZIP.');
+  }else if(action==='srt'||action==='vtt'){
+   const result=convertSubtitles(s.subtitle,action);
+   send(new Blob([result],{type:action==='vtt'?'text/vtt;charset=utf-8':'text/plain;charset=utf-8'}),safeFileName(s.files.subs?.name||'subtitulos')+'.'+action);
+   ctx.toast('Subtítulos '+action.toUpperCase()+' exportados.');
   }else if(action==='wav'){
    if(!s.files.audio)throw Error('Selecciona un audio');
    const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('El navegador no admite decodificación de audio');
