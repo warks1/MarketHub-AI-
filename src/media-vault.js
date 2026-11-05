@@ -7,7 +7,7 @@ export function validateVaultAsset({name,blob}={}){
  if(!(blob instanceof Blob)||blob.size<1)throw Error('El archivo debe contener datos');
  if(blob.size>50*1024*1024)throw Error('Este archivo supera 50 MB. Utiliza un archivo más pequeño');
  if(!TYPES.includes(blob.type))throw Error('Formato no permitido en la biblioteca multimedia');
- const cleaned=String(name||'Archivo').replace(/[<>\x00-\x1F]/g,'').trim().slice(0,90)||'Archivo';
+ const cleaned=String(name||'Archivo').replace(/[<>\\/\x00-\x1F]/g,'').trim().slice(0,90)||'Archivo';
  return {name:cleaned,type:blob.type,size:blob.size};
 }
 function openDb(){
