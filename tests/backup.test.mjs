@@ -79,3 +79,16 @@ test('Rechaza estructuras potencialmente peligrosas',()=>{
  const suspicious=JSON.parse('{"__proto__": {"admin": true}}');
  assert.throws(()=>validateBackup(payload({'markethub-ai-demo-v1':suspicious})),/Clave no autorizada/);
 });
+
+test('La copia conserva fotografías de escenas sin aceptar imágenes SVG ni scripts',()=>{
+ const photo='data:image/jpeg;base64,'+'A'.repeat(140000);
+ const content={plan:'free',storyboard:[{id:'escena-1',title:'Foto',imageData:photo}]};
+ map.clear();
+ map.set('markethub-ai-demo-v1',JSON.stringify(content));
+ const backup=readBackup();
+ assert.equal(backup.modules['markethub-ai-demo-v1'].storyboard[0].imageData,photo);
+ const validated=validateBackup(payload({'markethub-ai-demo-v1':content}));
+ assert.equal(JSON.parse(validated['markethub-ai-demo-v1']).storyboard[0].imageData,photo);
+ const unsafe={plan:'free',storyboard:[{id:'mal',imageData:'data:image/svg+xml;base64,'+'A'.repeat(140000)}]};
+ assert.throws(()=>validateBackup(payload({'markethub-ai-demo-v1':unsafe})),/Texto demasiado largo/);
+});
