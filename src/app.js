@@ -800,7 +800,7 @@ function splash(){
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches){finish();return}
  timer=setInterval(()=>{
   progress=Math.min(100,progress+8);
-  bar.style.width=progress+'%';
+  bar.style.setProperty('--splash-progress',String(progress/100));
   value.textContent=progress+'%';
   if(track)track.setAttribute('aria-valuenow',String(progress));
   if(progress===100)finish();
