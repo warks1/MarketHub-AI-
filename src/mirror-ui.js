@@ -115,6 +115,25 @@ function mobileImage(page){
  'style="width:'+imgWidth+'%;left:'+left+'%;top:'+top+'%" draggable="false" fetchpriority="high">'+
  mobileHits(page)+'</div>';
 }
+function fixedMobileNav(page){
+ const crop=page==='inicio'?{x:229,y:850,w:271,h:61}:{x:559,y:851,w:300,h:61};
+ const imgWidth=(IMAGE_W/crop.w*100).toFixed(5);
+ const left=(-crop.x/crop.w*100).toFixed(5);
+ const top=(-crop.y/crop.h*100).toFixed(5);
+ const base=page==='inicio'?[
+  ['Inicio','inicio',237,852,48],['Crear','estudio',290,852,49],
+  ['Planificar','crear',343,852,53],['Bandeja','bandeja',398,852,51],
+  ['Más herramientas','mirror-menu',451,852,48,true]
+ ]:[
+  ['Inicio','inicio',558,853,52],['Crear','estudio',614,853,59],
+  ['Planificar','crear',680,853,52],['Bandeja','bandeja',739,853,54],
+  ['Más herramientas','mirror-menu',796,853,56,true]
+ ];
+ const hits=base.map(([label,route,x,y,w,action])=>mobileHit(label,route,x,y,w,55,crop,Boolean(action))).join('');
+ return '<nav class="mirror-mobile-fixednav" aria-label="Navegación principal móvil" style="aspect-ratio:'+crop.w+'/'+crop.h+'">'+
+ '<img class="mirror-fixednav-original" src="'+SRC.movil+'" width="'+IMAGE_W+'" height="'+IMAGE_H+'" draggable="false" alt="" '+
+ 'style="width:'+imgWidth+'%;left:'+left+'%;top:'+top+'%">'+hits+'</nav>';
+}
 const MENU=[
  ['inicio','Inicio'],['estudio','Estudio IA'],['diseño','Crear y diseñar'],['crear','Planificar publicaciones'],
  ['campanas','Campañas'],['analitica','Analítica'],['escucha','Social Listening'],['bandeja','Bandeja'],
@@ -138,7 +157,7 @@ export function mirrorLayer(page,{menu=false}={}){
  '<div class="mirror-desktop-view"><div class="mirror-desktop-board">'+
  '<img class="mirror-desktop-original" src="'+src+'" width="1448" height="1086" alt="Diseño original aprobado de MarketHub AI. Los indicadores de la imagen son ilustrativos." draggable="false" fetchpriority="high">'+
  desktopHits(page)+'</div></div>'+
- '<div class="mirror-mobile-view">'+mobileImage(page)+'</div>'+
+ '<div class="mirror-mobile-view">'+mobileImage(page)+fixedMobileNav(page)+'</div>'+
  '</main>'+
  '<p class="mirror-a11y-note">La apariencia reproduce el archivo original aprobado. Las cifras e indicadores incrustados en la imagen son ejemplos, no conexiones activas. Toca los módulos para abrir las herramientas funcionales.</p>'+
  (menu?menuHTML():'')+
