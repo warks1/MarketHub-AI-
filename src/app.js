@@ -46,7 +46,7 @@ const nav=[
  ['bandeja','Bandeja','inbox'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
 function sectionHeader(title,subtitle,action){
- return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.3.0</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
+ return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.3.2</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
 }
 function btn(text,action,klass='secondary',extra=''){return '<button class="'+klass+'" data-action="'+action+'" '+extra+'>'+text+'</button>'}
 function kpi(title,value,delta,symbol,glow){return '<div class="kpi" style="--glow:'+glow+'"><div class="kpi-label">'+safe(title)+'<span class="kpi-symbol">'+symbol+'</span></div><div class="kpi-value">'+safe(value)+'</div><div class="positive">↗ '+safe(delta)+' · ejemplo</div></div>'}
@@ -59,7 +59,7 @@ function calendar(){
  for(let i=0;i<shift;i++)cells.push('<div></div>');
  for(let day=1;day<=days;day++){
   const date=yr+'-'+String(month+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
-  const has=state.posts.some(p=>p.date===date);
+  const has=state.posts.some(p=>p && typeof p==='object' && p.date===date);
   cells.push('<div class="'+(has?'event ':'')+(day===now.getDate()?'today':'')+'" title="'+(has?'Publicación de demostración':'')+'">'+day+'</div>');
  }
  return '<div class="card"><div class="card-head"><h2>📅 Calendario de contenidos</h2>'+btn('Programar','goto-crear','secondary small-btn')+'</div><p class="muted tiny" style="margin-bottom:10px">'+new Intl.DateTimeFormat('es',{month:'long',year:'numeric'}).format(now)+'</p><div class="calendar-days">'+cells.join('')+'</div></div>';
@@ -69,7 +69,7 @@ function postRow(p){
 }
 function postsFiltered(){
  const query=state.search.toLowerCase();
- return state.posts.filter(p=>(p.title+' '+p.platform+' '+p.status).toLowerCase().includes(query));
+ return state.posts.filter(p=>p && typeof p==='object' && (String(p.title??'')+' '+String(p.platform??'')+' '+String(p.status??'')).toLowerCase().includes(query));
 }
 function adUnit(placement){
  if(state.plan==='pro')return '';
@@ -249,5 +249,13 @@ function splash(){
  overlay.querySelector('#skipSplash').addEventListener('click',finish);
  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)finish();
 }
-render();
-splash();
+try {
+  render();
+  if (window.__MARKETHUB_BOOT__) window.__MARKETHUB_BOOT__.ready = true;
+  splash();
+} catch (error) {
+  if (window.__MARKETHUB_BOOT__) window.__MARKETHUB_BOOT__.ready = false;
+  document.querySelector('.splash')?.remove();
+  if (typeof window.markethubBootFailed === 'function') window.markethubBootFailed(error);
+  else throw error;
+}
