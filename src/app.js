@@ -10,6 +10,7 @@ import {analyticsLocalHTML,analyticsCsvTemplate,parseAnalyticsCSV} from './analy
 import {mirrorLayer} from './mirror-ui.js';
 import {liveHome,liveInbox,liveListening} from './live-ui.js';
 import {liveStudio,createScene,parseScene,STUDIO_THEMES} from './live-studio.js';
+import {downloadScenePNG} from './studio-scene-export.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -405,6 +406,12 @@ case 'campaign-export':{
   if(state.storyboard.length)state.storyboard.splice(state.storyboardCurrent,1);
   state.storyboardCurrent=Math.max(0,Math.min(state.storyboardCurrent,state.storyboard.length-1));
   state.modal=null;save();render();toast('Escena eliminada del proyecto local.');break;
+ }
+ case 'storyboard-export-png':{
+  downloadScenePNG(state.storyboard[state.storyboardCurrent],state.videoFormat)
+   .then(file=>toast('PNG '+file.width+'×'+file.height+' creado localmente.'))
+   .catch(error=>toast('No se ha podido exportar la imagen: '+String(error.message||error)));
+  break;
  }
  case 'storyboard-export':{
   const data={app:'MarketHub AI',format:state.videoFormat,kind:'Storyboard local (no vídeo exportado)',scenes:state.storyboard};
