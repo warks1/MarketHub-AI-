@@ -71,6 +71,10 @@ try{
    await page.locator('#live-scene-title').fill('Escena realmente editable');
    await page.locator('#storyboardForm button[type="submit"]').click();
    if(!(await page.locator('.live-editor-text h3').textContent()).includes('Escena realmente editable'))problems.push('Vista previa no refleja edición');
+   const output=page.waitForEvent('download',{timeout:10000});
+   await page.locator('[data-action="storyboard-export-png"]').click();
+   const png=await output;
+   if(!png.suggestedFilename().endsWith('.png'))problems.push('El estudio no exporta una imagen PNG real');
    await page.screenshot({path:'visual-qa/'+id+'-edicion.png',fullPage:true});
   }
   await go(page,'campanas',width);
