@@ -255,3 +255,23 @@
  .live-stat{padding:10px;min-height:108px}
  .live-stat strong{font-size:clamp(17px,1.8vw,25px)}
 }
+
+/* Legibilidad móvil: no miniaturizar la interfaz para fingir que cabe toda. */
+@media(max-width:700px){
+ .live-panel-heading h2{font-size:13px;line-height:1.35}
+ .live-stat>span:first-child{font-size:11px;line-height:1.2}
+ .live-stat small{font-size:10px}
+ .live-tip{font-size:12px;min-height:38px}
+ .live-link,.live-outline{font-size:12px;min-height:36px}
+ .live-day{font-size:12px;min-height:33px}
+ .live-calendar-next strong{font-size:12px}
+ .live-row>div strong,.live-message strong{font-size:12px}
+ .live-row>div small,.live-message small{font-size:10px}
+ .live-panel .live-empty{font-size:12px;line-height:1.5}
+ .live-studio-switch{font-size:12px;min-height:40px}
+ .live-primary{min-height:40px}
+}
+@media(min-width:380px) and (max-width:700px){
+ .live-stat>span:first-child{font-size:10px;white-space:normal}
+ .live-stat small{font-size:10px}
+}
