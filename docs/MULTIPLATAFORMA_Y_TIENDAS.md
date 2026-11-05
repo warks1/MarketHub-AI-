@@ -65,3 +65,10 @@ El paquete Android es una **APK de prueba**, no una publicación comercial. La c
 de codecs, WebM, visor PDF y descargas debe comprobarse instalándolo en dispositivos reales.
 Las funciones de IA generativa, seguimiento de sujetos, transcripción y conversión MP4/MP3
 universal siguen siendo objetivos futuros: no se presentan como activas.
+
+### Paquete de validación de la suite integrada (5 de noviembre de 2026)
+Este build suma Media Forge, biblioteca privada IndexedDB, perfiles ADN Creativo de Marca,
+Auditor PULSE, SafeFrame y transferencia interna al Estudio. La compilación se usa
+para **probar dispositivos Android reales**: permisos de archivos, WebView, galería,
+descargas, IndexedDB, almacenamiento lleno, recarga y navegación, antes de generar un
+AAB firmado para distribución comercial. Los datos locales no se sincronizan entre móviles.
