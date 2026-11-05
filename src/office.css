@@ -30,3 +30,10 @@
 .workspace-metrics span{font-size:11px;color:#b6cbe8}
 @media(max-width:1140px){.workspace-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-dual{grid-template-columns:1fr}}
 @media(max-width:680px){.workspace-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.workspace-stat{padding:12px}.workspace-stat strong{font-size:24px}.workspace-dual{grid-template-columns:1fr}.workspace-record select.input{font-size:12px}.workspace-metrics{grid-template-columns:1fr 1fr}.workspace-metrics strong{font-size:17px}.workspace-tabs button{padding:10px 11px;font-size:12px}}
+
+/* La landing y el kit de marca muestran el texto completo, sin partir palabras. */
+.workspace-landing-preview,.workspace-brand-preview,
+.workspace-landing-preview h2,.workspace-brand-preview h2,
+.workspace-landing-preview p,.workspace-brand-preview p,.landing-preview-button{
+ min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:normal;
+}
