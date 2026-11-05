@@ -67,3 +67,12 @@
 .forge-brand-fields input[type=color]{min-height:48px;padding:4px;cursor:pointer}
 .forge-brand select{display:block;max-width:100%;min-height:44px}
 @media(max-width:680px){.forge-brand-fields{grid-template-columns:minmax(0,1fr)}.forge-brand-fields label:last-child{grid-column:auto}}
+
+/* Auditor original: señales legibles, no certificados de plataforma. */
+.forge-audit{margin-top:15px}
+.forge-audit ul{display:grid;gap:8px;list-style:none;margin:16px 0 0;padding:0}
+.forge-audit li{display:grid;gap:3px;border-radius:12px;padding:10px 12px;border:1px solid #4b618d;background:#102042;line-height:1.45}
+.forge-audit li strong{font-size:13px}
+.forge-audit li span{font-size:12px;color:#d5dff8;overflow-wrap:anywhere}
+.forge-audit-pass{border-color:#367e82!important}
+.forge-audit-warn{border-color:#bc8b4c!important}
