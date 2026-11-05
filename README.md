@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.4.4. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.5.0. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,7 +25,7 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.4.4 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.5.0 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
 ## Inicio rápido
 
@@ -110,3 +110,9 @@ La interfaz de ejemplo de métricas del boceto se conserva por separado y se ide
 ## Analítica CSV real, sin cuentas conectadas
 
 En **Analítica → Analítica con datos propios**, descarga la plantilla CSV, complétala con cifras de tus informes y vuelve a importarla. El módulo valida fechas, plataformas y números, suma las métricas por canal y genera una gráfica de alcance por fecha. No se envía información a ningún servidor. Los datos guardados entran en el respaldo JSON local; no representan datos de cuentas conectadas.
+
+## Modo ESPEJO — referencia visual aprobada
+
+Por decisión del propietario, las vistas principales se abren mostrando **los JPEG originales** de los bocetos 01 (Inicio), 02 (Estudio creativo) y 03 (pantallas móviles), sin filtros, inversiones, recoloreados ni reinterpretaciones. La pantalla de carga utiliza el JPEG original 04 en todos los dispositivos. Los originales están duplicados **sin modificar un byte** en `public/assets/` para que la compilación Vite y las apps Capacitor utilicen los mismos diseños que la web.
+
+Las áreas transparentes sobre los originales permiten navegar y abrir funciones locales. Desde la placa inferior del escritorio, las zonas de edición del estudio o la opción «Abrir controles editables» del menú móvil se entra a los controles funcionales. Los KPI, conexiones y cifras fotografiados forman parte del boceto y **no representan mediciones ni conexiones reales**. La reproducción pixel a pixel de una imagen no equivale todavía a haber implementado todas sus funciones. Se debe mantener este diseño literal mientras se sustituyen progresivamente las zonas estáticas por componentes vivos con geometría y paleta coincidentes.

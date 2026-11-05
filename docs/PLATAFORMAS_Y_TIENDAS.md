@@ -51,3 +51,7 @@ Los originales se pueden consultar en referencias.html sin modificaciones. La in
 - [ ] Ningún botón de demostración puede hacerse pasar por una función comercial integrada.
 
 **Situación actual:** prototipo en desarrollo; NO está subido ni aprobado en ninguna de las tres tiendas.
+
+## Regla adicional de fidelidad estricta — v0.5.0
+
+No volver a generar diseños alternativos. Los cuatro JPEG originales son la única fuente de verdad de la apariencia elegida. No aplicar `flip`, filtros cromáticos ni cambios de composición. Para apps nativas, las imágenes deben copiarse a `public/assets` conservando el hash del original; la navegación real se implementa mediante controles accesibles sobre las vistas aprobadas mientras se completa el componente dinámico equivalente. Las métricas fotografiadas son ilustrativas.

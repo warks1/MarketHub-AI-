@@ -1,3 +1,12 @@
+## 2026-11-05 — v0.5.0 Modo ESPEJO: originales sin redibujar
+
+- Carga 04 sustituida por el JPEG original seleccionado en todas las plataformas, con barra real y entrada pulsable sobre la imagen.
+- Inicio 01 y Estudio 02 reproducidos con JPEG originales y zonas transparentes de interacción. La pantalla 03 aporta las vistas móviles, sin flip horizontal ni cambios de color.
+- Barra de navegación fija en móviles usando otro recorte de la misma referencia original, no iconos recreados.
+- Los cuatro JPEG se incluyen en `public/assets/` idénticos byte por byte para Windows, Mac, Android, iOS y PWA.
+- Se preservan todas las herramientas reales y se añade acceso explícito a controles editables; las cifras de la imagen permanecen como demo visual.
+- Nueva auditoría visual responsive y pruebas de fidelidad de assets. No implica aprobación comercial ni publicación en tiendas.
+
 ## 2026-11-05 — v0.4.4 Calendario editorial táctil
 
 - Calendario del panel principal con navegación mensual y selección de un día para preparar una publicación con la fecha precargada.
