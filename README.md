@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.6.1. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.7.0. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -128,3 +128,11 @@ El Estudio creativo ahora incluye storyboard con edición de escenas, orden, dur
 La previsualización del storyboard reproduce escenas con su duración configurada y permite pausar. Su imagen estática puede exportarse como PNG auténtico en 9:16/16:9; el proyecto se exporta en JSON. El editor completo de vídeo con audio, exportación MP4, generación IA y publicaciones automáticas todavía están pendientes. Imagen/Diseño/Plantillas abren el diseñador local, Texto/Copy las plantillas de Oficina y Ideas las utilidades locales Growth Lab.
 
 Las pruebas abarcan Chromium y una auditoría separada de WebKit y Firefox. Las pruebas de navegador **no sustituyen** Safari iOS ni dispositivos físicos. Se puede generar un APK Android de **depuración** mediante GitHub Actions, pero no hay todavía paquete comercial firmado ni versión publicada en tiendas.
+
+## v0.7.0 · Funciones locales nuevas
+
+**Vídeo desde el estudio.** Cuando el navegador permite Canvas y MediaRecorder, puedes generar clips auténticos sin audio en MP4 o WebM con fotografías propias, escenas, textos, fundidos y zoom. Esta fase admite hasta 12 escenas y 45 segundos a 720p. Si el navegador no soporta grabación local, el botón se desactiva. No incorpora todavía música, subtítulos automáticos, exportación 4K ni IA generativa. Los archivos no se envían a un servidor.
+
+**Copias protegidas.** Ajustes permite exportar y restaurar archivos cifrados con contraseña mediante AES-256-GCM y PBKDF2-SHA256, sal e IV aleatorios. La contraseña no se almacena y no se puede recuperar. Las copias JSON sin cifrar siguen disponibles para no perder compatibilidad.
+
+**Competencia.** Registro manual de cuentas, seguidores e interacciones por publicación; comparación, edición y descarga CSV. Hasta 3 competidores en FREE demo y 30 en PRO demo. No se simulan consultas a APIs ni se afirman métricas oficiales.
