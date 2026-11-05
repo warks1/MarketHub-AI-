@@ -44,3 +44,18 @@
 @media(max-width:680px){
  .media-forge .forge-panel textarea{font-size:16px;min-height:195px}
 }
+
+/* Biblioteca local de materiales integrada. Etiquetas y acciones reales en móvil. */
+.forge-vault{min-height:340px}
+.forge-vault-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:12px;margin-top:15px}
+.forge-vault-item{min-width:0;display:flex;flex-direction:column;gap:10px;border:1px solid #495f9f;border-radius:15px;background:#0c1738;padding:11px}
+.forge-vault-item>img,.forge-vault-icon{height:145px;width:100%;object-fit:contain;border-radius:11px;background:#09132d;display:grid;place-items:center;color:#7bf4ff;font-size:43px}
+.forge-vault-info{min-width:0;display:grid;gap:5px}
+.forge-vault-info strong{font-size:13px;overflow-wrap:anywhere;line-height:1.35}
+.forge-vault-info small{font-size:11px;color:#b1c5ef;overflow-wrap:anywhere}
+.forge-vault-buttons{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+.forge-vault-buttons button{flex:1 1 auto;min-height:42px;padding:8px 10px;border:1px solid #4c8cbc;border-radius:9px;background:#12396b;color:#effbff;font-size:12px;font-weight:700}
+.forge-vault-buttons .forge-vault-delete{background:#442148;border-color:#a86191}
+.forge-vault-error{border:1px solid #fb9f78;border-radius:12px;padding:10px;color:#ffe4d6}
+@media(max-width:680px){.forge-vault-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.forge-vault-item{padding:8px}.forge-vault-item>img,.forge-vault-icon{height:108px}.forge-vault-buttons button{width:100%}}
+@media(max-width:360px){.forge-vault-grid{grid-template-columns:minmax(0,1fr)}}
