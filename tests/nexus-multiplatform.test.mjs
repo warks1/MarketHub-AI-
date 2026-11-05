@@ -40,11 +40,11 @@ test('Boceto 03: navegación inferior móvil conserva Inicio, Crear, Planificar,
 test('Boceto 04: referencia original y barra de carga animada',()=>{
  const app=read('src/app.js');
  assert.match(app,/nexus-original-splash/);
- assert.match(app,/boceto-04-carga.webp/);
+ assert.match(app,/boceto-04-carga-original.jpeg/);
  assert.match(app,/progressFill/);
  assert.match(app,/progressPercent/);
  assert.match(app,/skipSplash/);
- assert.ok(fs.existsSync(path.join(root,'assets/boceto-04-carga.webp')));
+ assert.ok(fs.existsSync(path.join(root,'assets/boceto-04-carga-original.jpeg')));
  assert.match(read('index.html'),/src\/reference\.css/);
 });
 test('Compatibilidad PWA y rutas a las tiendas',()=>{
