@@ -4,7 +4,7 @@ import {listVaultAssets,getVaultAsset,saveVaultAsset,removeVaultAsset,vaultSuppo
 import {readBrandProfiles,saveBrandProfile,removeBrandProfile,normalizeBrandProfile,TONES} from './brand-dna.js';
 import {auditCreative} from './creative-audit.js';
 // Sin subida de archivos a servidores, ni dependencias de servicios externos.
-const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[],brandSelection:'',brandName:'',brandPrimary:'#26E9FB',brandAccent:'#EB4DF5',brandTone:'Profesional',brandCta:'',brandActive:false,audit:null};
+const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off',vault:[],vaultReady:false,vaultError:'',vaultUrls:[],vaultLoadToken:0,brandSelection:'',brandName:'',brandPrimary:'#26E9FB',brandAccent:'#EB4DF5',brandTone:'Profesional',brandCta:'',brandActive:false,audit:null};
 export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9':[1920,1080],'3:2':[1500,1000]};
 // SafeFrame es una orientación visual nuestra, no los requisitos oficiales de las redes sociales.
 export const SAFEFRAME_GUIDES={'9:16':{top:.17,right:.12,bottom:.25,left:.09},'4:5':{top:.10,right:.08,bottom:.18,left:.08},'1:1':{top:.10,right:.08,bottom:.15,left:.08},'16:9':{top:.10,right:.11,bottom:.17,left:.11},'3:2':{top:.10,right:.10,bottom:.15,left:.10}};
@@ -99,18 +99,25 @@ function vaultPage(){
  '<p class="forge-meta">Los archivos se conservan solo en este navegador/dispositivo. No se sincronizan ni se incluyen en las copias JSON. Puedes descargarlos individualmente. Si borras los datos del navegador podrías perderlos.</p></section>';
 }
 async function forgeVaultLoad(refresh){
- for(const url of s.vaultUrls)URL.revokeObjectURL(url);
- s.vaultUrls=[];s.vaultReady=false;s.vaultError='';
+ const token=++s.vaultLoadToken,urls=[];
+ s.vaultReady=false;s.vaultError='';
  try{
   const items=await listVaultAssets();
   for(const item of items){
    if(item.type.startsWith('image/')){
     const asset=await getVaultAsset(item.id);
-    item.thumbnail=URL.createObjectURL(asset.blob);s.vaultUrls.push(item.thumbnail);
+    item.thumbnail=URL.createObjectURL(asset.blob);urls.push(item.thumbnail);
    }
   }
-  s.vault=items;
- }catch(err){s.vault=[];s.vaultError=String(err.message||err)}
+  // Una carga anterior no debe sobrescribir un guardado o borrado más reciente.
+  if(token!==s.vaultLoadToken){for(const url of urls)URL.revokeObjectURL(url);return}
+  for(const url of s.vaultUrls)URL.revokeObjectURL(url);
+  s.vaultUrls=urls;s.vault=items;s.vaultError='';
+ }catch(err){
+  for(const url of urls)URL.revokeObjectURL(url);
+  if(token!==s.vaultLoadToken)return;
+  s.vault=[];s.vaultError=String(err.message||err);
+ }
  s.vaultReady=true;if(s.tab==='vault')refresh();
 }
 export function forgePage(){
@@ -304,6 +311,7 @@ export async function forgeClick(target,ctx){
     const blob=await asBlob(canvas,'image/jpeg');
     if(blob.type!=='image/jpeg')throw Error('Este navegador no puede guardar JPG');
     await saveVaultAsset(safeFileName(s.files.photo.name)+'-'+s.format.replace(':','x')+'.jpg',blob);
+    if(s.tab==='vault')await forgeVaultLoad(ctx.refresh);
     ctx.toast('Composición guardada en Mi biblioteca.');
    }else if(action.startsWith('vault-save-')){
     const kind=action.slice('vault-save-'.length);
@@ -315,6 +323,7 @@ export async function forgeClick(target,ctx){
      if(!original)throw Error('Selecciona antes un archivo');
      await saveVaultAsset(original.name,original);
     }
+    if(s.tab==='vault')await forgeVaultLoad(ctx.refresh);
     ctx.toast('Archivo guardado en Mi biblioteca.');
    }else{
     const asset=await getVaultAsset(target.dataset.forgeId);
