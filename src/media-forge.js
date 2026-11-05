@@ -258,7 +258,9 @@ if(!tabNames[type==='photo'?'photo':type])return false;
  const url=URL.createObjectURL(file);
  if(type==='photo'){
   s.audit=null;
-  try{const img=new Image();img.src=url;await img.decode();if(!img.naturalWidth||img.naturalWidth*img.naturalHeight>50000000)throw Error('Tamaño de imagen excesivo');s.image=img}
+  try{const img=new Image();img.src=url;await img.decode();if(!img.naturalWidth||img.naturalWidth*img.naturalHeight>50000000)throw Error('Tamaño de imagen excesivo');s.image=img;
+   if(!ctx.keepProject){s.projectId=null;s.projectName=safeFileName(file.name)||'Nueva campaña'}
+  }
   catch{URL.revokeObjectURL(url);ctx.toast('No se puede decodificar esta foto.');return true}
  }
  if(s.urls[type])URL.revokeObjectURL(s.urls[type]);s.files[type]=file;s.urls[type]=url;
@@ -324,7 +326,7 @@ export async function forgeClick(target,ctx){
     if(action==='project-open'){
      const p=await openCreativeProject(id);
      const source=new File([p.file],p.name+'.'+(p.type==='image/png'?'png':p.type==='image/webp'?'webp':p.type==='image/gif'?'gif':'jpg'),{type:p.type});
-     await forgeFile({dataset:{forgeFile:'photo'},files:[source]},ctx);
+     await forgeFile({dataset:{forgeFile:'photo'},files:[source]},{...ctx,keepProject:true});
      Object.assign(s,p.settings);
      s.projectId=p.id;s.projectName=p.name;s.audit=null;
      forgeTab('photo',ctx.refresh);
