@@ -3,6 +3,7 @@ import {officePage,officeClick,officeSubmit,officeChange,officeOpenTab} from './
 import {growthPage,growthOpenTab,growthClick,growthSubmit} from './growth.js';
 import {backupExport,backupEncryptedExport,backupImport,backupSettingsHTML} from './backup.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
+import {forgePage,forgeMount,forgeTab,forgeClick,forgeInput,forgeFile} from './media-forge.js';
 import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
 import {campaignManagerHTML,campaignLimit,validateCampaign,campaignById,campaignsToCSV} from './campaign-manager.js';
@@ -97,7 +98,7 @@ const nav=[
  ['inicio','Inicio','home'],['estudio','Estudio IA','sparkles'],['diseño','Diseño gráfico','sparkles'],['crear','Crear / Programar','plus'],
  ['campanas','Campañas','megaphone'],['analitica','Analítica','chart'],['escucha','Social Listening','bolt'],
  ['bandeja','Bandeja','inbox'],['competencia','Competencia','users'],['automatizaciones','Automatizaciones','gear'],
- ['biblioteca','Biblioteca','laptop'],['oficina','Oficina de marketing','users'],
+ ['biblioteca','Biblioteca','laptop'],['multimedia','Media Forge','laptop'],['oficina','Oficina de marketing','users'],
  ['laboratorio','Growth Lab','chart'],['herramientas','Herramientas','bolt'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
 function sectionHeader(title,subtitle,action){
@@ -233,6 +234,7 @@ function content(){
  case 'inicio':return liveHome({posts:postsFiltered(),campaigns:state.campaigns,analyticsRows:state.analyticsRows,messages:state.localMessages,mentions:state.localMentions,plan:state.plan,calendarOffset:state.calendarOffset})+adUnit('mobile')+adUnit('desktop');
  case 'estudio':return liveStudio({scenes:state.storyboard,current:state.storyboardCurrent,mode:state.creativeMode,format:state.videoFormat,posts:state.posts,playing:state.storyboardPlaying})+adUnit('mobile')+adUnit('desktop');
  case 'diseño':return visualPage();
+ case 'multimedia':return forgePage();
  case 'crear':return create();
  case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');
  case 'laboratorio':return growthPage(state.plan)+adUnit('mobile')+adUnit('desktop');
@@ -292,6 +294,7 @@ function render(){
  const mobileNative=app.querySelector('.mobile-bottom');
  if(mobileNative)mobileNative.inert=mirrored;
  if(state.page==='diseño')visualMount();
+ if(state.page==='multimedia')forgeMount();
 }
 function modalHTML(){
  let head='',body='',foot='';
@@ -315,6 +318,10 @@ function toast(msg){
 }
 function go(page){if(activeVideoExport){activeVideoExport.abort();activeVideoExport=null;}stopStoryboardPlayback();if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=true;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
+ const forgeTabTarget=e.target.closest('[data-forge-tab]');
+ if(forgeTabTarget){forgeTab(forgeTabTarget.dataset.forgeTab,render);return}
+ const forgeActionTarget=e.target.closest('[data-forge-action]');
+ if(forgeActionTarget){void forgeClick(forgeActionTarget,{toast});return}
  const growthTarget=e.target.closest('[data-growth-action]');
  if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
  const visualTarget=e.target.closest('[data-visual-action]');
@@ -703,6 +710,8 @@ if(e.target.id!=='postForm')return;
  save();render();toast(editing?'Publicación local actualizada.':'Borrador local guardado. No se ha publicado en ninguna red.');
 });
 document.addEventListener('change',e=>{
+ if(e.target.matches('[data-forge-file]')){void forgeFile(e.target,{refresh:render,toast});return}
+ if(e.target.matches('[data-forge-input]')){forgeInput(e.target);return}
  if(e.target.matches('[data-scene-image]')){
   const file=e.target.files?.[0];
   if(!file)return;
@@ -735,6 +744,7 @@ document.addEventListener('change',e=>{
  }
  if(e.target.matches('[data-backup-import]')){const field=document.querySelector('#backupPassword'),password=field?.value||'';if(field)field.value='';backupImport(e.target.files?.[0],{toast,password}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
 document.addEventListener('input',e=>{
+ if(e.target.matches('[data-forge-input]')){forgeInput(e.target);return}
  if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}
  if(e.target.id==='toolSearch'){
   state.toolsQuery=e.target.value;const pos=e.target.selectionStart;render();const input=document.querySelector('#toolSearch');if(input){input.focus();input.setSelectionRange(pos,pos)}return;
