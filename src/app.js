@@ -5,7 +5,6 @@ import {backupExport,backupImport,backupSettingsHTML} from './backup.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
-import {nexusHome,nexusStudio} from './nexus-ui.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
