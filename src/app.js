@@ -34,6 +34,27 @@ state.editCampaignId=null;state.pendingDeleteCampaignId=null;
 state.calendarOffset=0;state.preselectedDate=null;
 state.mirrorLive=true;state.mirrorMenu=false;
 state.storyboardCurrent=0;
+state.storyboardPlaying=false;
+let storyboardTimer=null;
+function stopStoryboardPlayback(){
+ state.storyboardPlaying=false;
+ if(storyboardTimer!=null){clearTimeout(storyboardTimer);storyboardTimer=null}
+}
+function scheduleStoryboardPlayback(){
+ if(!state.storyboardPlaying||state.page!=='estudio')return;
+ const current=state.storyboard[state.storyboardCurrent];
+ if(!current){stopStoryboardPlayback();render();return}
+ const duration=Math.min(60,Math.max(1,Number(current.duration)||5));
+ storyboardTimer=setTimeout(()=>{
+  storyboardTimer=null;
+  if(!state.storyboardPlaying||state.page!=='estudio')return;
+  if(state.storyboardCurrent<state.storyboard.length-1){
+   state.storyboardCurrent++;render();scheduleStoryboardPlayback();
+  }else{
+   stopStoryboardPlayback();render();toast('Reproducción de storyboard terminada.');
+  }
+ },duration*1000);
+}
 const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,analyticsRows:state.analyticsRows,localMessages:state.localMessages,localMentions:state.localMentions,storyboard:state.storyboard,consent:state.consent}))}catch{}};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
@@ -189,7 +210,7 @@ function extraScreen(page){
 function content(){
  switch(state.page){
  case 'inicio':return liveHome({posts:postsFiltered(),campaigns:state.campaigns,analyticsRows:state.analyticsRows,messages:state.localMessages,mentions:state.localMentions,plan:state.plan,calendarOffset:state.calendarOffset})+adUnit('mobile')+adUnit('desktop');
- case 'estudio':return liveStudio({scenes:state.storyboard,current:state.storyboardCurrent,mode:state.creativeMode,format:state.videoFormat,posts:state.posts})+adUnit('mobile')+adUnit('desktop');
+ case 'estudio':return liveStudio({scenes:state.storyboard,current:state.storyboardCurrent,mode:state.creativeMode,format:state.videoFormat,posts:state.posts,playing:state.storyboardPlaying})+adUnit('mobile')+adUnit('desktop');
  case 'diseño':return visualPage();
  case 'crear':return create();
  case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');
@@ -269,7 +290,7 @@ function toast(msg){
  const elem=document.createElement('div');elem.className='toast';elem.setAttribute('role','status');elem.textContent=msg;document.body.append(elem);
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>elem.remove(),3300);
 }
-function go(page){if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=true;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
+function go(page){stopStoryboardPlayback();if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=true;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
  const growthTarget=e.target.closest('[data-growth-action]');
  if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
@@ -384,14 +405,20 @@ case 'campaign-export':{
    document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
    toast('Archivo CSV generado en este dispositivo.');break;
   }
+ case 'storyboard-play':{
+  if(state.storyboardPlaying){stopStoryboardPlayback();render();break}
+  if(!state.storyboard.length){toast('Añade al menos una escena para reproducir.');break}
+  stopStoryboardPlayback();state.storyboardCurrent=0;state.storyboardPlaying=true;
+  render();scheduleStoryboardPlayback();break;
+ }
  case 'storyboard-add':{
   if(state.storyboard.length>=80){toast('Máximo de 80 escenas por proyecto local.');break}
   state.storyboard.push(createScene('Escena '+(state.storyboard.length+1)));state.storyboardCurrent=state.storyboard.length-1;
   save();render();toast('Escena añadida.');break;
  }
- case 'storyboard-select':state.storyboardCurrent=Math.max(0,Math.min(state.storyboard.length-1,Number(target.dataset.index)||0));render();break;
- case 'storyboard-next':state.storyboardCurrent=Math.min(state.storyboard.length-1,state.storyboardCurrent+1);render();break;
- case 'storyboard-prev':state.storyboardCurrent=Math.max(0,state.storyboardCurrent-1);render();break;
+ case 'storyboard-select':stopStoryboardPlayback();state.storyboardCurrent=Math.max(0,Math.min(state.storyboard.length-1,Number(target.dataset.index)||0));render();break;
+ case 'storyboard-next':stopStoryboardPlayback();state.storyboardCurrent=Math.min(state.storyboard.length-1,state.storyboardCurrent+1);render();break;
+ case 'storyboard-prev':stopStoryboardPlayback();state.storyboardCurrent=Math.max(0,state.storyboardCurrent-1);render();break;
  case 'storyboard-move-left':case 'storyboard-move-right':{
   const a=state.storyboardCurrent,b=a+(action==='storyboard-move-left'?-1:1);
   if(b<0||b>=state.storyboard.length){toast('La escena ya está en el extremo de la secuencia.');break}
