@@ -1,0 +1,30 @@
+/* Campañas locales con acabados NEXUS + PULSE y controles reales. */
+.campaign-local{display:grid;gap:13px;min-width:0;margin:20px 0 8px;padding:15px;border:1px solid #8d4deb;border-radius:17px;background:radial-gradient(ellipse at 20% 0%,#21437a88,transparent 50%),radial-gradient(ellipse at 92% 100%,#52236f71,transparent 45%),#0c1535;box-shadow:0 0 15px #883bdf55}
+.campaign-local-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.campaign-local-title h2{font-size:clamp(19px,2vw,25px);margin:2px 0}
+.campaign-local-title p{font-size:12px;color:#bfcdeb}
+.campaign-local-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.campaign-local-summary>div{display:grid;gap:6px;padding:12px 13px;border:1px solid #417cbb;border-radius:12px;background:linear-gradient(145deg,#102b59,#171846);box-shadow:inset 0 0 12px #00e0ff0e}
+.campaign-local-summary>div:nth-child(2){border-color:#b949d7}
+.campaign-local-summary>div:nth-child(3){border-color:#87d843}
+.campaign-local-summary span{color:#bbceec;font-size:10px}
+.campaign-local-summary strong{font:800 clamp(15px,1.8vw,24px) 'Space Grotesk',system-ui,sans-serif;color:#fff}
+.campaign-local-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.2fr);gap:12px;align-items:start;min-width:0}
+.campaign-local-grid>.card{min-width:0}
+.campaign-local-form{display:grid;gap:9px}
+.campaign-local-form>label,.campaign-local-fields label{display:block;color:#d6e7ff;font-weight:700;font-size:11px;margin-bottom:4px}
+.campaign-local-form input,.campaign-local-form select{width:100%;min-width:0}
+.campaign-local-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.campaign-local-fields>div{min-width:0}
+.campaign-local-list{display:grid;gap:7px}
+.campaign-local-row{border:1px solid #395eac;background:#111f4b;border-radius:11px;padding:9px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.campaign-local-main{display:grid;gap:4px;min-width:140px;flex:1 1 180px}
+.campaign-local-main strong{font-size:12px;overflow-wrap:anywhere}
+.campaign-local-main small{font-size:10px;color:#b7cbf0;overflow-wrap:anywhere}
+.campaign-local-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px}
+.campaign-local-meta strong{color:#b8f2ff}
+.campaign-local-actions{display:flex;flex-wrap:wrap;gap:6px}
+.campaign-local-actions button{padding:7px 10px;font-size:10px;min-height:34px}
+@media(max-width:900px){.campaign-local-grid{grid-template-columns:1fr}}
+@media(max-width:680px){.campaign-local{padding:11px;margin:14px 0}.campaign-local-title{display:grid}.campaign-local-summary{grid-template-columns:1fr 1fr}.campaign-local-summary>div:nth-child(2){grid-column:span 1}.campaign-local-summary>div:last-child{grid-column:1/-1}.campaign-local-row{align-items:flex-start}.campaign-local-actions{width:100%}.campaign-local-actions button{flex:1 1 auto}.campaign-local-fields{gap:7px}.campaign-local-fields input,.campaign-local-fields select{font-size:16px}}
+@media(max-width:360px){.campaign-local-fields{grid-template-columns:1fr}.campaign-local-summary{grid-template-columns:1fr}.campaign-local-summary>div:last-child{grid-column:auto}}
