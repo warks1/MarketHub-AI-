@@ -1,8 +1,10 @@
 // MEDIA FORGE · Herramientas multimedia locales originales de MarketHub AI.
 import {convertSubtitles,parseSubtitles} from './subtitle-tools.js';
 // Sin subida de archivos a servidores, ni dependencias de servicios externos.
-const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:''};
+const s={tab:'photo',files:{},urls:{},image:null,format:'9:16',mask:'orbita',look:'neon',caption:'',subtitle:'',safezone:'off'};
 export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9':[1920,1080],'3:2':[1500,1000]};
+// SafeFrame es una orientación visual nuestra, no los requisitos oficiales de las redes sociales.
+export const SAFEFRAME_GUIDES={'9:16':{top:.17,right:.12,bottom:.25,left:.09},'4:5':{top:.10,right:.08,bottom:.18,left:.08},'1:1':{top:.10,right:.08,bottom:.15,left:.08},'16:9':{top:.10,right:.11,bottom:.17,left:.11},'3:2':{top:.10,right:.10,bottom:.15,left:.10}};
 export const MASKS=['orbita','circulo','ovalada','redondeada','estrella','hexagono','pentagono','octagono','triangulo','diamante','corazon','banda-horizontal','banda-vertical','ventana','completa'];
 const looks={neon:['contrast(1.1) saturate(1.3)','#26e9fb','#eb4df5'],editorial:['contrast(1.06) saturate(.85)','#ffcfa2','#ef9bcd'],noir:['grayscale(1) contrast(1.25)','#f0f4ff','#8190dd'],natural:['none','#ffffff','#8acde9']};
 const tabNames={photo:'Foto y máscaras',audio:'Audio y WAV',video:'Vídeo y fotogramas',pdf:'Visor PDF',subs:'Subtítulos SRT / VTT'};
@@ -17,9 +19,10 @@ function photo(){
  field('Formato social','format',Object.entries(SIZES).map(([k,d])=>[k,k+' · '+d.join('×')]))+
  field('Máscara creativa','mask',MASKS.map(k=>[k,k==='orbita'?'Órbita NEXUS · creación propia':k]))+
  field('Tratamiento visual','look',Object.keys(looks).map(k=>[k,k]))+
+ field('SafeFrame PULSE · zona de texto','safezone',[['off','Desactivada'],['on','Mostrar guías y proteger texto']])+
  '<label>Texto sobre la composición<input data-forge-input="caption" maxlength="90" value="'+esc(s.caption)+'" placeholder="Tu mensaje opcional"></label>'+
  actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image)])+
- '<p>El editor usa un recorte centrado: no modifica el archivo original. La máscara Órbita combina foto, marcos dobles y formato social.</p>')+
+ '<p>El editor utiliza recorte centrado y no modifica el original. SafeFrame PULSE marca guías de texto orientativas (no certificadas por las redes sociales). La máscara Órbita combina foto, marcos dobles y formato social.</p>')+
  panel('Vista previa real','<div class="forge-preview"><canvas id="forgeCanvas" role="img" aria-label="Vista previa de composición"></canvas></div>')+'</div>';
 }
 function audio(){
@@ -98,7 +101,14 @@ export function composeImage(canvas,image,opts={}){
   ctx.strokeStyle=look[2];ctx.lineWidth=Math.max(1,w*.004);ctx.beginPath();ctx.ellipse(w/2,h/2,Math.min(w,h)*.46,Math.min(w,h)*.38,.3,0,2*Math.PI);ctx.stroke();
  }
  const caption=String(opts.caption??s.caption).trim().slice(0,90);
- if(caption){ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='800 '+Math.max(15,Math.round(w*.045))+'px system-ui';ctx.shadowColor='#000';ctx.shadowBlur=w*.015;ctx.fillText(caption,w/2,h*.85,w*.85)}
+ if(caption){ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='800 '+Math.max(15,Math.round(w*.045))+'px system-ui';ctx.shadowColor='#000';ctx.shadowBlur=w*.015;ctx.fillText(caption,w/2,s.safezone==='on'?h*(1-SAFEFRAME_GUIDES[opts.format||s.format].bottom)-w*.04:h*.85,w*.85)}
+ // Guías para el editor: no se incluyen en los archivos exportados.
+ if(opts.preview&&s.safezone==='on'){
+  const m=SAFEFRAME_GUIDES[opts.format||s.format];ctx.save();ctx.setLineDash([Math.max(3,w*.014),Math.max(2,w*.008)]);
+  ctx.strokeStyle='#18efff';ctx.lineWidth=Math.max(1,w*.004);
+  ctx.strokeRect(w*m.left,h*m.top,w*(1-m.left-m.right),h*(1-m.top-m.bottom));
+  ctx.restore();
+ }
  return canvas;
 }
 export function forgeMount(){
@@ -112,6 +122,7 @@ export function forgeInput(target){
  if(name==='format'&&SIZES[target.value])s.format=target.value;
  else if(name==='mask'&&MASKS.includes(target.value))s.mask=target.value;
  else if(name==='look'&&looks[target.value])s.look=target.value;
+ else if(name==='safezone'&&['off','on'].includes(target.value))s.safezone=target.value;
  else if(name==='caption')s.caption=String(target.value).slice(0,90);
  else if(name==='subtitle'){
   s.subtitle=String(target.value).slice(0,1000000);
