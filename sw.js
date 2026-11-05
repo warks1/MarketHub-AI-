@@ -1,11 +1,11 @@
 /* MarketHub AI · service worker PWA para modo básico sin conexión.
    La estrategia de navegación es network-first: no inmovilizar versiones antiguas ni ocultar fallos de publicación. */
-const CACHE = 'markethub-nexus-pulse-shell-v0.4.1';
+const CACHE = 'markethub-nexus-pulse-shell-v0.4.2';
 const SHELL = [
  './','./index.html','./logo.svg','./manifest.webmanifest',
- './src/app.js','./src/catalogue.js','./src/nexus-ui.js','./src/post-manager.js',
+ './src/app.js','./src/catalogue.js','./src/nexus-ui.js','./src/post-manager.js','./src/campaign-manager.js',
  './src/office.js','./src/growth.js','./src/visual.js','./src/backup.js',
- './src/style.css','./src/nexus-ui.css','./src/nexus.css','./src/reference.css',
+ './src/style.css','./src/nexus-ui.css','./src/nexus.css','./src/reference.css','./src/campaign-manager.css',
  './assets/boceto-01-inicio.webp','./assets/boceto-02-estudio.webp',
  './assets/boceto-03-movil.webp','./assets/boceto-04-carga.webp',
  './referencias.html','./icon-192.png','./icon-512.png',
