@@ -359,7 +359,7 @@ document.addEventListener('click',e=>{
  if(state.storyboardPlaying && ['storyboard-add','storyboard-move-left','storyboard-move-right','storyboard-duplicate','storyboard-remove','confirm-storyboard-delete'].includes(action))stopStoryboardPlayback();
  switch(action){
  case 'catalogue-open-growth':{if(state.selectedTool?.growthTab){growthOpenTab(state.selectedTool.growthTab);go('laboratorio')}break}
- case 'catalogue-open-media':{if(state.selectedTool?.mediaTab){forgeTab(state.selectedTool.mediaTab,()=>{});go('multimedia')}break}
+ case 'catalogue-open-media':{if(state.selectedTool?.mediaTab){go('multimedia');forgeTab(state.selectedTool.mediaTab,render)}break}
  case 'catalogue-open-settings':{if(state.selectedTool?.settingsPage==='ajustes')go('ajustes');break}
  case 'catalogue-open-local':{
   if(state.selectedTool?.localTab){if(state.selectedTool.localTab==='diseño')go('diseño');else{officeOpenTab(state.selectedTool.localTab);go('oficina')}}break;
