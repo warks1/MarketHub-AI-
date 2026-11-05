@@ -17,7 +17,7 @@ function photo(){
  field('Máscara creativa','mask',MASKS.map(k=>[k,k==='orbita'?'Órbita NEXUS · creación propia':k]))+
  field('Tratamiento visual','look',Object.keys(looks).map(k=>[k,k]))+
  '<label>Texto sobre la composición<input data-forge-input="caption" maxlength="90" value="'+esc(s.caption)+'" placeholder="Tu mensaje opcional"></label>'+
- actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image)])+
+ actions([btn('Exportar PNG','png',!s.image),btn('Exportar JPG','jpeg',!s.image),btn('Exportar WebP','webp',!s.image),btn('PULSE PACK · 5 formatos ZIP','pack',!s.image)])+
  '<p>El editor usa un recorte centrado: no modifica el archivo original. La máscara Órbita combina foto, marcos dobles y formato social.</p>')+
  panel('Vista previa real','<div class="forge-preview"><canvas id="forgeCanvas" role="img" aria-label="Vista previa de composición"></canvas></div>')+'</div>';
 }
@@ -120,6 +120,33 @@ export async function forgeFile(target,ctx){
 }
 function send(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000)}
 const asBlob=(canvas,type)=>new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('Exportación no disponible')),type,.9));
+// ZIP estándar sin dependencias: crea paquetes de medios directamente en el dispositivo.
+const CRC_TABLE=Uint32Array.from({length:256},(_,n)=>{
+ let c=n;for(let i=0;i<8;i++)c=c&1?0xedb88320^(c>>>1):c>>>1;return c>>>0;
+});
+export function createMediaZip(files){
+ if(!Array.isArray(files)||!files.length||files.length>20)throw Error('Selecciona entre 1 y 20 archivos');
+ const enc=new TextEncoder(),local=[],central=[];let offset=0,centralSize=0;
+ const u16=(v,p,n)=>v.setUint16(p,n,true),u32=(v,p,n)=>v.setUint32(p,n>>>0,true);
+ for(const {name,data} of files){
+  if(!(data instanceof Uint8Array)||data.length>35000000)throw Error('Archivo ZIP no válido');
+  const filename=enc.encode(String(name).slice(0,110));
+  if(!filename.length||filename.length>240)throw Error('Nombre de archivo ZIP inválido');
+  let crc=0xffffffff;for(const byte of data)crc=CRC_TABLE[(crc^byte)&255]^(crc>>>8);crc=(crc^0xffffffff)>>>0;
+  const lh=new Uint8Array(30+filename.length),lv=new DataView(lh.buffer);
+  u32(lv,0,0x04034b50);u16(lv,4,20);u16(lv,6,0x0800);u16(lv,8,0);
+  u32(lv,14,crc);u32(lv,18,data.length);u32(lv,22,data.length);u16(lv,26,filename.length);lh.set(filename,30);
+  const ch=new Uint8Array(46+filename.length),cv=new DataView(ch.buffer);
+  u32(cv,0,0x02014b50);u16(cv,4,20);u16(cv,6,20);u16(cv,8,0x0800);u16(cv,10,0);
+  u32(cv,16,crc);u32(cv,20,data.length);u32(cv,24,data.length);
+  u16(cv,28,filename.length);u32(cv,42,offset);ch.set(filename,46);
+  local.push(lh,data);central.push(ch);offset+=lh.length+data.length;centralSize+=ch.length;
+ }
+ const end=new Uint8Array(22),v=new DataView(end.buffer);
+ u32(v,0,0x06054b50);u16(v,8,files.length);u16(v,10,files.length);
+ u32(v,12,centralSize);u32(v,16,offset);
+ return new Blob([...local,...central,end],{type:'application/zip'});
+}
 export function encodeWav(buffer,begin=0,finish=0){
  const rate=buffer.sampleRate,ch=Math.min(buffer.numberOfChannels,2);
  if(!rate||ch<1||!Number.isFinite(begin)||!Number.isFinite(finish)||begin<0||finish<0||(finish>0&&finish<=begin))throw Error('Audio/intervalo inválido');
@@ -142,6 +169,18 @@ export async function forgeClick(target,ctx){
    const mime='image/'+(action==='jpeg'?'jpeg':action),canvas=document.createElement('canvas');composeImage(canvas,s.image);
    const blob=await asBlob(canvas,mime);if(blob.type!==mime)throw Error('Este navegador no admite '+mime);
    send(blob,safeFileName(s.files.photo.name)+'-'+s.format.replace(':','x')+'.'+(action==='jpeg'?'jpg':action));ctx.toast('Imagen exportada.');
+  }else if(action==='pack'){
+   if(!s.image)throw Error('Primero selecciona una fotografía');
+   const files=[];
+   for(const format of Object.keys(SIZES)){
+    const canvas=document.createElement('canvas');composeImage(canvas,s.image,{format});
+    const blob=await asBlob(canvas,'image/jpeg');
+    if(blob.type!=='image/jpeg')throw Error('No se pudo crear JPG para '+format);
+    const data=new Uint8Array(await blob.arrayBuffer());
+    files.push({name:safeFileName(s.files.photo.name)+'-'+format.replace(':','x')+'.jpg',data});
+   }
+   send(createMediaZip(files),safeFileName(s.files.photo.name)+'-PULSE-PACK.zip');
+   ctx.toast('PULSE PACK: cinco formatos exportados en un ZIP.');
   }else if(action==='wav'){
    if(!s.files.audio)throw Error('Selecciona un audio');
    const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('El navegador no admite decodificación de audio');
