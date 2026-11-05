@@ -5,6 +5,7 @@ import {backupExport,backupImport,backupSettingsHTML} from './backup.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
+import {campaignManagerHTML,campaignLimit,validateCampaign,campaignById,campaignsToCSV} from './campaign-manager.js';
 
 const app=document.querySelector('#app');
 const safe = value => String(value??'').replace(/[&<>"']/g, chr => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[chr]));
@@ -19,12 +20,13 @@ let saved={};
 try{saved=JSON.parse(localStorage.getItem(storeKey)||'{}')||{}}catch{saved={}}
 let state={
   page:'inicio',plan:saved.plan==='pro'?'pro':'free',credits:Number.isFinite(saved.credits)?saved.credits:20,
-  posts:Array.isArray(saved.posts)?saved.posts:demoPosts,modal:null,creativeMode:'Video / Reels',
+  posts:Array.isArray(saved.posts)?saved.posts:demoPosts,campaigns:Array.isArray(saved.campaigns)?saved.campaigns:[],modal:null,creativeMode:'Video / Reels',
   videoFormat:'9:16',search:'',menuMore:false,consent: saved.consent || 'pending'
 };
 state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
 state.editPostId=null;state.pendingDeleteId=null;
-const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,consent:state.consent}))}catch{}};
+state.editCampaignId=null;state.pendingDeleteCampaignId=null;
+const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify({plan:state.plan,credits:state.credits,posts:state.posts,campaigns:state.campaigns,consent:state.consent}))}catch{}};
 const icons={
  home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
  sparkles:'<path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="m19 17 .7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z"/>',
@@ -135,7 +137,7 @@ function create(){
 function campaigns(){
  return sectionHeader('Campañas','Panel de preparación de campañas. Las cifras son ilustrativas.')+
  '<div class="grid kpis">'+kpi('Campañas','3','ejemplo','🚀','#e33fa045')+kpi('Presupuesto','3.250 €','ejemplo','€','#13d6e445')+kpi('Conversiones','2.310','ejemplo','◎','#b5fa3645')+kpi('ROI','5,8×','ejemplo','↗','#846bff45')+'</div>'+
- '<div class="two-cols"><div class="card"><div class="card-head"><h2>Campañas de ejemplo</h2><span class="demo-pill">Sin conexión publicitaria</span></div><div class="line-list">'+['Lanzamiento de producto','Reconocimiento de marca','Remarketing inteligente'].map((t,i)=>'<div class="list-row"><div><b>'+t+'</b><p>Campaña ficticia · '+(i===0?'Instagram / Facebook':'Multicanal')+'</p></div><span class="tag green">Ejemplo</span></div>').join('')+'</div></div><div class="card ai-card"><h2 style="margin-bottom:12px">✦ Optimizador de campañas</h2><p class="muted">La conexión con las APIs oficiales y el control presupuestario estarán disponibles en próximas fases.</p><div class="tip" style="margin-top:16px">No se han creado ni cobrado campañas reales.</div></div></div>';
+ '<div class="two-cols"><div class="card"><div class="card-head"><h2>Campañas de ejemplo</h2><span class="demo-pill">Sin conexión publicitaria</span></div><div class="line-list">'+['Lanzamiento de producto','Reconocimiento de marca','Remarketing inteligente'].map((t,i)=>'<div class="list-row"><div><b>'+t+'</b><p>Campaña ficticia · '+(i===0?'Instagram / Facebook':'Multicanal')+'</p></div><span class="tag green">Ejemplo</span></div>').join('')+'</div></div><div class="card ai-card"><h2 style="margin-bottom:12px">✦ Optimizador de campañas</h2><p class="muted">La conexión con las APIs oficiales y el control presupuestario estarán disponibles en próximas fases.</p><div class="tip" style="margin-top:16px">No se han creado ni cobrado campañas reales.</div></div></div>'+campaignManagerHTML({campaigns:state.campaigns,editingId:state.editCampaignId,plan:state.plan});
 }
 function analytics(){
  return sectionHeader('Analítica avanzada','Panel visual de demostración. Los datos reales requerirán conectar cuentas autorizadas.')+
