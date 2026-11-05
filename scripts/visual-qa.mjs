@@ -83,7 +83,7 @@ try{
   await page.screenshot({path:'visual-qa/'+id+'-analitica.png',fullPage:true});
   await page.locator('#analyticsCsv').setInputFiles({
     name:'informe-local.csv',mimeType:'text/csv',
-    buffer:Buffer.from('fecha;plataforma;alcance;impresiones;interacciones;clics\\n2026-11-02;Instagram;100;150;20;10\\n')
+    buffer:Buffer.from('fecha;plataforma;alcance;impresiones;interacciones;clics\n2026-11-02;Instagram;100;150;20;10\n')
   });
   await page.locator('.analytics-local-metrics').waitFor({state:'visible'});
   const analytics=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth}));
