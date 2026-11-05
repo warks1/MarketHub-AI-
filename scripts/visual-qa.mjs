@@ -242,7 +242,7 @@ try{
     if(errors?.length)problems.push('Valores rotos en '+section+': '+errors.join(', '));
    };
    await go(page,'oficina',width);
-   await page.locator('[data-office-action="tab-calculadora"]').click();
+   await page.locator('.workspace-tabs [data-office-action="tab-calculadora"]').click();
    await page.locator('#calcSpend').fill('100');
    await page.locator('#calcRevenue').fill('250');
    await page.locator('#calcLeads').fill('10');
@@ -250,7 +250,7 @@ try{
    await page.locator('#office-calc-form button[type="submit"]').click();
    if(!(await page.locator('.workspace-metrics').innerText()).includes('2.50×'))problems.push('Oficina no calcula ROAS 2.50×');
    await checkBroken('Oficina / Calculadora');
-   await page.locator('[data-office-action="tab-landing"]').click();
+   await page.locator('.workspace-tabs [data-office-action="tab-landing"]').click();
    await page.locator('#landingTitle').fill('Promoción de prueba con palabras completas');
    await page.locator('#landingSubtitle').fill('Esta vista previa debe respetar las palabras y los saltos de línea.');
    await page.locator('#landingUrl').fill('https://example.com/landing');
