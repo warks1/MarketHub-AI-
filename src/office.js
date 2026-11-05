@@ -206,8 +206,15 @@ export function officeSubmit(form,plan,ctx){
   if(!value('brandName')){ctx.toast('Introduce el nombre de tu marca.');return true}
   model.brand={name:value('brandName'),tagline:truncate(data.get('brandTagline'),150),tone:value('brandTone'),primary:validHex(data.get('brandPrimary')),accent:validHex(data.get('brandAccent'))};
  }else if(id==='office-calc-form'){
-  const spend=numeric(data.get('calcSpend')),revenue=numeric(data.get('calcRevenue')),leads=Math.floor(numeric(data.get('calcLeads'))),orders=Math.floor(numeric(data.get('calcOrders')));
-  if(orders>leads&&leads>0){ctx.toast('Las conversiones no deben superar los contactos para esa tasa.');return true}
+  const raw=['calcSpend','calcRevenue','calcLeads','calcOrders'].map(k=>data.get(k));
+  if(raw.some(v=>v===null||String(v).trim()===''||!Number.isFinite(Number(v))||Number(v)<0||Number(v)>1e12)){
+   ctx.toast('Introduce importes y cantidades numéricos válidos, sin valores negativos.');return true;
+  }
+  const [spend,revenue,leads,orders]=raw.map(Number);
+  if(!Number.isInteger(leads)||!Number.isInteger(orders)){
+   ctx.toast('Los contactos y las conversiones deben ser números enteros.');return true;
+  }
+  if(orders>leads){ctx.toast('Las conversiones no deben superar los contactos para esa tasa.');return true}
   model.calculation={spend,revenue,leads,orders};
   message='Indicadores calculados con tus cifras.';
  }else return false;
