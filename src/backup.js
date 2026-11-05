@@ -76,7 +76,7 @@ export async function backupEncryptedExport(ctx){
  try{
   const payload=readBackup();
   if(Object.keys(payload.modules).length===0){ctx.toast('No hay datos para respaldar.');return false}
-  const encrypted=await encryptBackupJSON(payload,ctx.password||'');
+  const encrypted=await encryptBackupJSON(payload,ctx.password||'',{cryptoImpl:ctx.cryptoImpl});
   const blob=new Blob([JSON.stringify(encrypted)],{type:'application/json;charset=utf-8'});
   const url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='MarketHub-AI-copia-CIFRADA-'+new Date().toISOString().slice(0,10)+'.json';
@@ -98,7 +98,7 @@ export async function backupImport(file,ctx){
   const parsed=JSON.parse(raw);
   if(parsed?.format===ENCRYPTED_BACKUP_FORMAT){
    if(!ctx.password){ctx.toast('Escribe la contraseña de la copia cifrada antes de restaurarla.');return false}
-   modules=validateBackup(await decryptBackupJSON(parsed,ctx.password));
+   modules=validateBackup(await decryptBackupJSON(parsed,ctx.password,{cryptoImpl:ctx.cryptoImpl}));
   }else{
    if(file.size>MAX_FILE){ctx.toast('La copia sin cifrar supera los 3 MB.');return false}
    modules=validateBackup(parsed);
