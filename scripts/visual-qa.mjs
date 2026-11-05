@@ -17,7 +17,7 @@ try{
   const faults=[];
   page.on('pageerror',e=>faults.push(String(e)));
   const response=await page.goto(origin,{waitUntil:'domcontentloaded'});
-  await page.waitForFunction(()=>window.__MARKETHUB_BOOT__?.ready===true,{timeout:15000});
+  await page.waitForFunction(()=>window.__MARKETHUB_BOOT__?.ready===true,null,{timeout:15000});
   const splash=page.locator('.nexus-splash');
   if(await splash.isVisible().catch(()=>false)){
    await page.screenshot({path:'visual-qa/'+id+'-carga.png',fullPage:false});
