@@ -104,7 +104,11 @@ function sectionHeader(title,subtitle,action){
  return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.3.2</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
 }
 function btn(text,action,klass='secondary',extra=''){return '<button class="'+klass+'" data-action="'+action+'" '+extra+'>'+text+'</button>'}
-function kpi(title,value,delta,symbol,glow){return '<div class="kpi" style="--glow:'+glow+'"><div class="kpi-label">'+safe(title)+'<span class="kpi-symbol">'+symbol+'</span></div><div class="kpi-value">'+safe(value)+'</div><div class="positive">↗ '+safe(delta)+' · ejemplo</div></div>'}
+function kpi(title,value,delta,symbol,glow){
+ const detail=String(delta??'').trim();
+ const note=detail.toLowerCase()==='ejemplo'?'Ejemplo':('↗ '+safe(detail)+' · ejemplo');
+ return '<div class="kpi" style="--glow:'+glow+'"><div class="kpi-label">'+safe(title)+'<span class="kpi-symbol">'+symbol+'</span></div><div class="kpi-value">'+safe(value)+'</div><div class="positive">'+note+'</div></div>';
+}
 function lines(){
  return '<div class="chart-box"><svg viewBox="0 0 600 220" role="img" aria-label="Gráfico ilustrativo de tendencia de redes sociales, sin datos reales"><defs><linearGradient id="fade" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#11d8f2" stop-opacity=".3"/><stop offset="1" stop-color="#11d8f2" stop-opacity="0"/></linearGradient></defs><path d="M2 40H599 M2 90H599 M2 140H599 M2 190H599" stroke="#354771" stroke-width="1"/><path d="M2 186 C55 178 60 103 115 121 S205 170 263 109 S356 62 412 98 S525 38 599 17 L599 218H2Z" fill="url(#fade)"/><path d="M2 186 C55 178 60 103 115 121 S205 170 263 109 S356 62 412 98 S525 38 599 17" fill="none" stroke="#1de7f7" stroke-width="4"/><path d="M2 198 C65 182 99 169 146 147 S247 92 305 117 S420 68 458 80 S555 27 599 53" fill="none" stroke="#ef4de6" stroke-width="4"/><path d="M2 206 C85 201 101 183 162 182 S265 140 320 150 S420 147 491 113 S548 125 599 93" fill="none" stroke="#b5fa36" stroke-width="3"/><circle cx="599" cy="17" r="6" fill="#1de7f7"/><circle cx="599" cy="53" r="6" fill="#ef4de6"/></svg></div><div class="chart-labels"><span>Semana 1</span><span>Semana 2</span><span>Semana 3</span><span>Semana 4</span></div><div class="legend"><span><i style="background:#1de7f7"></i>Instagram</span><span><i style="background:#ef4de6"></i>TikTok</span><span><i style="background:#b5fa36"></i>YouTube</span></div>';
 }
