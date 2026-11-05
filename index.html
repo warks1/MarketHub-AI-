@@ -7,10 +7,10 @@
   <meta name="description" content="MarketHub AI — Tu centro creativo de marketing digital. NEXUS + PULSE.">
   <link rel="icon" type="image/svg+xml" href="./logo.svg">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./src/style.css">
-  <link rel="stylesheet" href="./src/office.css">
-  <link rel="stylesheet" href="./src/growth.css">
-  <link rel="stylesheet" href="./src/visual.css">
+  <link rel="stylesheet" href="./src/style.css?v=20261105b">
+  <link rel="stylesheet" href="./src/office.css?v=20261105b">
+  <link rel="stylesheet" href="./src/growth.css?v=20261105b">
+  <link rel="stylesheet" href="./src/visual.css?v=20261105b">
   <title>MarketHub AI · NEXUS + PULSE</title>
   <style>
     html,body{margin:0;min-height:100%;background:#090e27;color:#e8edff;font-family:system-ui, sans-serif}
@@ -27,11 +27,51 @@
       <div class="boot-fallback-content">
         <div style="font-size:42px;color:#df77ec">✦</div>
         <h1>MarketHub AI</h1>
-        <p>Iniciando la aplicación… Si no aparece el panel, actualiza la página. Tus proyectos guardados no se borrarán.</p>
-        <a href="./">Volver a cargar</a>
+        <p id="bootStatus">Iniciando la aplicación… Comprobando los módulos para evitar la pantalla blanca.</p><p id="bootHelp" hidden>El inicio no se ha completado. Puedes abrir el diagnóstico sin borrar tus borradores ni preferencias.</p>
+        <a href="./?reparacion=20261105b">Reintentar inicio</a> <a href="./diagnostico.html?v=20261105b">Ver diagnóstico</a>
       </div>
     </div>
   </div>
-  <script type="module" src="./src/app.js"></script>
+
+  <script>
+    (function () {
+      var boot = window.__MARKETHUB_BOOT__ = { ready: false, version: '20261105b', errors: [] };
+      function explain(reason) {
+        if (boot.ready) return;
+        var error = String(reason && reason.message || reason || 'Inicio incompleto').slice(0, 240);
+        boot.errors.push(error);
+        var root = document.getElementById('app');
+        if (!root) return;
+        if (!document.getElementById('bootStatus')) {
+          root.innerHTML = '<div class="boot-fallback" role="alert"><div class="boot-fallback-content"><h1>MarketHub AI</h1><p id="bootStatus"></p><p id="bootHelp">Tus datos locales se conservan.</p><a href="./?reparacion=20261105b">Reintentar inicio</a> <a href="./diagnostico.html?v=20261105b">Ver diagnóstico</a></div></div>';
+        }
+        document.getElementById('bootStatus').textContent = 'No se ha podido completar el inicio. Abre «Ver diagnóstico» para comprobar los archivos de la aplicación.';
+        var help = document.getElementById('bootHelp');
+        if (help) help.hidden = false;
+        var detail = document.getElementById('bootDetail');
+        if (!detail) {
+          detail = document.createElement('p');
+          detail.id = 'bootDetail';
+          detail.style.fontSize = '12px';
+          detail.style.overflowWrap = 'anywhere';
+          (help || root).appendChild(detail);
+        }
+        detail.textContent = 'Detalle técnico: ' + error;
+      }
+      window.markethubBootFailed = explain;
+      window.addEventListener('error', function (event) {
+        var target = event.target;
+        if (target && target !== window && target.tagName !== 'SCRIPT' && target.tagName !== 'LINK') return;
+        explain(event.message || (target && target.src) || 'Recurso bloqueado');
+      }, true);
+      window.addEventListener('unhandledrejection', function (event) {
+        explain(event.reason);
+      });
+      window.setTimeout(function () {
+        if (!boot.ready) explain('Tiempo de carga agotado');
+      }, 8000);
+    }());
+  </script>
+  <script type="module" src="./src/app.js?v=20261105b"></script>
 </body>
 </html>
