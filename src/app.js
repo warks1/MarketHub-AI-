@@ -451,43 +451,29 @@ document.addEventListener('input',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(state.menuMore){state.menuMore=false;render()}else if(state.modal){state.modal=null;render()}}});
 function splash(){
  const overlay=document.createElement('div');
- overlay.className='splash nexus-splash';overlay.setAttribute('role','status');
- const left=[['left-one','▥','Analítica inteligente'],['left-two','♧','Campañas con IA'],['left-three','▤','Contenido creativo']];
- const right=[['right-one','✧','IA creativa'],['right-two','♧','Social Listening'],['right-three','▦','Planificación y automatización']];
- const chips=[...left,...right].map(([where,iconText,label])=>'<div class="nexus-float-chip '+where+'"><span>'+iconText+'</span><b>'+label+'</b></div>').join('');
- overlay.innerHTML='<div class="nexus-splash-layout">'+
- '<div class="nexus-energy-scene">'+chips+
- '<div class="nexus-energy-orb"><span class="nexus-orb-glow"></span><img class="nexus-orb-logo" src="./logo.svg" alt=""></div>'+
- '<div class="nexus-orb-platform"></div></div>'+
- '<div class="nexus-splash-title"><img src="./logo.svg" alt=""><span>MarketHub <em>AI</em></span></div>'+
- '<p class="nexus-splash-subtitle">Iniciando tu centro de marketing digital con IA</p>'+
- '<div class="progress-track"><div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
- '<p id="progressLabel" class="nexus-splash-subtitle">Preparando paneles, campañas y analítica...</p>'+
- '<div class="splash-footer">© '+new Date().getFullYear()+' MarketHub AI. Todos los derechos reservados. | Versión prototipo 0.4.4</div>'+
- '<button type="button" class="splash-skip" id="skipSplash">Entrar ahora</button></div>';
- // En pantallas panorámicas, utilizar el boceto 04 ORIGINAL como superficie visual
- // y superponer una barra real. En móvil mantener la composición responsive animada.
- if(window.matchMedia?.('(min-width:900px) and (min-aspect-ratio:14/10)').matches){
-  overlay.classList.add('nexus-original-splash');
-  overlay.innerHTML='<div class="nexus-original-splash-board">'+
-   '<img src="./assets/boceto-04-carga-original.jpeg" alt="Pantalla de carga original seleccionada: esfera neón, seis módulos y logo MarketHub AI">'+
-   '<div class="progress-track"><div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
-   '<p id="progressLabel">Preparando paneles, campañas y analítica...</p>'+
-   '<button type="button" class="splash-skip" id="skipSplash">Entrar ahora</button>'+
-   '</div>';
- }
+ overlay.className='splash nexus-splash nexus-original-splash';
+ overlay.setAttribute('role','status');
+ overlay.setAttribute('aria-label','MarketHub AI iniciando');
+ overlay.innerHTML='<div class="nexus-original-splash-board">'+
+ '<img src="./assets/boceto-04-carga-original.jpeg" width="1536" height="864" alt="Pantalla de carga original aprobada de MarketHub AI" fetchpriority="high" draggable="false">'+
+ '<div class="progress-track" aria-label="Progreso de inicialización">'+
+ '<div class="progress-fill" id="progressFill"></div><span class="progress-value" id="progressPercent">0%</span></div>'+
+ '<p id="progressLabel">Preparando paneles, campañas y analítica...</p>'+
+ '<button type="button" class="splash-skip mirror-skip" id="skipSplash" aria-label="Entrar a MarketHub AI"></button>'+
+ '</div>';
  document.body.append(overlay);
- let progress=0,closed=false;
- const bar=overlay.querySelector('#progressFill'),percent=overlay.querySelector('#progressPercent');
- let timer;
- function finish(){
-  if(closed)return;closed=true;
-  if(timer!=null)clearInterval(timer);
-  overlay.remove();
- }
+ let progress=0,closed=false,timer;
+ const bar=overlay.querySelector('#progressFill');
+ const value=overlay.querySelector('#progressPercent');
+ function finish(){if(closed)return;closed=true;if(timer!=null)clearInterval(timer);overlay.remove()}
  overlay.querySelector('#skipSplash').addEventListener('click',finish);
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){finish();return}
- timer=setInterval(()=>{progress=Math.min(100,progress+8);bar.style.width=progress+'%';percent.textContent=progress+'%';if(progress===100)finish()},105);
+ timer=setInterval(()=>{
+  progress=Math.min(100,progress+8);
+  bar.style.width=progress+'%';
+  value.textContent=progress+'%';
+  if(progress===100)finish();
+ },105);
 }
 try {
   render();
