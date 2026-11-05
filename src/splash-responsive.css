@@ -239,3 +239,22 @@
  .nexus-splash.nexus-original-splash .mh-splash-feature,
  .nexus-splash.nexus-original-splash .mh-splash-orb-crop{animation:none!important}
 }
+
+/* Corrección 2026-11-05: relleno visible en escritorio y centrado real en tablet. */
+.nexus-splash.nexus-original-splash .mh-splash-track > .progress-fill{
+ display:block!important;
+ position:absolute!important;
+ left:4px!important;top:4px!important;bottom:auto!important;right:auto!important;
+ height:calc(100% - 8px)!important;min-height:14px;
+ min-width:0;z-index:1;visibility:visible!important;opacity:1!important;
+ transform:none!important;pointer-events:none;
+}
+.nexus-splash.nexus-original-splash .mh-splash-track > .progress-value{z-index:2}
+@media(min-width:700px) and (max-width:1199px) and (min-height:541px){
+ .nexus-splash.nexus-original-splash .mh-splash-compact{
+  display:flex;flex-direction:column;justify-content:safe center;
+ }
+ .nexus-splash.nexus-original-splash .mh-splash-inner{
+  flex:0 0 auto;min-height:100dvh;justify-content:center;
+ }
+}
