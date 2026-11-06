@@ -2,6 +2,7 @@
 import {summarizeAnalytics} from './analytics-local.js';
 import {localRecommendations} from './local-insights.js';
 import {spanishMonthYear} from './date-label.js';
+import {socialBrandIcon,hasSocialBrand,PLATFORMS_DISPLAY,PLATFORMS_DRAFT} from './social-brand-icons.js';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean=xs=>Array.isArray(xs)?xs.filter(x=>x&&typeof x==='object'):[];
 const fmt=x=>{const n=Number(x);return new Intl.NumberFormat('es-ES',{maximumFractionDigits:1}).format(Number.isFinite(n)?n:0)};
@@ -16,12 +17,12 @@ function stat(name,value,hint,ico,tint,route){
  '<span><i>'+ico+'</i>'+name+'</span><strong>'+value+'</strong><small>'+hint+'</small><b class="live-stat-light"></b></button>';
 }
 function post(p,i){
- return '<div class="live-row"><span class="live-thumb '+(i%2?'pink':'cyan')+'">✦</span><div><strong>'+esc(p.title||'Sin título')+'</strong>'+
+ return '<div class="live-row"><span class="live-thumb '+(i%2?'pink':'cyan')+'">'+socialBrandIcon(p.platform)+'</span><div><strong>'+esc(p.title||'Sin título')+'</strong>+
  '<small>'+esc(p.platform||'')+' · '+displayDate(p.date)+'</small></div><span class="live-state">'+esc(p.status||'Borrador')+'</span>'+
  action('✎','edit-post','live-pencil','data-id="'+esc(p.id)+'" aria-label="Editar publicación"')+'</div>';
 }
 function campaign(c,i){
- return '<div class="live-row"><span class="live-thumb '+(i%2?'pink':'lime')+'">◎</span><div><strong>'+esc(c.name||'Sin título')+'</strong>'+
+ return '<div class="live-row"><span class="live-thumb '+(i%2?'pink':'lime')+'">'+(hasSocialBrand(c.channel)?socialBrandIcon(c.channel):'◎')+'</span><div><strong>'+esc(c.name||'Sin título')+'</strong>+
  '<small>'+esc(c.channel||'')+' · '+esc(c.objective||'')+'</small></div><span class="live-state">'+esc(c.status||'Borrador')+'</span>'+
  action('✎','campaign-edit','live-pencil','data-id="'+esc(c.id)+'" aria-label="Editar campaña"')+'</div>';
 }
@@ -61,7 +62,7 @@ function graph(rows){
  return '<svg class="live-graph" viewBox="0 0 600 180" preserveAspectRatio="none" role="img" aria-label="Alcance por plataforma, datos importados">'+
  '<path d="M0 30H600 M0 75H600 M0 120H600 M0 165H600" stroke="#415682" fill="none"/>'+plots+'</svg>'+
  '<div class="live-graph-labels"><span>'+esc(dates[0])+'</span><span>'+esc(dates[dates.length-1])+'</span></div>'+
- '<div class="live-graph-key">'+networks.map((n,i)=>data.some(r=>r.plataforma===n)?'<span style="--bullet:'+cols[i]+'">● '+n+'</span>':'').join('')+'</div>';
+ '<div class="live-graph-key">'+networks.map((n,i)=>data.some(r=>r.plataforma===n)?'<span style="--bullet:'+cols[i]+'">'+socialBrandIcon(n)+'<span>● '+n+'</span></span>':'').join('')+'</div>';
 }
 export function liveHome({posts=[],campaigns=[],analyticsRows=[],messages=[],mentions=[],calendarOffset=0,plan='free'}={}){
  const p=clean(posts),c=clean(campaigns),a=clean(analyticsRows),m=clean(messages),mentionsArr=clean(mentions),t=summarizeAnalytics(a);
@@ -96,9 +97,10 @@ export function liveHome({posts=[],campaigns=[],analyticsRows=[],messages=[],men
  const inboxPanel=panel('▣ Bandeja unificada',page('Abrir bandeja','bandeja'),
  '<div class="live-inbox-summary"><div><strong>'+m.filter(x=>x.status!=='Resuelto').length+'</strong><small>Pendientes</small></div>'+
  '<div><strong>'+m.length+'</strong><small>Guardadas</small></div><div><strong>0</strong><small>Cuentas conectadas</small></div></div>','live-inbox');
- const networks=[['Instagram','◎'],['TikTok','♪'],['YouTube','▶'],['LinkedIn','in'],['Facebook','f'],['X','𝕏'],['WhatsApp','◉']];
  const platformPanel=panel('♧ Plataformas',page('Gestionar','ajustes'),
- '<div class="live-platforms">'+networks.map(([n,ic])=>'<div><span>'+ic+'</span><b>'+n+'</b><small>Sin conectar</small></div>').join('')+'</div>','live-platform-panel');
+ '<div class="live-platforms">'+PLATFORMS_DISPLAY.map(n=>PLATFORMS_DRAFT.includes(n)?
+ '<button type="button" data-action="start-platform-draft" data-platform="'+n+'" aria-label="Crear borrador local para '+n+'. Sin cuenta conectada">'+socialBrandIcon(n)+'<b>'+n+'</b><small>Sin conectar</small></button>':
+ '<div>'+socialBrandIcon(n)+'<b>'+n+'</b><small>Sin conectar</small></div>').join('')+'</div>','live-platform-panel');
  return '<div class="live-home"><div class="live-heading"><div><span class="live-eyebrow">PANEL PRINCIPAL · NEXUS + PULSE</span>'+
  '<h1>¡Hola! 👋</h1><p>Organiza tu marketing con datos reales cuando los importas.</p></div>'+
  '<div class="live-period">▦ Datos locales · '+(a.length?a.length+' registros':'Sin conexión')+'</div></div>'+
@@ -118,7 +120,7 @@ export function liveInbox({messages=[]}={}){
  '<label for="lmsg-text">Mensaje o nota</label><textarea class="input" id="lmsg-text" name="body" maxlength="600" rows="4" required></textarea>'+
  '<button class="live-primary" type="submit">Guardar conversación</button></form>')+
  panel('Conversaciones <small>'+m.length+'</small>','',
- m.length?m.map(x=>'<div class="live-message"><div><strong>'+esc(x.contact)+'</strong><small>'+esc(x.network)+' · '+esc(x.status||'Pendiente')+'</small><p>'+esc(x.body)+'</p></div>'+
+ m.length?m.map(x=>'<div class="live-message"><div><strong>'+esc(x.contact)+'</strong><small>'+socialBrandIcon(x.network,{size:'tiny'})+' '+esc(x.network)+' · '+esc(x.status||'Pendiente')+'</small><p>'+esc(x.body)+'</p></div>'+
  action(x.status==='Resuelto'?'Reabrir':'Resolver','live-message-toggle','live-outline','data-id="'+esc(x.id)+'"')+
  action('Eliminar','live-message-delete','live-outline','data-id="'+esc(x.id)+'"')+'</div>').join(''):'<p class="live-empty">Todavía no hay conversaciones locales.</p>')+'</div></div>';
 }
