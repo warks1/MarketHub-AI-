@@ -32,7 +32,8 @@ test('Los accesos rápidos de móvil son estables por identificador',()=>{
 test('El menú completo se puede abrir, cerrar y responde a Escape',()=>{
  assert.ok(app.includes("case 'show-mobile-menu':"));
  assert.ok(app.includes("case 'close-mobile-menu':"));
- assert.ok(app.includes("if(state.menuMore){state.menuMore=false;render()}"));
+ assert.ok(app.includes("else if(state.menuMore){e.preventDefault();state.menuMore=false;render()}"));
+ assert.ok(app.includes("if(dialog&&e.key==='Tab')"));
  assert.ok(css.includes(".mobile-menu-drawer"));
  assert.ok(css.includes(".mobile-drawer-grid"));
 });
