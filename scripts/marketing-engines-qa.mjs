@@ -1,4 +1,4 @@
-// Pruebas end-to-end de cuatro motores reales en pantallas PC, tablet y móvil.
+// Pruebas end-to-end de siete motores reales en pantallas PC, tablet y móvil.
 import {chromium,webkit} from 'playwright';
 import {mkdir,readFile} from 'node:fs/promises';
 await mkdir('visual-qa/engines',{recursive:true});
@@ -14,6 +14,12 @@ for(const {label,browser:driver,width,height} of presets){
  try{
   const context=await browser.newContext({viewport:{width,height},acceptDownloads:true});
   const page=await context.newPage();
+  await page.addInitScript(()=>{
+   const key='markethub-ai-demo-v1';
+   let data={};try{data=JSON.parse(localStorage.getItem(key)||'{}')||{}}catch{}
+   data.analyticsRows=[{fecha:'2026-11-05',plataforma:'TikTok',impresiones:1000,alcance:500,interacciones:100,clics:40}];
+   localStorage.setItem(key,JSON.stringify(data));
+  });
   page.on('pageerror',e=>errors.push('Error JS: '+e.message));
   try{
    await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
@@ -45,13 +51,28 @@ for(const {label,browser:driver,width,height} of presets){
    // AB
    await page.locator('#growth-engine-ab button[type="submit"]').click();
    if(!await page.locator('.engine-ab-metrics').count())errors.push('A/B sin salida');
+   // Muestra A/B con supuestos editables
+   await page.locator('#growth-engine-adv-sample button[type="submit"]').click();
+   if(!await page.locator('.engine-advanced .engine-score').count())errors.push('Motor de muestra sin resultados');
+   // Repartidor de inversión
+   await page.locator('#growth-engine-adv-allocate button[type="submit"]').click();
+   if(await page.locator('.engine-advanced .engine-table tbody tr').count()<4)errors.push('No hay reparto de canales');
+   // Analítica aportada por el usuario, nunca cifras inventadas
+   if(!await page.locator('.engine-advanced').textContent().then(t=>t.includes('CTR observado más alto')&&t.includes('TikTok')))
+    errors.push('No lee la analítica CSV importada');
+   const strategyDownload=page.waitForEvent('download',{timeout:12000});
+   await page.locator('[data-growth-action="engine-adv-export"]').click();
+   const strategy=await strategyDownload;
+   const strategyText=await readFile(await strategy.path(),'utf8');
+   if(!strategyText.includes('PLANIFICACIÓN A/B')||!strategyText.includes('ASIGNACIÓN TEÓRICA')||!strategyText.includes('TikTok'))
+    errors.push('Informe estratégico incompleto');
    const downloadEvent=page.waitForEvent('download',{timeout:12000});
    await page.locator('[data-growth-action="engine-export-report"]').click();
    const download=await downloadEvent;
    const txt=await readFile(await download.path(),'utf8');
    if(!txt.includes('Texto corregido manualmente')||!txt.includes('EMBUDO TEÓRICO'))errors.push('Exportación incompleta');
    const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('markethub-growth-local-v1')||'{}'));
-   if(!saved.engines?.creative||!saved.engines?.copies||!saved.engines?.forecast||!saved.engines?.ab)errors.push('Faltan resultados persistidos');
+   if(!saved.engines?.creative||!saved.engines?.copies||!saved.engines?.forecast||!saved.engines?.ab||!saved.engines?.advanced?.sample||!saved.engines?.advanced?.allocation)errors.push('Faltan resultados persistidos');
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
    if(overflow>2)errors.push('Desbordamiento horizontal de '+overflow+' px');
    await page.screenshot({path:'visual-qa/engines/'+label+'.png',fullPage:true});
