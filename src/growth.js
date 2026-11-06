@@ -1,10 +1,11 @@
 // MarketHub AI — Growth Lab v0.3
 // Herramientas 100 % locales, sin IA externa, publicación ni envío de campañas.
 import {buildPulsePlan,pulsePlanCSV,pulsePlanICS} from './pulse-campaign.js';
+import {engineLabPage,engineLabClick,engineLabSubmit} from './engine-lab.js';
 const STORE = 'markethub-growth-local-v1';
 const initial=()=>({
  briefs:[], utms:[], seo:null, email:{subject:'',preheader:'',message:'',cta:'Descubre más',url:'https://example.com'},
- bio:{name:'',description:'',links:[]},repurpose:[],pulsePlan:null
+ bio:{name:'',description:'',links:[]},repurpose:[],pulsePlan:null,engines:{}
 });
 const validStoredPlan=p=>p&&typeof p==='object'&&!Array.isArray(p)&&
  typeof p.name==='string'&&p.name.length<=100&&
@@ -24,7 +25,8 @@ try{
    email:raw.email&&typeof raw.email==='object'?{...base.email,...raw.email}:base.email,
    bio:raw.bio&&typeof raw.bio==='object'?{...base.bio,...raw.bio}:base.bio,
    repurpose:Array.isArray(raw.repurpose)?raw.repurpose.slice(0,5):[],
-   pulsePlan:validStoredPlan(raw.pulsePlan)?raw.pulsePlan:null};
+   pulsePlan:validStoredPlan(raw.pulsePlan)?raw.pulsePlan:null,
+   engines:raw.engines&&typeof raw.engines==='object'&&!Array.isArray(raw.engines)?raw.engines:{}};
  }
 }catch{}
 let active='campanas';
@@ -46,10 +48,11 @@ function button(label,action,extra=''){return '<button type="button" class="seco
 function chips(items){return items.map(i=>'<span class="tag">'+esc(i)+'</span>').join(' ')}
 const sections=[
  ['campanas','Briefs de campaña','🎯'],['utm','Enlaces UTM','🔗'],['seo','SEO para redes','🔎'],
- ['emails','Editor de email','✉️'],['reutilizar','Reutilizar contenido','♻️'],['bio','Link en bio','🌐']
+ ['emails','Editor de email','✉️'],['reutilizar','Reutilizar contenido','♻️'],['bio','Link en bio','🌐'],
+ ['motores','Motores inteligentes','⚙️']
 ];
 function header(){
- return '<div class="page-head"><div><span class="eyebrow">MARKETHUB AI · GROWTH LAB v0.3</span><h1>Laboratorio de crecimiento 🚀</h1><p>Herramientas de marketing utilizables sin conectar ninguna red social.</p></div><span class="demo-pill">100 % local</span></div>'+
+ return '<div class="page-head"><div><span class="eyebrow">MARKETHUB AI · GROWTH LAB v0.4</span><h1>Laboratorio de crecimiento 🚀</h1><p>Herramientas de marketing utilizables sin conectar ninguna red social.</p></div><span class="demo-pill">100 % local</span></div>'+
  '<div class="notice" style="margin-bottom:13px">Herramientas locales y manuales: <strong>sin generación de IA, sin campañas enviadas, sin analítica externa ni publicación real.</strong> No guardes datos personales de clientes ni información confidencial. FREE tiene límites de prueba; PRO aquí es un modo de demostración.</div>';
 }
 function pulsePlanPanel(){
@@ -205,7 +208,7 @@ function bio(plan){
 export function growthOpenTab(tab){if(sections.some(s=>s[0]===tab))active=tab}
 export function growthPage(plan){
  const n=sections.map(s=>'<button type="button" data-growth-action="tab-'+s[0]+'" aria-current="'+(active===s[0]?'page':'false')+'">'+s[2]+' '+s[1]+'</button>').join('');
- const page=active==='utm'?utms(plan):active==='seo'?seo():active==='emails'?emails():active==='reutilizar'?reuse():active==='bio'?bio(plan):briefs(plan);
+ const page=active==='motores'?engineLabPage(plan,data.engines):active==='utm'?utms(plan):active==='seo'?seo():active==='emails'?emails():active==='reutilizar'?reuse():active==='bio'?bio(plan):briefs(plan);
  return header()+'<div class="workspace-tabs" role="navigation" aria-label="Laboratorio de marketing">'+n+'</div><section class="section-stack">'+page+'</section>';
 }
 function download(filename,content,type){
@@ -220,6 +223,7 @@ export function growthClick(target,ctx){
  const action=target.dataset.growthAction;
  if(!action)return false;
  if(action.startsWith('tab-')){growthOpenTab(action.slice(4));ctx.refresh();return true}
+  if(action.startsWith('engine-'))return engineLabClick(target,data,ctx,{commit:callbacks,copyText,download});
  const id=String(target.dataset.id||'');
  if(action==='delete-brief'||action==='delete-utm'){
   if(!window.confirm('¿Eliminar este elemento guardado? Esta operación no se puede deshacer.'))return true;
@@ -323,6 +327,7 @@ export function growthClick(target,ctx){
 }
 export function growthSubmit(form,plan,ctx){
  if(!form?.id?.startsWith('growth-'))return false;
+ if(form.id.startsWith('growth-engine-'))return engineLabSubmit(form,plan,data,ctx,callbacks);
  const id=form.id,f=new FormData(form),v=k=>cut(f.get(k),320);
  if(id==='growth-brief'){
   const cap=plan==='pro'?100:10;
