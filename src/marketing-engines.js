@@ -83,7 +83,7 @@ export function compareAB(input={}){
  const rateA=convertsA/visitsA,rateB=convertsB/visitsB,difference=rateB-rateA;
  const pool=(convertsA+convertsB)/(visitsA+visitsB);
  const pooledSE=Math.sqrt(pool*(1-pool)*(1/visitsA+1/visitsB));
- const z=pooledSE?difference/pooledSE:0,pValue=pooledSE?clamp(2*(1-normalCdf(Math.abs(z))),0,1):1;
+ const z=pooledSE?difference/pooledSE:0,pValue=difference===0?1:pooledSE?clamp(2*(1-normalCdf(Math.abs(z))),0,1):1;
  const standardError=Math.sqrt(rateA*(1-rateA)/visitsA+rateB*(1-rateB)/visitsB);
  const lower=difference-1.96*standardError,upper=difference+1.96*standardError;
  const sufficient=visitsA>=30&&visitsB>=30&&
