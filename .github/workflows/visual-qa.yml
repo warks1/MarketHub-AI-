@@ -13,6 +13,7 @@ on:
       - 'scripts/media-forge-qa.mjs'
       - 'scripts/unified-backup-qa.mjs'
       - 'scripts/studio-draft-qa.mjs'
+      - 'scripts/mobile-ux-qa.mjs'
       - '.github/workflows/visual-qa.yml'
   pull_request:
     paths:
@@ -25,6 +26,7 @@ on:
       - 'scripts/media-forge-qa.mjs'
       - 'scripts/unified-backup-qa.mjs'
       - 'scripts/studio-draft-qa.mjs'
+      - 'scripts/mobile-ux-qa.mjs'
       - '.github/workflows/visual-qa.yml'
 
 permissions:
@@ -59,6 +61,8 @@ jobs:
         run: node scripts/visual-qa.mjs
       - name: Revisar Safari WebKit Firefox y pantallas horizontales/UHD
         run: node scripts/cross-browser-qa.mjs
+      - name: Comprobar diálogos buscador y ajustes responsive en Chromium y Safari
+        run: node scripts/mobile-ux-qa.mjs
       - name: Verificar límite FREE y PRO desde Estudio en Chromium y Safari
         run: node scripts/studio-draft-qa.mjs
       - name: Comprobar Media Forge y PULSE PACK en navegadores
