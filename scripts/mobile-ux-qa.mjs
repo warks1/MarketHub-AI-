@@ -27,7 +27,7 @@ for(const [name,engine,width,height] of variants){
   const month=await page.locator('.live-month strong').first().innerText();
   if(!/^[A-ZÁÉÍÓÚÜÑ].* de \d{4}$/.test(month)||month.includes(' De '))
    errors.push('Etiqueta de mes incorrecta: '+month);
-  if(!(await page.locator('.live-calendar-help').innerText()).includes('No se publica'))errors.push('No aparece la ayuda del calendario');
+  if(!(await page.locator('.live-calendar-help').innerText()).toLocaleLowerCase('es-ES').includes('no se publica'))errors.push('No aparece la ayuda del calendario');
   await openPage(page,'ajustes',width);
   const size=await page.evaluate(()=>{
    const btn=document.querySelector('[data-action="unified-backup-encrypted-export"]');
