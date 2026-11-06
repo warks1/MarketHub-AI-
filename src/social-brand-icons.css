@@ -1,0 +1,75 @@
+/* MarketHub AI v0.7.7 · marcas de plataformas locales NEXUS × PULSE.
+   Las figuras corresponden a los iconos de las redes. Nunca implican conexión ni patrocinio.
+   Las superficies de la aplicación mantienen su apariencia aprobada. */
+.social-brand-icon{
+ display:inline-grid;place-items:center;flex:0 0 auto;vertical-align:middle;
+ width:30px;height:30px;min-width:0;max-width:100%;border-radius:8px;
+ background:var(--social-bg,#172652);color:var(--social-fg,#fff);
+ isolation:isolate;overflow:hidden;
+}
+.social-brand-icon svg{display:block;width:66%;height:66%;max-width:100%;fill:currentColor;flex:none}
+.social-brand-icon--tiny{width:17px;height:17px;border-radius:4px}
+.social-brand-icon--tiny svg{width:69%;height:69%}
+.social-brand-icon--large{width:38px;height:38px;border-radius:11px}
+.social-brand-icon--large svg{width:68%;height:68%}
+.social-brand-icon--instagram{
+ --social-bg:radial-gradient(circle at 29% 104%,#feda75 0%,#fa7e1e 26%,#d62976 52%,#962fbf 74%,#4f5bd5 100%);
+}
+.social-brand-icon--tiktok{--social-bg:#090909}
+.social-brand-icon--youtube{--social-bg:#ff0033}
+.social-brand-icon--facebook{--social-bg:#0866ff}
+.social-brand-icon--linkedin{--social-bg:#0a66c2}
+.social-brand-icon--x{--social-bg:#070707}
+.social-brand-icon--whatsapp{--social-bg:#25d366}
+.social-brand-icon--threads{--social-bg:#070707}
+.social-brand-icon--pinterest{--social-bg:#bd081c}
+.social-brand-icon--snapchat{--social-bg:#fffc00;--social-fg:#0a0a0a}
+.social-brand-icon--bluesky{--social-bg:#0085ff}
+.social-brand-icon--twitch{--social-bg:#9146ff}
+.social-brand-icon--telegram{--social-bg:#229ed9}
+.social-brand-fallback{display:inline-grid;place-items:center;min-width:25px;min-height:25px;background:#1e3260;color:#bceafa;border-radius:7px}
+.nexus-platform .social-brand-icon{display:grid;margin:0 auto 3px;width:30px;height:30px}
+.nexus-platform-legend{align-items:center}
+.nexus-platform-legend>span{display:inline-flex;align-items:center;gap:5px;min-width:0}
+.nexus-platform-legend .social-brand-icon{width:18px;height:18px;border-radius:5px}
+.nexus-post-thumb .social-brand-icon,.live-thumb .social-brand-icon{width:31px;height:31px}
+.nexus-post-thumb,.live-thumb{isolation:isolate}
+.live-platforms>button,.live-platforms>div{display:grid;justify-items:center;align-content:start;gap:5px;min-width:0;background:#13204b;border:1px solid #485d9b;border-radius:11px;padding:7px 3px;color:#f2f7ff}
+.live-platforms>button{cursor:pointer;min-height:78px;touch-action:manipulation}
+.live-platforms>button:hover{border-color:#4bdfff;box-shadow:0 0 12px #3cbdff38}
+.live-platforms>button:focus-visible{outline:2px solid #c88aff;outline-offset:3px}
+.live-platforms .social-brand-icon{display:grid;width:32px;height:32px;border-radius:8px;background:var(--social-bg,#1b3473);color:var(--social-fg,#fff);font-weight:normal;font-size:inherit}
+.live-platforms .social-brand-icon svg{width:67%;height:67%}
+.live-platforms>button b,.live-platforms>div b{font-size:10px;max-width:100%;overflow-wrap:anywhere}
+.live-platforms>button small,.live-platforms>div small{font-size:9px;color:#f0b9d9;text-align:center}
+.live-graph-key{align-items:center}
+.live-graph-key>span{display:inline-flex;gap:5px;align-items:center;min-width:0;color:#d7e1fc}
+.live-graph-key .social-brand-icon{width:18px;height:18px;border-radius:5px}
+.live-row .live-thumb .social-brand-icon{margin:0}
+.live-message small .social-brand-icon{width:16px;height:16px;margin-right:3px}
+.social-post-choices{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+ margin:9px 0 10px;
+}
+.social-post-choice{
+ display:flex;align-items:center;justify-content:center;gap:7px;min-width:0;
+ padding:8px 6px;min-height:48px;background:#13234c;border:1px solid #40588d;border-radius:11px;
+ color:#e5efff;font-size:12px;font-weight:750;cursor:pointer;touch-action:manipulation;
+}
+.social-post-choice .social-brand-icon{width:27px;height:27px;flex:none}
+.social-post-choice[aria-pressed="true"]{
+ border-color:#60e5f4;background:linear-gradient(115deg,#103e73,#3b2367);
+ box-shadow:0 0 0 1px #5bcbe4,0 0 12px #20e5fc33;
+}
+.social-post-choice:focus-visible{outline:2px solid #d68aff;outline-offset:2px}
+.social-post-note{font-size:11px;color:#adcaed;line-height:1.45}
+.social-brand-inline{display:inline-flex;align-items:center;gap:7px;min-width:0}
+.social-brand-inline .social-brand-icon{width:23px;height:23px;border-radius:6px}
+.social-brand-source{font-size:10px;color:#b7ccef}
+@media(min-width:900px){.social-post-choices{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:460px){
+ .social-post-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .social-post-choice{font-size:11px;padding:8px 5px}
+ .live-platforms>button,.live-platforms>div{padding:8px 3px;min-height:85px}
+}
+@media(prefers-reduced-motion:reduce){.social-post-choice,.live-platforms>button{transition:none!important}}
