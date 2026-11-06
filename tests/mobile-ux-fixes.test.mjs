@@ -41,6 +41,7 @@ test('Los meses en castellano capitalizan solo la primera letra y respetan la pr
  assert.match(liveHome({posts:[]}),/Selecciona un día para preparar contenido/);
  assert.match(nexusHome({posts:[]}),/No se publica automáticamente en redes/);
  assert.match(nexusCSS,/\.nexus-cal-month\{text-transform:none\}/);
+ assert.match(liveCSS,/\.live-month>strong\{font-size:12px;text-transform:none\}/);
 });
 test('Vista previa de Estudio no rompe palabras y etiqueta de versión coincide con package.json',()=>{
  assert.match(liveCSS,/\.live-editor-text h3,\.live-editor-text p\{[^}]*word-break:normal/);
