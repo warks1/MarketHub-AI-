@@ -2,6 +2,19 @@
 // No publica ni programa acciones en plataformas externas.
 export const draftLimit = plan => plan === 'pro' ? 500 : 20;
 
+// Biblioteca: ignora diferencias de acentos, mayúsculas y espacios de la consulta.
+// La búsqueda es local; no se envía texto a servicios externos.
+const normalizeSearch = value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('es-ES');
+export function filterLocalPosts(posts,query=''){
+ const words=normalizeSearch(query).trim().split(/\s+/).filter(Boolean);
+ return (Array.isArray(posts)?posts:[]).filter(p=>{
+  if(!p||typeof p!=='object')return false;
+  if(!words.length)return true;
+  const searchable=normalizeSearch([p.title,p.platform,p.status,p.date].join(' '));
+  return words.every(word=>searchable.includes(word));
+ });
+}
+
 export function findPost(posts, id) {
   if (!Array.isArray(posts) || id == null) return null;
   return posts.find(post => post && typeof post === 'object' && String(post.id) === String(id)) ?? null;
