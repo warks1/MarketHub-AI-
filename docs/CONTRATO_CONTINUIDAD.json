@@ -606,7 +606,7 @@
       "tokens": [
         "case 'show-mobile-menu':",
         "case 'close-mobile-menu':",
-        "if(state.menuMore){state.menuMore=false;render()}"
+        "state.menuMore=false;render()"
       ]
     },
     {
@@ -798,10 +798,10 @@
     },
     {
       "id": "SW-LATEST-CACHE",
-      "label": "Actualización PWA con shell v0.7.20",
+      "label": "Actualización PWA con shell v0.7.21",
       "file": "sw.js",
       "tokens": [
-        "markethub-nexus-pulse-shell-v0.7.20",
+        "markethub-nexus-pulse-shell-v0.7.21",
         "self.skipWaiting()",
         "self.clients.claim()"
       ]
