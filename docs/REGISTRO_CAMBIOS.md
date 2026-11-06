@@ -1,3 +1,10 @@
+## 2026-11-06 · MarketHub AI v0.7.6 — transición blanca del lanzamiento iOS
+
+- El vídeo grabado desde la pantalla de inicio de iPhone confirma un intervalo blanco entre el lanzamiento nativo y la pantalla de carga NEXUS × PULSE. No se trata de una pantalla blanca permanente ni de un fallo del módulo de reproductores.
+- Metadatos `apple-mobile-web-app-*` y pantallas de inicio PNG de tamaño exacto, generadas por Node y publicadas con la app en GitHub Pages. Incluye 430×932 puntos a 3×, además de otros tamaños modernos iPhone/iPad y orientación horizontal en iPad.
+- Color base y tema oscuros en el primer documento HTML; precache y versión PWA renovados sin borrar almacenamiento local.
+- El splash animado anterior y todas las demás funciones se conservan. La comprobación final de la transición del sistema requiere abrirla desde el icono del iPhone y, si iOS conserva el splash antiguo, reinstalar ese icono desde Safari.
+
 ## 2026-11-06 · MarketHub AI v0.7.5 — visores y reproductores reales
 
 - Nueva pestaña «Visores · imagen y sonido» dentro de Media Forge: galería multiimagen con miniaturas, flechas, zoom 1–5×, giro, swipe, pantalla completa adaptable y presentación automática.
