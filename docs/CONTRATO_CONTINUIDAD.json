@@ -403,7 +403,7 @@
       "file": "src/app.js",
       "tokens": [
         "['laboratorio','Growth Lab','chart']",
-        "case 'laboratorio':return growthPage(state.plan)",
+        "case 'laboratorio':return growthPage(state.plan,state.analyticsRows)",
         "growthClick(growthTarget"
       ]
     },
