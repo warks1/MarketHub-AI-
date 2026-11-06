@@ -1,9 +1,10 @@
 // MarketHub AI — Growth Lab v0.3
 // Herramientas 100 % locales, sin IA externa, publicación ni envío de campañas.
+import {buildPulsePlan,pulsePlanCSV,pulsePlanICS} from './pulse-campaign.js';
 const STORE = 'markethub-growth-local-v1';
 const initial=()=>({
  briefs:[], utms:[], seo:null, email:{subject:'',preheader:'',message:'',cta:'Descubre más',url:'https://example.com'},
- bio:{name:'',description:'',links:[]},repurpose:[]
+ bio:{name:'',description:'',links:[]},repurpose:[],pulsePlan:null
 });
 let data=initial();
 try{
@@ -14,7 +15,8 @@ try{
    seo:raw.seo&&typeof raw.seo==='object'?raw.seo:null,
    email:raw.email&&typeof raw.email==='object'?{...base.email,...raw.email}:base.email,
    bio:raw.bio&&typeof raw.bio==='object'?{...base.bio,...raw.bio}:base.bio,
-   repurpose:Array.isArray(raw.repurpose)?raw.repurpose.slice(0,5):[]};
+   repurpose:Array.isArray(raw.repurpose)?raw.repurpose.slice(0,5):[],
+   pulsePlan:raw.pulsePlan&&Array.isArray(raw.pulsePlan.items)&&raw.pulsePlan.items.length===7?raw.pulsePlan:null};
  }
 }catch{}
 let active='campanas';
@@ -42,9 +44,29 @@ function header(){
  return '<div class="page-head"><div><span class="eyebrow">MARKETHUB AI · GROWTH LAB v0.3</span><h1>Laboratorio de crecimiento 🚀</h1><p>Herramientas de marketing utilizables sin conectar ninguna red social.</p></div><span class="demo-pill">100 % local</span></div>'+
  '<div class="notice" style="margin-bottom:13px">Herramientas locales y manuales: <strong>sin generación de IA, sin campañas enviadas, sin analítica externa ni publicación real.</strong> No guardes datos personales de clientes ni información confidencial. FREE tiene límites de prueba; PRO aquí es un modo de demostración.</div>';
 }
+function pulsePlanPanel(){
+ const p=data.pulsePlan;
+ if(!p||!Array.isArray(p.items)||p.items.length!==7)return '';
+ const rows=p.items.map((post,i)=>
+  '<article class="growth-pulse-day"><div class="growth-pulse-day-head"><span class="tag">'+esc(post.date)+'</span>'+
+  '<strong>Día '+(i+1)+' · '+esc(post.phase)+'</strong><small>'+esc(post.platform)+' · '+esc(post.format)+'</small></div>'+
+  '<p>'+esc(post.angle)+'</p><label for="pulseText'+i+'">Texto editable para '+esc(post.platform)+'</label>'+
+  '<textarea class="input" id="pulseText'+i+'" data-pulse-text="'+i+'" maxlength="240" rows="4">'+esc(post.title)+'</textarea>'+
+  '<small class="growth-pulse-check">Antes de publicar: '+esc(post.check)+'</small></article>'
+ ).join('');
+ return '<section class="growth-pulse card"><div class="card-head"><div><span class="eyebrow">PULSE CAMPAIGN PILOT · MOTOR LOCAL</span>'+
+ '<h2>Plan editorial de 7 días · '+esc(p.name)+'</h2></div><span class="tag">Editable</span></div>'+
+ '<p class="muted tiny">Propuestas mediante reglas propias, sin IA generativa. El calendario no programa ni publica automáticamente. Revisa derechos, datos, promesas y condiciones antes de usar cada texto.</p>'+
+ '<div class="growth-pulse-grid">'+rows+'</div>'+
+ '<div class="workspace-actions growth-pulse-actions">'+
+ button('Guardar ajustes','pulse-save-edits')+button('Descargar CSV','pulse-export-csv')+
+ button('Calendario .ics','pulse-export-ics')+
+ '<button type="button" class="primary" data-growth-action="pulse-to-drafts">Crear 7 borradores locales</button></div>'+
+ '<p class="tiny muted">Los borradores respetan el límite FREE/PRO. Todos deben caber para poder añadirlos sin pérdidas ni publicaciones parciales.</p></section>';
+}
 function briefs(plan){
  const max=plan==='pro'?100:10;
- const items=data.briefs.slice().reverse().map(b=>'<div class="growth-entry"><div><strong>'+esc(b.name)+'</strong><p>'+esc(b.goal)+' · '+esc(b.channel)+' · '+fmtMoney(b.budget)+'</p><p class="tiny muted">Público: '+esc(b.audience)+'</p></div><div class="workspace-actions">'+button('Exportar .txt','export-brief','data-id="'+esc(b.id)+'"')+button('Eliminar','delete-brief','data-id="'+esc(b.id)+'"')+'</div></div>').join('');
+ const items=data.briefs.slice().reverse().map(b=>'<div class="growth-entry"><div><strong>'+esc(b.name)+'</strong><p>'+esc(b.goal)+' · '+esc(b.channel)+' · '+fmtMoney(b.budget)+'</p><p class="tiny muted">Público: '+esc(b.audience)+'</p></div><div class="workspace-actions">'+button('Crear plan PULSE 7 días','pulse-generate','data-id="'+esc(b.id)+'"')+button('Exportar .txt','export-brief','data-id="'+esc(b.id)+'"')+button('Eliminar','delete-brief','data-id="'+esc(b.id)+'"')+'</div></div>').join('');
  return '<div class="workspace-dual">'+card('🎯 Preparar campaña',
  '<p class="tiny muted" style="margin-bottom:12px">Organiza objetivos, público, oferta, canal y presupuesto. No hay IA ni gasto publicitario real.</p>'+
  '<form id="growth-brief">'+textField('Nombre de campaña','briefName','','required maxlength="100" placeholder="Ej.: lanzamiento primavera"')+
@@ -57,7 +79,7 @@ function briefs(plan){
  textField('Fecha de inicio','briefDate',today(),'type="date" required')+
  textField('Llamada a la acción','briefCta','','maxlength="120" placeholder="Solicita información"')+
  '<button class="primary full" type="submit">Guardar brief de campaña</button></form><p class="tiny muted" style="margin-top:12px">Hasta '+max+' briefs locales en este plan de prueba.</p>')+
- card('Biblioteca de campañas · '+data.briefs.length,'<div class="line-list">'+(items||'<div class="empty">Aún no has preparado una campaña.</div>')+'</div>')+'</div>';
+ card('Biblioteca de campañas · '+data.briefs.length,'<div class="line-list">'+(items||'<div class="empty">Aún no has preparado una campaña.</div>')+'</div>')+'</div>'+pulsePlanPanel();
 }
 function utms(plan){
  const max=plan==='pro'?250:20;
@@ -192,6 +214,46 @@ export function growthClick(target,ctx){
   if(action==='delete-brief')data.briefs=data.briefs.filter(x=>x.id!==id);
   else data.utms=data.utms.filter(x=>x.id!==id);
   callbacks(ctx,'Elemento eliminado.');return true;
+ }
+ if(action==='pulse-generate'){
+  const brief=data.briefs.find(b=>b.id===id);
+  if(!brief){ctx.toast('No se encuentra el brief seleccionado.');return true}
+  try{data.pulsePlan=buildPulsePlan(brief);callbacks(ctx,'Plan PULSE de siete días generado y guardado localmente.')}
+  catch(error){ctx.toast('No se pudo generar: '+String(error.message||error).slice(0,100))}
+  return true;
+ }
+ if(action.startsWith('pulse-')){
+  const plan=data.pulsePlan;
+  if(!plan||!Array.isArray(plan.items)||plan.items.length!==7){
+   ctx.toast('Genera antes un plan PULSE desde un brief.');return true;
+  }
+  // Antes de exportar o añadir borradores se incorporan los textos corregidos por el usuario.
+  const updated=plan.items.map((item,i)=>({
+   ...item,title:cut(document.getElementById('pulseText'+i)?.value??item.title,240)
+  }));
+  if(updated.some(item=>!item.title)){
+   ctx.toast('Todos los días necesitan un texto antes de guardar el plan.');return true;
+  }
+  if(action==='pulse-to-drafts'){
+   if(typeof ctx.newPosts!=='function'){ctx.toast('El editor de borradores no está disponible.');return true}
+   if(ctx.newPosts(updated.map(item=>({title:item.title,date:item.date,platform:item.platform,status:'Borrador'})))){
+    plan.items=updated;save();
+   }
+   return true;
+  }
+  plan.items=updated;
+  if(!save()){ctx.toast('No se han podido guardar los ajustes.');return true}
+  if(action==='pulse-save-edits'){ctx.refresh();ctx.toast('Los siete textos se han guardado.');return true}
+  try{
+   if(action==='pulse-export-csv'){
+    download('PULSE-Plan-7-dias.csv',pulsePlanCSV(plan),'text/csv;charset=utf-8');
+    ctx.toast('Plan editorial CSV descargado.');
+   }else if(action==='pulse-export-ics'){
+    download('PULSE-Calendario-7-dias.ics',pulsePlanICS(plan),'text/calendar;charset=utf-8');
+    ctx.toast('Calendario local descargado, sin publicación automática.');
+   }
+  }catch(error){ctx.toast('No se pudo exportar: '+String(error.message||error).slice(0,100))}
+  return true;
  }
  if(action==='export-brief'){
   const b=data.briefs.find(x=>x.id===id);
