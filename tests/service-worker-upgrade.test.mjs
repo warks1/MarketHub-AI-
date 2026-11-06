@@ -4,9 +4,9 @@ import {readFileSync} from 'node:fs';
 const sw=readFileSync(new URL('../sw.js',import.meta.url),'utf8');
 const publicSw=readFileSync(new URL('../public/sw.js',import.meta.url),'utf8');
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
-test('Los dos service workers usan la misma revisión posterior a v0.7.4',()=>{
+test('Los dos service workers usan la misma revisión posterior a v0.7.5',()=>{
  assert.equal(sw,publicSw,'La copia del public/ debe ser idéntica a sw.js');
- assert.match(sw,/const CACHE = 'markethub-nexus-pulse-shell-v0\.7\.28'/);
+ assert.match(sw,/const CACHE = 'markethub-nexus-pulse-shell-v0\.7\.29'/);
  assert.doesNotMatch(sw,/shell-v0\.7\.4['"]/);
 });
 test('La actualización reemplaza el shell anterior pero conserva datos locales',()=>{
