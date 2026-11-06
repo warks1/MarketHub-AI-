@@ -34,6 +34,9 @@ export const catalogueSections = [
       {"id":"CAT-ENG-02","name":"Motor de variantes multicanal","tier":"free","status":"local","growthTab":"motores","description":"Genera variantes por plantillas editables y exportables. FREE 2 opciones, PRO demo hasta 5."},
       {"id":"CAT-ENG-03","name":"Motor de escenarios de inversión","tier":"free","status":"local","growthTab":"motores","description":"Simula impresiones, clics, conversiones, rentabilidad y tres escenarios con supuestos aportados por el usuario; no son predicciones."},
       {"id":"CAT-ENG-04","name":"Motor estadístico de experimentos A/B","tier":"free","status":"local","growthTab":"motores","description":"Compara tasas de conversión con p-valor e intervalo al 95 % y detecta muestras insuficientes."},
+      {"id":"CAT-ENG-05","name":"Planificador de tamaño de muestra A/B","tier":"free","status":"local","growthTab":"motores","description":"Calcula visitas por variante y días estimados según tasa base, mejora relativa, confianza y potencia. No ejecuta pruebas."},
+      {"id":"CAT-ENG-06","name":"Motor de distribución de presupuesto","tier":"free","status":"local","growthTab":"motores","description":"Reparte inversión hipotética entre tres canales y limita la exposición máxima por canal según parámetros declarados; sin gasto real."},
+      {"id":"CAT-ENG-07","name":"Inteligencia de canales por CSV propio","tier":"free","status":"local","growthTab":"motores","description":"Lee las métricas aportadas en Analítica, calcula CTR y participación, y distingue explícitamente datos ausentes o no comparables."},
       {
         "id": "CAT-001",
         "name": "Asistente de marketing por chat",
