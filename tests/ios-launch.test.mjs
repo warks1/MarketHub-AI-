@@ -33,7 +33,7 @@ test('Metadatos iOS dan fondo oscuro nativo y mantienen intacto el splash animad
   'name="apple-mobile-web-app-title" content="MarketHub AI"',
   'rel="apple-touch-icon"'])
   assert.ok(page.includes(part),part);
- assert.match(page,/src="\.\/src\/app\.js\?v=20261106q"/);
+ assert.match(page,/src="\.\/src\/app\.js\?v=20261106r"/);
  assert.match(page,/src\/splash-responsive\.css/);
  const css=readFileSync(new URL('../src/splash-responsive.css',import.meta.url),'utf8');
  assert.match(css,/mh-splash-feature/);
