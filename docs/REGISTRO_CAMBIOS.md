@@ -200,3 +200,13 @@ Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalida
 - Actualizada la versión de carga del módulo principal a `20261106a` para evitar servir la versión anterior en navegadores instalados.
 - Nuevas pruebas unitarias de límite de borradores y Canvas antiguo/moderno, integridad de SW, y prueba end-to-end de acción de Estudio en Chromium y Safari WebKit.
 - Nota de plataforma: que el SW se actualice no garantiza que una pestaña ya abierta cambie su JS sin recargar; puede requerir cerrar y volver a abrir la aplicación. El navegador Safari antiguo se reproduce mediante simulación de APIs Canvas ausentes, no mediante un dispositivo antiguo físico.
+
+## 2026-11-06 · PULSE Campaign Pilot: de brief guardado a plan editorial editable
+- **Nueva herramienta funcional, local, sin IA remota:** Growth Lab puede convertir un brief guardado en **7 publicaciones sugeridas** y revisiones editoriales diferenciadas (presentación, problema, beneficio, demostración, confianza, preguntas y cierre).
+- Las propuestas conservan nombre, oferta, público, llamada a la acción y fecha; se ajustan al canal elegido, incluido multicanal. El usuario puede editar cada texto antes de usarlo y guardar el plan en el almacenamiento local de Growth Lab.
+- Se exporta **CSV seguro para hojas de cálculo** (neutralización de textos que empiezan como fórmulas) y **calendario ICS de día completo** sin inventar horas de publicación. No se conecta a redes ni activa anuncios.
+- **Crear 7 borradores locales en un paso:** todas las propuestas se validan antes de escribir. No se guarda ningún borrador cuando el conjunto supera el máximo FREE (20) o PRO de demostración (500), o cuando falla el almacenamiento local.
+- Email y Google Ads pueden exportar CSV/ICS, pero no se envían al gestor de borradores sociales porque éste aún no admite esos destinos. Multicanal elige solo redes sociales admitidas.
+- Interfaz responsive para smartphone, tablet, PC y Mac dentro del estilo NEXUS × PULSE, manteniendo los módulos anteriores y el menú existente.
+- Nuevas pruebas unitarias para formato, fechas, integridad CSV/ICS y flujo de Growth Lab; prueba E2E en Chromium y Safari WebKit de exportaciones, edición, transferencia y respeto de cuota.
+- Se marca como **reglas y plantillas locales, no generación por IA ni publicación automática**. Para publicidad/servicios conectados se necesitan autorizaciones y backends reales.
