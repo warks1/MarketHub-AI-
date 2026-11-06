@@ -29,6 +29,11 @@ on:
       - 'scripts/mobile-ux-qa.mjs'
       - '.github/workflows/visual-qa.yml'
 
+# Evita acumular pruebas lentas de revisiones ya sustituidas en main.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
