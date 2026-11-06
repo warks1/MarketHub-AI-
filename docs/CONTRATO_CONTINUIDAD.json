@@ -808,7 +808,7 @@
       "label": "Actualización PWA con shell v0.7.26",
       "file": "sw.js",
       "tokens": [
-        "markethub-nexus-pulse-shell-v0.7.29",
+        "markethub-nexus-pulse-shell-v0.7.30",
         "self.skipWaiting()",
         "self.clients.claim()"
       ]
@@ -852,7 +852,7 @@
       "file": "src/app.js",
       "tokens": [
         "spanishMonthYear(now)",
-        "NEXUS × PULSE · v0.7.5"
+        "NEXUS × PULSE · v0.7.6"
       ]
     },
     {
