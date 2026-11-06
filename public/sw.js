@@ -1,6 +1,6 @@
 /* MarketHub AI · service worker PWA para modo básico sin conexión.
    La estrategia de navegación es network-first: no inmovilizar versiones antiguas ni ocultar fallos de publicación. */
-const CACHE = 'markethub-nexus-pulse-shell-v0.7.24';
+const CACHE = 'markethub-nexus-pulse-shell-v0.7.25';
 const SHELL = [
  './','./index.html','./logo.svg','./manifest.webmanifest',
  './src/app.js','./src/date-label.js','./src/catalogue.js','./src/nexus-ui.js','./src/mirror-ui.js','./src/live-ui.js','./src/local-insights.js','./src/live-studio.js','./src/studio-scene-export.js','./src/studio-video-export.js','./src/studio-scene-media.js','./src/post-manager.js','./src/campaign-manager.js','./src/analytics-local.js',
