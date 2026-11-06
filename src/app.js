@@ -336,11 +336,11 @@ document.addEventListener('click',e=>{
   }});return;
  }
  const growthTarget=e.target.closest('[data-growth-action]');
- if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de borradores locales FREE demo.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
+ if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.posts.length>=draftLimit(state.plan)){toast('Límite de '+draftLimit(state.plan)+' borradores locales alcanzado.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
  const visualTarget=e.target.closest('[data-visual-action]');
- if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
+ if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.posts.length>=draftLimit(state.plan)){toast('Límite de '+draftLimit(state.plan)+' borradores locales alcanzado.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
  const officeTarget=e.target.closest('[data-office-action]');
- if(officeTarget&&officeClick(officeTarget,{refresh:render,toast,newPost:text=>{if(state.plan==='free'&&state.posts.length>=20){toast('Límite de 20 borradores en FREE demo.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto añadido a los borradores locales.')}}))return;
+ if(officeTarget&&officeClick(officeTarget,{refresh:render,toast,newPost:text=>{if(state.posts.length>=draftLimit(state.plan)){toast('Límite de '+draftLimit(state.plan)+' borradores locales alcanzado.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto añadido a los borradores locales.')}}))return;
  const page=e.target.closest('[data-page]');
  if(page){go(page.dataset.page);return}
  const filter=e.target.closest('[data-filter]');if(filter){state.toolsFilter=filter.dataset.filter;render();return}
@@ -653,6 +653,9 @@ case 'campaign-export':{
  case 'draft-from-studio':{
   const input=document.querySelector('#creativePrompt'),val=input?.value.trim();
   if(!val){toast('Escribe una idea antes de crear el borrador.');break}
+  if(state.posts.length>=draftLimit(state.plan)){
+   toast('Has alcanzado el límite de '+draftLimit(state.plan)+' borradores locales de tu plan.');break;
+  }
   state.posts.unshift({id:Date.now(),title:val.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});
   save();go('crear');toast('Borrador de demostración guardado en el dispositivo.');break;
  }
