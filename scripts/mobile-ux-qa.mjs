@@ -92,8 +92,8 @@ for(const [name,engine,width,height] of variants){
   rows=await page.locator('#libraryResults .post-list-row').count();
   if(rows!==2)errors.push('No se recuperan los dos borradores originales: '+rows);
   await openPage(page,'crear',width);
-  if(!(await page.locator('.page-head .eyebrow').first().textContent()).includes('v0.7.3'))
-   errors.push('La etiqueta de versión no coincide con v0.7.3');
+  if(!(await page.locator('.page-head .eyebrow').first().textContent()).includes('v0.7.4'))
+   errors.push('La etiqueta de versión no coincide con v0.7.4');
   await openPage(page,'estudio',width);
   const typography=await page.locator('.live-editor-text h3').first().evaluate(el=>{
    const css=getComputedStyle(el);return {break:css.wordBreak,wrap:css.overflowWrap}

@@ -1,4 +1,4 @@
-// MarketHub AI — Growth Lab v0.3
+// MarketHub AI — Growth Lab v0.5
 // Herramientas 100 % locales, sin IA externa, publicación ni envío de campañas.
 import {buildPulsePlan,pulsePlanCSV,pulsePlanICS} from './pulse-campaign.js';
 import {engineLabPage,engineLabClick,engineLabSubmit} from './engine-lab.js';
@@ -52,7 +52,7 @@ const sections=[
  ['motores','Motores inteligentes','⚙️']
 ];
 function header(){
- return '<div class="page-head"><div><span class="eyebrow">MARKETHUB AI · GROWTH LAB v0.4</span><h1>Laboratorio de crecimiento 🚀</h1><p>Herramientas de marketing utilizables sin conectar ninguna red social.</p></div><span class="demo-pill">100 % local</span></div>'+
+ return '<div class="page-head"><div><span class="eyebrow">MARKETHUB AI · GROWTH LAB v0.5</span><h1>Laboratorio de crecimiento 🚀</h1><p>Herramientas de marketing utilizables sin conectar ninguna red social.</p></div><span class="demo-pill">100 % local</span></div>'+
  '<div class="notice" style="margin-bottom:13px">Herramientas locales y manuales: <strong>sin generación de IA, sin campañas enviadas, sin analítica externa ni publicación real.</strong> No guardes datos personales de clientes ni información confidencial. FREE tiene límites de prueba; PRO aquí es un modo de demostración.</div>';
 }
 function pulsePlanPanel(){
@@ -206,9 +206,9 @@ function bio(plan){
  '<div class="workspace-actions" style="margin-top:13px">'+button('Descargar HTML','export-bio')+'</div><p class="tiny muted" style="margin-top:10px">FREE: hasta 3 enlaces · PRO demo: hasta 8. Exportar no significa que esté publicado en internet.</p>')+'</div>';
 }
 export function growthOpenTab(tab){if(sections.some(s=>s[0]===tab))active=tab}
-export function growthPage(plan){
+export function growthPage(plan,analyticsRows=[]){
  const n=sections.map(s=>'<button type="button" data-growth-action="tab-'+s[0]+'" aria-current="'+(active===s[0]?'page':'false')+'">'+s[2]+' '+s[1]+'</button>').join('');
- const page=active==='motores'?engineLabPage(plan,data.engines):active==='utm'?utms(plan):active==='seo'?seo():active==='emails'?emails():active==='reutilizar'?reuse():active==='bio'?bio(plan):briefs(plan);
+ const page=active==='motores'?engineLabPage(plan,data.engines,analyticsRows):active==='utm'?utms(plan):active==='seo'?seo():active==='emails'?emails():active==='reutilizar'?reuse():active==='bio'?bio(plan):briefs(plan);
  return header()+'<div class="workspace-tabs" role="navigation" aria-label="Laboratorio de marketing">'+n+'</div><section class="section-stack">'+page+'</section>';
 }
 function download(filename,content,type){
