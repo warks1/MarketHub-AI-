@@ -86,3 +86,16 @@
 .engine-ab-metrics strong{font-size:clamp(15px,2.1vw,23px);overflow-wrap:anywhere}
 @media(max-width:680px){.engine-grid,.engine-fields{grid-template-columns:minmax(0,1fr)}.engine-panel{padding:14px}.engine-score{align-items:flex-start}.engine-panel .input,.engine-variant textarea{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.engine-lab *{scroll-behavior:auto}}
+
+/* Escenarios: en pantallas estrechas se muestran TODAS las métricas como fichas,
+   sin ocultar columnas ni obligar al desplazamiento horizontal. */
+@media(max-width:760px){
+ .engine-table-wrap{overflow:visible}
+ .engine-table{display:block;width:100%;min-width:0}
+ .engine-table thead{display:none}
+ .engine-table tbody{display:grid;gap:10px;padding:8px}
+ .engine-table tbody tr{display:grid;gap:0;border:1px solid #415d8e;border-radius:12px;padding:8px;min-width:0}
+ .engine-table tbody th{display:block;font-size:16px;font-weight:800;text-align:left;padding:10px 8px;white-space:normal}
+ .engine-table tbody td{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;min-width:0;padding:9px 8px;text-align:right;white-space:normal;overflow-wrap:anywhere}
+ .engine-table tbody td::before{content:attr(data-label);flex:0 0 48%;text-align:left;font-size:12px;font-weight:650;white-space:normal}
+}
