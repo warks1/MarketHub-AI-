@@ -74,14 +74,18 @@ const foldIcs=line=>{
 export function pulsePlanICS(plan){
  if(!Array.isArray(plan?.items)||plan.items.length!==7)throw Error('Prepara antes un plan válido');
  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//MarketHub AI//PULSE Campaign Pilot//ES','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+ const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
  for(let i=0;i<plan.items.length;i++){
   const post=plan.items[i];
   if(!isoDate(post.date))throw Error('El plan contiene una fecha inválida');
   const date=post.date.replace(/-/g,'');
+  const end=new Date(post.date+'T12:00:00Z');end.setUTCDate(end.getUTCDate()+1);
+  const endDate=end.toISOString().slice(0,10).replace(/-/g,'');
   const summary='Revisar borrador '+post.phase+' · '+post.platform;
   const description='Propuesta local para revisar. '+post.title+' / '+post.check+'. No se publica automáticamente.';
   const uid='pulse-'+date+'-'+i+'-'+String(plan.sourceId||'local').replace(/[^a-z0-9-]/gi,'').slice(0,40)+'@markethub.local';
-  lines.push('BEGIN:VEVENT','UID:'+uid,'DTSTART;VALUE=DATE:'+date,
+  lines.push('BEGIN:VEVENT','UID:'+uid,'DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+date,
+   'DTEND;VALUE=DATE:'+endDate,'STATUS:TENTATIVE',
    'SUMMARY:'+icsEscape(summary),'DESCRIPTION:'+icsEscape(description),'END:VEVENT');
  }
  lines.push('END:VCALENDAR');
