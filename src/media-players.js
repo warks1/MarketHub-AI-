@@ -349,7 +349,9 @@ export async function playerClick(target,ctx){
   }else if(action==='player-play'){
    if(!audioElement)throw Error('Abre un archivo de sonido');
    if(audioElement.paused){
-    if(audioContext?.state==='suspended')await audioContext.resume();
+    // Safari iOS puede posponer la resolución de resume() hasta iniciar la reproducción.
+    // Ambas llamadas deben comenzar dentro del mismo gesto táctil, sin esperar entre ellas.
+    if(audioContext?.state==='suspended')void audioContext.resume().catch(()=>updatePlayerStatus('El análisis no está autorizado; utiliza el reproductor nativo.'));
     await audioElement.play();
    }else audioElement.pause();
   }else if(action==='player-back'||action==='player-forward'){
