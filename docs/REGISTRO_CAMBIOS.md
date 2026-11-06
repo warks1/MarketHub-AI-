@@ -190,3 +190,13 @@ Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalida
 - El cifrado utiliza Web Crypto en contexto seguro; si falta compatibilidad no se presenta el botón como operativo.
 - Pruebas unitarias de cifrado/descifrado multibloque, autenticidad, contraseñas, aleatoriedad por archivo y controles de interfaz. Pruebas visuales de exportación cifrada, recuperación y rechazo de archivos manipulados en Chromium y Safari WebKit.
 - Limitaciones: copias potencialmente de hasta 245 MB requieren memoria libre; es necesario probar descargas/compartición en iPhone y Android físicos. No implica que exista sincronización automática ni almacenamiento en la nube.
+
+## 2026-11-06 · Auditoría de límite FREE, Safari y actualización PWA
+- Detectada y corregida la acción interna **`draft-from-studio`**, que antes creaba un borrador aunque se hubiera alcanzado el límite. Ahora aplica el mismo `draftLimit(plan)` de las pantallas de creación y duplicación (20 FREE / 500 PRO).
+- Las rutas adicionales de Growth Lab, Diseñador y Oficina dejan de tener el máximo FREE `20` codificado como condición independiente. Todas usan el mismo límite de borradores; incluso PRO queda protegido ante un número excesivo de publicaciones.
+- Corregido el renderizado Canvas de Diseñador en Safari antiguo: cuando no existe `CanvasRenderingContext2D.filter`, se utiliza un gradiente radial con caída progresiva para el resplandor de fondo. Cuando no existe `ctx.roundRect`, el botón se traza mediante `moveTo`, `lineTo` y `quadraticCurveTo`.
+- Conservada la apariencia del diseño y la ruta nativa para navegadores modernos. No se retiran funciones anteriores.
+- Los dos archivos del service worker (`sw.js` y `public/sw.js`) están sincronizados en **v0.7.20**, que sustituye a v0.7.19 y es posterior a v0.7.4. `skipWaiting`, `clients.claim`, red primero para JS/CSS y limpieza de cachés antiguas siguen en el flujo.
+- Actualizada la versión de carga del módulo principal a `20261106a` para evitar servir la versión anterior en navegadores instalados.
+- Nuevas pruebas unitarias de límite de borradores y Canvas antiguo/moderno, integridad de SW, y prueba end-to-end de acción de Estudio en Chromium y Safari WebKit.
+- Nota de plataforma: que el SW se actualice no garantiza que una pestaña ya abierta cambie su JS sin recargar; puede requerir cerrar y volver a abrir la aplicación. El navegador Safari antiguo se reproduce mediante simulación de APIs Canvas ausentes, no mediante un dispositivo antiguo físico.
