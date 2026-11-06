@@ -1,6 +1,7 @@
 // MarketHub AI · interfaz y controladores del laboratorio de motores locales.
 // Las salidas son diagnósticos y escenarios, no datos de redes ni IA generativa.
 import {analyzeCreative,generateCopyVariants,forecastScenarios,compareAB} from './marketing-engines.js';
+import {advancedLabPage,advancedLabSubmit,advancedLabClick} from './advanced-engine-lab.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const field=(title,name,value='',attrs='')=>'<label class="engine-field"><span>'+title+'</span><input class="input" name="'+name+'" value="'+esc(value)+'" '+attrs+'></label>';
 const area=(title,name,value='',attrs='')=>'<label class="engine-field"><span>'+title+'</span><textarea class="input" name="'+name+'" '+attrs+'>'+esc(value)+'</textarea></label>';
@@ -10,7 +11,7 @@ const dec=(n,d=1)=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:d}).form
 const pct=(n,d=2)=>dec(100*n,d)+' %';
 const box=(title,note,form,result)=>'<section class="card engine-panel"><div class="card-head"><h2>'+title+'</h2><span class="tag">Motor local</span></div><p class="tiny muted">'+note+'</p>'+form+'<div class="engine-result" aria-live="polite">'+result+'</div></section>';
 const channels=['Instagram','TikTok','Facebook','LinkedIn','YouTube','X','Email'];
-export function engineLabPage(plan,stored={}){
+export function engineLabPage(plan,stored={},analyticsRows=[]){
  const s=stored&&typeof stored==='object'&&!Array.isArray(stored)?stored:{};
  const object=x=>x&&typeof x==='object'&&!Array.isArray(x)?x:{};
  const creative=object(s.creative),copies=object(s.copies),forecast=object(s.forecast),ab=object(s.ab);
@@ -69,12 +70,14 @@ export function engineLabPage(plan,stored={}){
  field('Visitas B','engineVisitsB',ab.input?.visitsB??1000,'type="number" min="1" step="1" required')+
  field('Conversiones B','engineConvertsB',ab.input?.convertsB??120,'type="number" min="0" step="1" required')+
  '</div><button type="submit" class="primary">Comparar variantes</button></form>',abResult)+
- '</div><div class="engine-actions"><button type="button" class="secondary small-btn" data-growth-action="engine-export-report">Descargar informe de motores (.txt)</button></div></div>';
+ '</div>'+advancedLabPage(plan,s.advanced,analyticsRows)+
+ '<div class="engine-actions"><button type="button" class="secondary small-btn" data-growth-action="engine-export-report">Descargar informe de motores (.txt)</button></div></div>';
 }
 const get=(f,key)=>f.get(key);
 const cut=(v,n)=>String(v??'').trim().slice(0,n);
 export function engineLabSubmit(form,plan,data,ctx,commit){
  if(!form?.id?.startsWith('growth-engine-'))return false;
+ if(form.id.startsWith('growth-engine-adv-'))return advancedLabSubmit(form,data,ctx,commit);
  const f=new FormData(form);const s=data.engines&&typeof data.engines==='object'?data.engines:{};
  try{
   if(form.id==='growth-engine-creative'){
@@ -114,6 +117,7 @@ function getReport(s){
 export function engineLabClick(target,data,ctx,{commit,copyText,download}){
  const action=target?.dataset?.growthAction||'';
  if(!action.startsWith('engine-'))return false;
+ if(action.startsWith('engine-adv-'))return advancedLabClick(target,data,ctx,download);
  const s=data.engines||{};
  if(action==='engine-save-copies'||action==='engine-export-copies'||action==='engine-export-report'){
   captureEdits(data);
