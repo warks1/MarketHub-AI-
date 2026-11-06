@@ -179,3 +179,14 @@ físico que el teclado, los backups y los archivos siguen funcionando.
 - Cada día puede enviar texto directamente al editor Media Forge para preparar una creatividad y, si coincide una marca local, reutilizar sus colores. No descarga automáticamente fotografías ni genera vídeo por IA.
 - Se mantiene el funcionamiento offline de plantillas, editor, biblioteca y respaldo, sujeto a los límites de almacenamiento del dispositivo. No conecta redes externas, no programa publicaciones reales y no realiza cargos.
 - Es necesario instalar la APK de depuración y probar específicamente los flujos de ficheros CSV/ICS, selector de fotografías, teclado táctil, persistencia local y uso en Android de gama baja. En iPhone/iPad se necesitan pruebas WebKit y posteriormente una compilación firmada con Xcode.
+
+### Paquete Android de PULSE v0.7.26 — 6 noviembre 2026
+La actualización final de esta fase conserva NEXUS × PULSE y añade la transferencia
+directa de un día del plan editorial a Media Forge con formato social sugerido y
+reutilización de ADN de Marca, además de siete borradores de una sola operación,
+exportación CSV/ICS y enlaces de descarga con tiempo suficiente para Safari iOS.
+La cuota FREE/PRO de borradores se aplica antes de escribir; no hay publicación
+automática, anuncios monetizados ni IA generativa real en esta función.
+**Verificación pendiente en dispositivos físicos:** descargas CSV/ICS, editores táctiles,
+permisos, almacenamiento y estabilidad con poca memoria.
+El paquete generado es exclusivamente una APK Android de depuración.
