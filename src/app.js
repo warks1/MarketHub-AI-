@@ -213,11 +213,24 @@ function settings(){
  '<div class="two-cols"><div class="card"><div class="card-head"><h2>Cuenta y suscripción</h2></div><div class="switch-wrap"><div><b>Tu plan actual (demo)</b><p class="muted tiny">'+(state.plan==='pro'?'PRO · sin publicidad':'FREE · con publicidad')+'</p></div>'+btn('Ver planes','goto-planes','secondary small-btn')+'</div><div class="switch-wrap" style="margin-top:12px"><div><b>Créditos de ejemplo</b><p class="muted tiny">'+state.credits+' créditos guardados localmente</p></div><span class="tag">'+state.credits+'</span></div><div class="notice" style="margin-top:14px">Los datos se almacenan solo en este navegador. No hay cuenta, sincronización, publicidad real ni contratación activa.</div></div>'+
  '<div class="card"><div class="card-head"><h2>Privacidad y demostración</h2></div><p class="muted">No almacenamos información en un servidor. El prototipo no incluye rastreadores publicitarios ni cookies de terceros configuradas por nosotros.</p><div class="line-list" style="margin-top:18px">'+btn('Borrar borradores y preferencias locales','reset-data','secondary full')+btn('Más información sobre FREE y PRO','goto-planes','secondary full')+'</div></div></div>'+backupSettingsHTML()+unifiedBackupSettingsHTML();
 }
+function libraryResultsHTML(){
+ const matched=postsFiltered();
+ return matched.length?matched.map(p=>postRow(p,true)).join(''):'<p class="muted">No hay publicaciones que coincidan con la búsqueda.</p>';
+}
+function updateLibraryResults(){
+ const results=document.querySelector('#libraryResults');
+ const status=document.querySelector('#libraryResultCount');
+ if(results)results.innerHTML=libraryResultsHTML();
+ if(status)status.textContent=postsFiltered().length+' publicaciones encontradas';
+}
 function extraScreen(page){
  if(page==='biblioteca'){
   return sectionHeader('Biblioteca de contenidos','Tus publicaciones guardadas en este dispositivo. No se publican automáticamente.')+
   '<div class="card"><div class="card-head"><h2>Publicaciones locales</h2>'+btn('Crear una publicación','goto-crear','primary')+'</div>'+
-  '<div class="line-list">'+(postsFiltered().length?postsFiltered().map(p=>postRow(p,true)).join(''):'<p class="muted">No hay borradores guardados.</p>')+'</div></div>';
+  '<div class="form-field"><label for="librarySearch">Buscar en la biblioteca</label>'+
+  '<input class="input" type="search" id="librarySearch" placeholder="Buscar por texto, red o estado…" autocomplete="off" value="'+safe(state.search)+'"></div>'+
+  '<p class="tiny muted" id="libraryResultCount" role="status" aria-live="polite">'+postsFiltered().length+' publicaciones encontradas</p>'+
+  '<div class="line-list" id="libraryResults">'+libraryResultsHTML()+'</div></div>';
  }
  const configs={
  escucha:['Social Listening','Escucha, tendencias y seguimiento de menciones',
@@ -814,6 +827,7 @@ document.addEventListener('change',e=>{
  }
  if(e.target.matches('[data-backup-import]')){const field=document.querySelector('#backupPassword'),password=field?.value||'';if(field)field.value='';backupImport(e.target.files?.[0],{toast,password}).catch(err=>toast('No se pudo importar: '+String(err))).finally(()=>{e.target.value=''});return}if(e.target.closest('[data-visual-file]')){visualFile(e.target,{refresh:render,toast});return}if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}if(e.target.closest('[data-office-change]'))officeChange(e.target,{refresh:render,toast})});
 document.addEventListener('input',e=>{
+ if(e.target.id==='librarySearch'){state.search=e.target.value;updateLibraryResults();return}
  if(e.target.matches('[data-forge-input]')){forgeInput(e.target);return}
  if(e.target.closest('[data-visual-field]')){visualInput(e.target);return}
  if(e.target.id==='toolSearch'){
@@ -821,7 +835,8 @@ document.addEventListener('input',e=>{
  }
  if(e.target.id==='globalSearch'){
   const val=e.target.value;state.search=val;
-  if(state.page==='inicio'||state.page==='crear'){const start=e.target.selectionStart;render();const input=document.querySelector('#globalSearch');if(input){input.focus();input.setSelectionRange(start,start)}}
+  if(state.page==='biblioteca'){const local=document.querySelector('#librarySearch');if(local)local.value=val;updateLibraryResults()}
+  else if(state.page==='inicio'||state.page==='crear'){const start=e.target.selectionStart;render();const input=document.querySelector('#globalSearch');if(input){input.focus();input.setSelectionRange(start,start)}}
  }
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(state.menuMore){state.menuMore=false;render()}else if(state.modal){state.modal=null;render()}}});
