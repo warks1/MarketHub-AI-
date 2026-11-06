@@ -16,6 +16,7 @@ import {liveHome,liveInbox,liveListening} from './live-ui.js';
 import {liveStudio,createScene,parseScene,STUDIO_THEMES} from './live-studio.js';
 import {imageFileToSceneData,canStoreSceneImage} from './studio-scene-media.js';
 import {exportEditorialICS} from './calendar-export.js';
+import {spanishMonthYear} from './date-label.js';
 import {downloadScenePNG} from './studio-scene-export.js';
 import {renderStoryboardVideo,saveVideoDownload} from './studio-video-export.js';
 
@@ -104,7 +105,7 @@ const nav=[
  ['laboratorio','Growth Lab','chart'],['herramientas','Herramientas','bolt'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
 function sectionHeader(title,subtitle,action){
- return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.3.2</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
+ return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.7.2</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
 }
 function btn(text,action,klass='secondary',extra=''){return '<button class="'+klass+'" data-action="'+action+'" '+extra+'>'+text+'</button>'}
 function kpi(title,value,delta,symbol,glow){
@@ -124,7 +125,7 @@ function calendar(){
   const has=state.posts.some(p=>p && typeof p==='object' && p.date===date);
   cells.push('<div class="'+(has?'event ':'')+(day===now.getDate()?'today':'')+'" title="'+(has?'Publicación de demostración':'')+'">'+day+'</div>');
  }
- return '<div class="card"><div class="card-head"><h2>📅 Calendario de contenidos</h2>'+btn('Programar','goto-crear','secondary small-btn')+'</div><p class="muted tiny" style="margin-bottom:10px">'+new Intl.DateTimeFormat('es',{month:'long',year:'numeric'}).format(now)+'</p><div class="calendar-days">'+cells.join('')+'</div></div>';
+ return '<div class="card"><div class="card-head"><h2>📅 Calendario de contenidos</h2>'+btn('Programar','goto-crear','secondary small-btn')+'</div><p class="muted tiny" style="margin-bottom:10px">'+spanishMonthYear(now)+'</p><div class="calendar-days">'+cells.join('')+'</div></div>';
 }
 function postRow(p, managed=false){
  const actions=managed?'<div class="post-actions">'+
