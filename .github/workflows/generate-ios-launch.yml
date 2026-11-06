@@ -1,0 +1,50 @@
+name: MarketHub AI · preparar imágenes nativas de arranque iOS
+
+# GitHub Pages de este repositorio publica el código del branch principal.
+# Por eso los PNG deben estar versionados, no sólo construidos localmente.
+on:
+  push:
+    branches: [fix/ios-white-launch-20261106]
+    paths:
+      - 'scripts/generate-ios-launch.mjs'
+      - '.github/workflows/generate-ios-launch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ios-launch-assets-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare-ios-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Crear PNG de inicio en resoluciones iPhone e iPad
+        run: node scripts/generate-ios-launch.mjs
+      - name: Comprobar archivos antes del commit
+        run: |
+          test -s public/ios-launch/launch-1290x2796.png
+          test -s public/ios-launch/launch-1320x2868.png
+          test -s public/ios-launch/launch-1668x2388.png
+          file public/ios-launch/launch-1290x2796.png
+      - name: Publicar imágenes de inicio en la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f public/ios-launch/*.png
+          if git diff --cached --quiet; then
+            echo "Imágenes de inicio ya incorporadas."
+          else
+            git commit -m "assets: add exact-size iOS native launch images"
+            git push origin "HEAD:${{ github.ref_name }}"
+          fi
