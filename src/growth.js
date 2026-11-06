@@ -60,7 +60,8 @@ function pulsePlanPanel(){
   '<strong>Día '+(i+1)+' · '+esc(post.phase)+'</strong><small>'+esc(post.platform)+' · '+esc(post.format)+'</small></div>'+
   '<p>'+esc(post.angle)+'</p><label for="pulseText'+i+'">Texto editable para '+esc(post.platform)+'</label>'+
   '<textarea class="input" id="pulseText'+i+'" data-pulse-text="'+i+'" maxlength="240" rows="4">'+esc(post.title)+'</textarea>'+
-  '<small class="growth-pulse-check">Antes de publicar: '+esc(post.check)+'</small></article>'
+  '<small class="growth-pulse-check">Antes de publicar: '+esc(post.check)+'</small>'+
+  button('Preparar imagen en Media Forge','pulse-to-forge','data-id="'+i+'"')+'</article>'
  ).join('');
  return '<section class="growth-pulse card"><div class="card-head"><div><span class="eyebrow">PULSE CAMPAIGN PILOT · MOTOR LOCAL</span>'+
  '<h2>Plan editorial de 7 días · '+esc(p.name)+'</h2></div><span class="tag">Editable</span></div>'+
@@ -243,6 +244,15 @@ export function growthClick(target,ctx){
   }));
   if(updated.some(item=>!item.title)){
    ctx.toast('Todos los días necesitan un texto antes de guardar el plan.');return true;
+  }
+  if(action==='pulse-to-forge'){
+   const index=Number(id),item=Number.isInteger(index)?updated[index]:null;
+   if(!item){ctx.toast('No se encuentra el día solicitado.');return true}
+   if(typeof ctx.editCreative!=='function'){ctx.toast('El editor multimedia no está disponible.');return true}
+   if(ctx.editCreative({text:item.title,platform:item.platform,brand:plan.brand})){
+    plan.items=updated;save();
+   }
+   return true;
   }
   if(action==='pulse-to-drafts'){
    if(updated.some(item=>!['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'].includes(item.platform))){
