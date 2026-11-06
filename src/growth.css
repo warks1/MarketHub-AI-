@@ -99,3 +99,23 @@
  .engine-table tbody td{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;min-width:0;padding:9px 8px;text-align:right;white-space:normal;overflow-wrap:anywhere}
  .engine-table tbody td::before{content:attr(data-label);flex:0 0 48%;text-align:left;font-size:12px;font-weight:650;white-space:normal}
 }
+
+
+/* Growth Lab v0.5 · estrategia experimental y análisis de métricas importadas. */
+.engine-advanced{min-width:0;display:grid;gap:14px}
+.engine-advanced .engine-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,410px),1fr))}
+.engine-section-head{min-width:0;padding:16px 18px}
+.engine-section-head h2{font-size:clamp(18px,2.7vw,25px);line-height:1.25;margin-bottom:7px}
+.engine-section-head p{line-height:1.6}
+.engine-channel{min-width:0;max-width:100%;padding:12px;border-radius:13px;border:1px solid #455e8e;margin:0}
+.engine-channel legend{font-size:13px;font-weight:750;padding:0 6px;color:#cfe9ff}
+.engine-advanced .engine-panel{min-width:0}
+.engine-advanced .engine-result .engine-score{margin:0}
+.engine-advanced .engine-result>p{font-size:13px;line-height:1.5}
+.engine-advanced .engine-result>.secondary{min-height:44px;white-space:normal;overflow-wrap:anywhere}
+.engine-advanced .engine-table{min-width:575px}
+@media(max-width:760px){
+ .engine-advanced .engine-table{display:block;min-width:0}
+ .engine-advanced .engine-channel .engine-fields{grid-template-columns:minmax(0,1fr)}
+ .engine-advanced .engine-section-head{padding:14px}
+}
