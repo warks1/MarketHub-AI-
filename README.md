@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.7.3. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.7.4. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,13 +25,15 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.7.3 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.7.4 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
-## Motores de marketing locales (v0.7.3)
+## Motores de marketing locales (v0.7.4)
 
 En **Growth Lab → Motores inteligentes** funcionan cuatro módulos verificables, sin conexión a redes ni modelos de IA externos: auditor de copy basado en siete reglas editoriales, generador de variantes editables (FREE: dos; PRO demo: cinco), simulador de embudo con escenarios conservador/base/optimista y comparación estadística A/B con advertencias por muestra insuficiente. Los resultados se conservan en el mismo almacenamiento de Growth Lab y en las copias integrales `.mhubfull`/`.mhubsecure`. Se puede exportar el informe en TXT. Las cifras de escenario son simulaciones y no predicciones de rendimiento.
 
-Pruebas: `node --test tests/marketing-engines.test.mjs tests/growth-engines-integration.test.mjs` y `node scripts/marketing-engines-qa.mjs` (con Playwright, servido por Vite).
+Además se han incorporado **tres motores estratégicos** en el mismo panel: planificación de muestra A/B (confianza y potencia), asignación matemática de presupuestos a tres canales y análisis de CTR/interacciones a partir de **filas CSV realmente importadas en Analítica**. Los escenarios dependen de parámetros introducidos y no garantizan conversiones. Ninguno publica campañas ni envía métricas a redes.
+
+Pruebas: `node --test tests/marketing-engines.test.mjs tests/advanced-engines.test.mjs tests/growth-engines-integration.test.mjs tests/advanced-engine-lab.test.mjs` y `node scripts/marketing-engines-qa.mjs` (con Playwright, servido por Vite).
 
 ## Inicio rápido
 
