@@ -88,7 +88,10 @@
     "tests/unified-backup.test.mjs",
     "scripts/unified-backup-qa.mjs",
     "src/unified-crypto.js",
-    "tests/unified-crypto.test.mjs"
+    "tests/unified-crypto.test.mjs",
+    "tests/studio-draft-limit.test.mjs",
+    "tests/service-worker-upgrade.test.mjs",
+    "scripts/studio-draft-qa.mjs"
   ],
   "requiredScreens": [
     {
@@ -766,6 +769,38 @@
         "data-unified-backup-import",
         "case 'unified-backup-encrypted-export':",
         "decryptUnifiedBlob(file,password)"
+      ]
+    },
+    {
+      "id": "DRAFT-FREE-PLAN",
+      "label": "No superar límites de borradores locales desde Estudio ni otros módulos",
+      "file": "src/app.js",
+      "tokens": [
+        "case 'draft-from-studio':",
+        "state.posts.length>=draftLimit(state.plan)",
+        "Has alcanzado el límite de"
+      ]
+    },
+    {
+      "id": "SAFARI-VISUAL",
+      "label": "Diseñador Canvas con fondo y botón compatibles con Safari antiguo",
+      "file": "src/visual.js",
+      "tokens": [
+        "function drawGlow(",
+        "function roundButtonPath(",
+        "createRadialGradient",
+        "quadraticCurveTo",
+        "typeof ctx.filter==='string'"
+      ]
+    },
+    {
+      "id": "SW-LATEST-CACHE",
+      "label": "Actualización PWA con shell v0.7.20",
+      "file": "sw.js",
+      "tokens": [
+        "markethub-nexus-pulse-shell-v0.7.20",
+        "self.skipWaiting()",
+        "self.clients.claim()"
       ]
     }
   ]
