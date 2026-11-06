@@ -274,7 +274,25 @@ function mobileDrawer(){
  const links=nav.map(item=>'<button class="mobile-drawer-link" data-page="'+item[0]+'" '+(state.page===item[0]?'aria-current="page"':'')+'>'+icon(item[2])+'<span>'+safe(item[1])+'</span></button>').join('');
  return '<div class="mobile-menu-backdrop" data-action="close-mobile-menu"></div><section class="mobile-menu-drawer" role="dialog" aria-modal="true" aria-label="Todas las secciones"><div class="mobile-menu-head"><h2>Todas las herramientas</h2>'+btn('Cerrar','close-mobile-menu','secondary small-btn')+'</div><nav class="mobile-drawer-grid" aria-label="Todas las secciones">'+links+'</nav></section>';
 }
+let overlayWasOpen=false;
+let overlayFocusReturn=null;
+function findOverlayFocusReturn(){
+ if(!overlayFocusReturn)return null;
+ const {action,id,page}=overlayFocusReturn;
+ const candidates=[...app.querySelectorAll('[data-action],[data-page]')];
+ return candidates.find(el=>action&&el.dataset.action===action&&(!id||el.dataset.id===id))||
+  candidates.find(el=>page&&el.dataset.page===page)||
+  app.querySelector('.mobile-more-button,.sidebar [aria-current="page"]');
+}
+function activeAppDialog(){
+ return app.querySelector('.modal[role="dialog"][aria-modal="true"],.mobile-menu-drawer[role="dialog"][aria-modal="true"]');
+}
+function dialogTabStops(dialog){
+ return [...dialog.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')]
+  .filter(el=>el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden');
+}
 function render(){
+ if(state.modal)state.menuMore=false;
  const side=nav.map(n=>navButton(n)).join('');
  const quickIds=['inicio','estudio','crear','bandeja'];
  const mobileLabels={'inicio':'Inicio','estudio':'Crear','crear':'Planificar','bandeja':'Bandeja'};
@@ -305,10 +323,22 @@ function render(){
  (state.modal?modalHTML():'')+(state.menuMore?mobileDrawer():'')+
  (!state.mirrorLive?mirrorLayer(state.page,{menu:state.mirrorMenu}):'');
  const mirrored=!state.mirrorLive&&['inicio','estudio'].includes(state.page);
+ const dialog=activeAppDialog(),opened=Boolean(dialog);
  const underlying=app.querySelector('.nexus-canvas');
- if(underlying)underlying.inert=mirrored;
+ if(underlying)underlying.inert=mirrored||opened;
  const mobileNative=app.querySelector('.mobile-bottom');
- if(mobileNative)mobileNative.inert=mirrored;
+ if(mobileNative)mobileNative.inert=mirrored||opened;
+ document.documentElement.classList.toggle('mh-overlay-open',opened);
+ document.body.classList.toggle('mh-overlay-open',opened);
+ if(opened){
+  // El primer control recibe foco incluso después de redibujar todo el panel.
+  (dialogTabStops(dialog)[0]||dialog).focus({preventScroll:true});
+ }else if(overlayWasOpen){
+  const previous=findOverlayFocusReturn();
+  if(previous&&previous.getClientRects().length>0)previous.focus({preventScroll:true});
+  overlayFocusReturn=null;
+ }
+ overlayWasOpen=opened;
  if(state.page==='diseño')visualMount();
  if(state.page==='multimedia')forgeMount();
 }
@@ -334,6 +364,14 @@ function toast(msg){
 }
 function go(page){if(activeVideoExport){activeVideoExport.abort();activeVideoExport=null;}stopStoryboardPlayback();if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=true;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
 document.addEventListener('click',e=>{
+ const existingDialog=activeAppDialog();
+ if(existingDialog&&!e.target.closest('[role="dialog"][aria-modal="true"]')&&!e.target.closest('.mobile-menu-backdrop')){
+  e.preventDefault();return;
+ }
+ if(!existingDialog){
+  const origin=e.target.closest('[data-action],[data-page]');
+  if(origin)overlayFocusReturn={action:origin.dataset.action||null,id:origin.dataset.id||null,page:origin.dataset.page||null};
+ }
  const forgeTabTarget=e.target.closest('[data-forge-tab]');
  if(forgeTabTarget){forgeTab(forgeTabTarget.dataset.forgeTab,render);return}
  const forgeActionTarget=e.target.closest('[data-forge-action]');
@@ -839,7 +877,24 @@ document.addEventListener('input',e=>{
   else if(state.page==='inicio'||state.page==='crear'){const start=e.target.selectionStart;render();const input=document.querySelector('#globalSearch');if(input){input.focus();input.setSelectionRange(start,start)}}
  }
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(state.menuMore){state.menuMore=false;render()}else if(state.modal){state.modal=null;render()}}});
+document.addEventListener('keydown',e=>{
+ const dialog=activeAppDialog();
+ if(dialog&&e.key==='Tab'){
+  const stops=dialogTabStops(dialog);
+  if(!stops.length){e.preventDefault();dialog.focus();return}
+  const first=stops[0],last=stops[stops.length-1];
+  if(e.shiftKey&&(document.activeElement===first||!dialog.contains(document.activeElement))){
+   e.preventDefault();last.focus();
+  }else if(!e.shiftKey&&(document.activeElement===last||!dialog.contains(document.activeElement))){
+   e.preventDefault();first.focus();
+  }
+  return;
+ }
+ if(e.key==='Escape'){
+  if(state.modal){e.preventDefault();state.modal=null;render()}
+  else if(state.menuMore){e.preventDefault();state.menuMore=false;render()}
+ }
+});
 function splash(){
  const original='./assets/boceto-04-carga-original.jpeg';
  const overlay=document.createElement('div');
