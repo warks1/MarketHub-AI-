@@ -94,7 +94,10 @@
     "scripts/studio-draft-qa.mjs",
     "src/date-label.js",
     "tests/mobile-ux-fixes.test.mjs",
-    "scripts/mobile-ux-qa.mjs"
+    "scripts/mobile-ux-qa.mjs",
+    "src/pulse-campaign.js",
+    "tests/pulse-campaign.test.mjs",
+    "scripts/pulse-campaign-qa.mjs"
   ],
   "requiredScreens": [
     {
@@ -846,6 +849,30 @@
       "tokens": [
         "spanishMonthYear(now)",
         "NEXUS × PULSE · v0.7.2"
+      ]
+    },
+    {
+      "id": "PULSE-CAMPAIGN-ENGINE",
+      "label": "PULSE Campaign Pilot prepara siete días y exporta calendario ICS",
+      "file": "src/growth.js",
+      "tokens": [
+        "function pulsePlanPanel()",
+        "buildPulsePlan(",
+        "pulsePlanCSV(",
+        "pulsePlanICS(",
+        "data-growth-action=\"pulse-to-drafts\""
+      ]
+    },
+    {
+      "id": "PULSE-DRAFT-QUOTA",
+      "label": "Creación de siete borradores en una operación respetando límite FREE/PRO",
+      "file": "src/app.js",
+      "tokens": [
+        "function addPulseDrafts(items)",
+        "state.posts.length+items.length>limit",
+        "items.map(x=>validatePost(x))",
+        "state.posts=previous;return false",
+        "newPosts:addPulseDrafts"
       ]
     }
   ]
