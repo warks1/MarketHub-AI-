@@ -798,10 +798,10 @@
     },
     {
       "id": "SW-LATEST-CACHE",
-      "label": "Actualización PWA con shell v0.7.21",
+      "label": "Actualización PWA con shell v0.7.22",
       "file": "sw.js",
       "tokens": [
-        "markethub-nexus-pulse-shell-v0.7.21",
+        "markethub-nexus-pulse-shell-v0.7.22",
         "self.skipWaiting()",
         "self.clients.claim()"
       ]
