@@ -1,3 +1,11 @@
+## 2026-11-06 · MarketHub AI v0.7.3 — motores de marketing operativos
+
+- Cuatro motores locales: auditor de copy (7 reglas), variantes editables y exportables, simulación de embudo/ROAS y comparación estadística A/B con precauciones de muestra.
+- Nuevos formularios en Growth Lab, acceso desde Catálogo, persistencia en almacenamiento local existente, exportación TXT y compatibilidad con copias integrales.
+- FREE: 2 variantes por generación. PRO (simulación): 5. Sin anuncios monetizados, IA externa ni conexiones reales a redes.
+- Cobertura de tests de cálculo, integración y QA visual de PC, iPhone y iPad, a comprobar en CI.
+- Diseño NEXUS × PULSE y herramientas precedentes conservadas; tablas anchas con desplazamiento interno horizontal.
+
 ## 2026-11-05 — v0.7.2 · Corrección de carga PWA
 
 - Precache corregida para incluir los nuevos estilos responsive de la pantalla de carga. Se conserva íntegra la apariencia seleccionada y los cuatro diseños de referencia.
