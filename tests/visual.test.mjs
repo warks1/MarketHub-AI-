@@ -13,18 +13,22 @@ globalThis.document={getElementById:()=>null};
 const {dimensions,visualPage,drawVisual,visualInput,visualClick}=await import('../src/visual.js');
 const messages=[];
 const ctx={refresh:()=>{},toast:m=>messages.push(m),newPost:s=>messages.push('BORRADOR '+s)};
-function fakeCanvas(){
+function fakeCanvas({modern=false}={}){
  const ops=[];
- const ctx=new Proxy({},{
+ const ctx=new Proxy(modern?{filter:'none'}:{},{
   get(target,key){
-   if(key==='createLinearGradient')return ()=>({addColorStop(){}});
+   if(key==='createLinearGradient'||key==='createRadialGradient')return (...args)=>{
+    ops.push([key,...args]);return {addColorStop(){}};
+   };
    if(key==='measureText')return text=>({width:String(text).length*29});
-   if(key==='ellipse'||key==='arc'||key==='fillRect'||key==='fillText'||key==='fill'||key==='stroke'||key==='beginPath'||key==='save'||key==='restore'||key==='translate'||key==='rotate'||key==='roundRect')return (...args)=>{ops.push([key,...args])};
+   if(key==='roundRect')return modern?(...args)=>{ops.push([key,...args])}:undefined;
+   if(['ellipse','arc','fillRect','fillText','fill','stroke','beginPath','save','restore','translate','rotate','moveTo','lineTo','quadraticCurveTo','closePath'].includes(key))
+    return (...args)=>{ops.push([key,...args])};
    return target[key];
   },
   set(target,key,value){target[key]=value;return true}
  });
- return {canvas:{width:0,height:0,getContext:()=>ctx},ops};
+ return {canvas:{width:0,height:0,getContext:()=>ctx},ops,ctx};
 }
 test('Proporciona tamaños exactos para cuatro formatos de redes',()=>{
  assert.deepEqual(dimensions('9:16'),[1080,1920]);
@@ -77,4 +81,20 @@ test('No se pierde el diseño si se cancela restablecer',()=>{
 test('Permite mandar un texto a un borrador sin prometer subir la imagen',()=>{
  visualClick({dataset:{visualAction:'draft'}},ctx);
  assert.ok(messages.some(x=>x.startsWith('BORRADOR ')));
+});
+
+test('Safari antiguo: sin filtro Canvas ni roundRect, se dibuja el fondo y el botón alternativos',()=>{
+ const {canvas,ops}=fakeCanvas();
+ assert.equal(drawVisual(canvas),true);
+ assert.ok(ops.some(x=>x[0]==='createRadialGradient'),'Falta degradado radial cuando no hay ctx.filter');
+ assert.ok(ops.some(x=>x[0]==='quadraticCurveTo'),'Falta ruta curva cuando no hay roundRect');
+ assert.ok(ops.some(x=>x[0]==='closePath'),'El botón debe cerrar su trazado');
+ assert.ok(ops.some(x=>x[0]==='fillText'),'La llamada a la acción debe seguir visible');
+});
+test('Navegadores modernos conservan blur nativo y botón redondeado',()=>{
+ const {canvas,ops,ctx}=fakeCanvas({modern:true});
+ assert.equal(drawVisual(canvas),true);
+ assert.match(ctx.filter,/^blur\(/);
+ assert.ok(ops.some(x=>x[0]==='roundRect'));
+ assert.equal(ops.some(x=>x[0]==='quadraticCurveTo'),false);
 });
