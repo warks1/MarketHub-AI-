@@ -1,6 +1,7 @@
 // MarketHub AI · paneles reales, sin fotografías sobre los controles.
 import {summarizeAnalytics} from './analytics-local.js';
 import {localRecommendations} from './local-insights.js';
+import {spanishMonthYear} from './date-label.js';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean=xs=>Array.isArray(xs)?xs.filter(x=>x&&typeof x==='object'):[];
 const fmt=x=>{const n=Number(x);return new Intl.NumberFormat('es-ES',{maximumFractionDigits:1}).format(Number.isFinite(n)?n:0)};
@@ -36,7 +37,7 @@ function calendar(posts,offset){
    '" data-action="calendar-day" data-date="'+key+'" aria-label="Crear publicación para '+key+'">'+day+(has?'<i></i>':'')+'</button>';
  }
  return '<div class="live-month">'+action('‹','calendar-prev','live-arrow','aria-label="Mes anterior"')+
- '<strong>'+esc(new Intl.DateTimeFormat('es-ES',{month:'long',year:'numeric'}).format(d))+'</strong>'+
+ '<strong>'+esc(spanishMonthYear(d))+'</strong>'+
  action('›','calendar-next','live-arrow','aria-label="Mes siguiente"')+'</div><div class="live-calendar">'+cells+'</div>';
 }
 function graph(rows){
@@ -77,6 +78,7 @@ export function liveHome({posts=[],campaigns=[],analyticsRows=[],messages=[],men
  .map(({icon,label,page:route})=>page('<span>'+icon+'</span>'+esc(label)+' <b>›</b>',route,'live-tip')).join('');
  const pPanel=panel('▥ Rendimiento por plataforma',page('Ver informes','analitica'),graph(a),'live-performance');
  const cPanel=panel('▦ Calendario de contenidos',page('Programar','crear'),calendar(p,calendarOffset)+
+ '<p class="live-calendar-help">Selecciona un día para preparar contenido. Las fechas son locales; no se publica automáticamente.</p>'+ 
  '<div class="live-calendar-actions">'+action('↓ Exportar al calendario','export-calendar','live-link')+'</div>'+
  '<div class="live-calendar-next"><strong>Publicaciones previstas</strong>'+
  (next.length?next.slice(0,2).map(post).join(''):'<p>Aún no hay publicaciones.</p>')+'</div>','live-calendar-panel');
