@@ -78,6 +78,9 @@ for(const [name,engine,width,height] of variants){
   await search.fill('Presentación');
   let rows=await page.locator('#libraryResults .post-list-row').count();
   if(rows!==1)errors.push('La biblioteca no filtra por texto, devuelve '+rows);
+  await search.fill('presentacion instagram');
+  rows=await page.locator('#libraryResults .post-list-row').count();
+  if(rows!==1)errors.push('La búsqueda sin acentos y con varias palabras no filtra: '+rows);
   if(!(await search.evaluate(el=>document.activeElement===el)))errors.push('Se pierde el foco del buscador');
   await search.fill('No existe este resultado');
   rows=await page.locator('#libraryResults .post-list-row').count();
