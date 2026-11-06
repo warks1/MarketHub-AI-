@@ -97,7 +97,11 @@
     "scripts/mobile-ux-qa.mjs",
     "src/pulse-campaign.js",
     "tests/pulse-campaign.test.mjs",
-    "scripts/pulse-campaign-qa.mjs"
+    "scripts/pulse-campaign-qa.mjs",
+    "src/media-players.js",
+    "src/media-players.css",
+    "tests/media-players.test.mjs",
+    "scripts/media-players-qa.mjs"
   ],
   "requiredScreens": [
     {
@@ -848,7 +852,7 @@
       "file": "src/app.js",
       "tokens": [
         "spanishMonthYear(now)",
-        "NEXUS × PULSE · v0.7.4"
+        "NEXUS × PULSE · v0.7.5"
       ]
     },
     {
@@ -874,6 +878,20 @@
         "items.map(x=>validatePost(x))",
         "state.posts=previous;return false",
         "newPosts:addPulseDrafts"
+      ]
+    },
+    {
+      "id": "MEDIA-PLAYERS-01",
+      "label": "Galería y visualización real de sonido sin sustituir editores",
+      "file": "src/media-players.js",
+      "tokens": [
+        "export function playerPage()",
+        "export function playerMount()",
+        "export async function playerClick(",
+        "export async function playerFile(",
+        "player-spectrum",
+        "player-waveform",
+        "player-slideshow"
       ]
     }
   ]
