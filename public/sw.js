@@ -1,18 +1,18 @@
 /* MarketHub AI · service worker PWA para modo básico sin conexión.
    La estrategia de navegación es network-first: no inmovilizar versiones antiguas ni ocultar fallos de publicación. */
-const CACHE = 'markethub-nexus-pulse-shell-v0.7.30';
+const CACHE = 'markethub-nexus-pulse-shell-v0.7.31';
 const SHELL = [
  './','./index.html','./logo.svg','./manifest.webmanifest',
  './ios-launch/launch-1320x2868.png','./ios-launch/launch-1260x2736.png','./ios-launch/launch-1206x2622.png','./ios-launch/launch-1290x2796.png','./ios-launch/launch-1179x2556.png','./ios-launch/launch-1284x2778.png','./ios-launch/launch-1170x2532.png','./ios-launch/launch-1125x2436.png','./ios-launch/launch-750x1334.png','./ios-launch/launch-1536x2048.png','./ios-launch/launch-2048x1536.png','./ios-launch/launch-1488x2266.png','./ios-launch/launch-2266x1488.png','./ios-launch/launch-1640x2360.png','./ios-launch/launch-2360x1640.png','./ios-launch/launch-1668x2388.png','./ios-launch/launch-2388x1668.png',
  './src/app.js','./src/date-label.js','./src/catalogue.js','./src/nexus-ui.js','./src/mirror-ui.js','./src/live-ui.js','./src/local-insights.js','./src/live-studio.js','./src/studio-scene-export.js','./src/studio-video-export.js','./src/studio-scene-media.js','./src/post-manager.js','./src/campaign-manager.js','./src/analytics-local.js',
- './src/office.js','./src/growth.js','./src/marketing-engines.js','./src/advanced-engines.js','./src/advanced-engine-lab.js','./src/engine-lab.js','./src/pulse-campaign.js','./src/visual.js','./src/media-forge.js','./src/media-players.js','./src/media-vault.js','./src/brand-dna.js','./src/creative-audit.js','./src/creative-projects.js','./src/project-portfolio.js','./src/unified-backup.js','./src/unified-crypto.js','./src/subtitle-tools.js','./src/backup.js','./src/secure-backup.js','./src/competitor-local.js',
+ './src/office.js','./src/growth.js','./src/marketing-engines.js','./src/advanced-engines.js','./src/advanced-engine-lab.js','./src/engine-lab.js','./src/pulse-campaign.js','./src/visual.js','./src/media-forge.js','./src/media-players.js','./src/social-brand-icons.js','./src/media-vault.js','./src/brand-dna.js','./src/creative-audit.js','./src/creative-projects.js','./src/project-portfolio.js','./src/unified-backup.js','./src/unified-crypto.js','./src/subtitle-tools.js','./src/backup.js','./src/secure-backup.js','./src/competitor-local.js',
  './src/style.css','./src/nexus-ui.css','./src/nexus.css','./src/mirror.css','./src/live-ui.css','./src/reference.css','./src/campaign-manager.css','./src/analytics-local.css','./src/competitor-local.css','./src/splash-responsive.css',
  './assets/boceto-01-inicio.webp','./assets/boceto-02-estudio.webp',
  './assets/boceto-01-inicio-original.jpeg','./assets/boceto-02-estudio-original.jpeg',
  './assets/boceto-03-movil-original.jpeg','./assets/boceto-04-carga-original.jpeg',
  './assets/boceto-03-movil.webp','./assets/boceto-04-carga.webp',
  './referencias.html','./icon-192.png','./icon-512.png',
- './src/office.css','./src/growth.css','./src/visual.css','./src/media-forge.css','./src/media-players.css'
+ './src/office.css','./src/growth.css','./src/visual.css','./src/media-forge.css','./src/media-players.css','./src/social-brand-icons.css'
 ];
 self.addEventListener('install', event=>{
  event.waitUntil((async()=>{
