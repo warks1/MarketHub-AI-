@@ -211,7 +211,8 @@ export function growthPage(plan){
 function download(filename,content,type){
  const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),anchor=document.createElement('a');
  anchor.href=url;anchor.download=filename;document.body.append(anchor);anchor.click();anchor.remove();
- setTimeout(()=>URL.revokeObjectURL(url),900);
+ // Evitar revocar antes de que Safari iOS haya iniciado la descarga.
+ setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
 const callbacks=(ctx,message)=>{if(!save()){ctx.toast('No se pudo guardar en este navegador.');return}ctx.refresh();ctx.toast(message)};
 const copyText=(value,ctx)=>{if(navigator.clipboard?.writeText)navigator.clipboard.writeText(value).then(()=>ctx.toast('Copiado.'),()=>ctx.toast('Selecciona y copia el texto manualmente.'));else ctx.toast('Selecciona y copia el texto manualmente.')};
