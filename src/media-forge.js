@@ -113,6 +113,7 @@ function vaultPage(){
    '<div class="forge-vault-info"><strong title="'+esc(item.name)+'">'+esc(item.name)+'</strong>'+
    '<small>'+esc(item.type)+' · '+(item.size/1048576).toFixed(2)+' MB</small></div>'+
    '<div class="forge-vault-buttons"><button type="button" data-forge-action="vault-open" data-forge-id="'+esc(item.id)+'">Abrir</button>'+
+   (item.type.startsWith('image/')||item.type.startsWith('audio/')?'<button type="button" data-forge-action="vault-player" data-forge-id="'+esc(item.id)+'">Ver / reproducir</button>':'')+
    '<button type="button" data-forge-action="vault-download" data-forge-id="'+esc(item.id)+'">Descargar</button>'+
    '<button type="button" class="forge-vault-delete" data-forge-action="vault-delete" data-forge-id="'+esc(item.id)+'" aria-label="Eliminar '+esc(item.name)+'">Eliminar</button></div></article>';
  }).join('');
@@ -447,7 +448,13 @@ export async function forgeClick(target,ctx){
     ctx.toast('Archivo guardado en Mi biblioteca.');
    }else{
     const asset=await getVaultAsset(target.dataset.forgeId);
-    if(action==='vault-download'){
+    if(action==='vault-player'){
+     const kind=asset.type.startsWith('image/')?'player-images':asset.type.startsWith('audio/')?'player-audio':null;
+     if(!kind)throw Error('Este archivo no tiene un reproductor de imagen o sonido');
+     forgeTab('players',ctx.refresh);
+     const file=new File([asset.blob],asset.name,{type:asset.type});
+     await playerFile({dataset:{forgeFile:kind},files:[file],value:''},ctx);
+    }else if(action==='vault-download'){
      send(asset.blob,asset.name);ctx.toast('Archivo descargado.');
     }else if(action==='vault-delete'){
      if(window.confirm('¿Eliminar definitivamente «'+asset.name+'» de la biblioteca local?')){
