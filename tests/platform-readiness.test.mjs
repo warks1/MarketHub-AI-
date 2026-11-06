@@ -12,7 +12,7 @@ test('El arranque no tiene imports repetidos ni errores sintácticos',()=>{
  const imports=app.match(/^import[^\n]*$/gm)||[];
  assert.equal(new Set(imports).size,imports.length,'Importación duplicada puede causar pantalla blanca');
  assert.doesNotThrow(()=>new Function(app.replace(/^import[^\n]*\n/gm,'')));
- assert.doesNotThrow(()=>new Function(read('src/nexus-ui.js').replace(/\bexport\s+(?=function|const|class)/g,'')));
+ assert.doesNotThrow(()=>new Function(read('src/nexus-ui.js').replace(/^import[^\n]*\n/gm,'').replace(/\bexport\s+(?=function|const|class)/g,'')));
  assert.match(app,/nexusHome\(/);
  assert.match(app,/nexusStudio\(/);
 });
