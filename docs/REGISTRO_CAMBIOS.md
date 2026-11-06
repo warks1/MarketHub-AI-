@@ -210,3 +210,10 @@ Cada entrega incluirá: fecha, versión, IDs de requisitos tocados, funcionalida
 - Interfaz responsive para smartphone, tablet, PC y Mac dentro del estilo NEXUS × PULSE, manteniendo los módulos anteriores y el menú existente.
 - Nuevas pruebas unitarias para formato, fechas, integridad CSV/ICS y flujo de Growth Lab; prueba E2E en Chromium y Safari WebKit de exportaciones, edición, transferencia y respeto de cuota.
 - Se marca como **reglas y plantillas locales, no generación por IA ni publicación automática**. Para publicidad/servicios conectados se necesitan autorizaciones y backends reales.
+
+### 2026-11-06 · Flujo creativo PULSE conectado a Media Forge
+- Desde cada día del plan editorial se puede pulsar **Preparar imagen en Media Forge**. Copia la propuesta editable, selecciona un formato social sugerido y abre el editor existente sin descargar ni importar el texto en programas externos.
+- Si existe un perfil de ADN Creativo de Marca con el mismo nombre que el brief, el editor carga sus colores principales y de acento. Nunca se presenta como generación automática de imágenes; se necesita elegir o recuperar una fotografía para componerla.
+- Antes de reemplazar texto/formato de una composición que ya tenga una imagen abierta, se solicita confirmación y se conserva el archivo fuente.
+- La vista del día en Growth Lab mantiene una acción táctil adaptada a smartphones y tablets. Se añaden pruebas unitarias y de navegador del enlace PULSE → Media Forge → borradores.
+- La fecha inicial propuesta en briefs ahora usa el día local del dispositivo, no UTC, evitando sugerir el día anterior en España cerca de medianoche.
