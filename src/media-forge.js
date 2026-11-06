@@ -149,6 +149,22 @@ export function forgePage(){
  '<nav class="forge-tabs" aria-label="Laboratorio multimedia">'+Object.entries(tabNames).map(([k,n])=>'<button type="button" data-forge-tab="'+k+'" aria-current="'+(s.tab===k?'page':'false')+'">'+n+'</button>').join('')+'</nav>'+
  (s.tab==='audio'?audio():s.tab==='video'?video():s.tab==='pdf'?pdf():s.tab==='subs'?subtitles():s.tab==='vault'?vaultPage():s.tab==='projects'?projectsPage():photo())+'</section>';
 }
+// Flujo PULSE Campaign Pilot → Media Forge: propuesta editable, nunca publicación automática.
+export function forgeCampaignDraft({text,platform,brand}={}){
+ const caption=String(text||'').trim();
+ if(!caption)throw Error('La propuesta no tiene texto creativo');
+ if(s.image&&s.caption&&typeof window!=='undefined'&&!window.confirm('¿Aplicar el texto y formato PULSE sobre la composición abierta? Se conservará la fotografía original.'))return false;
+ const target=platform==='YouTube'?'16:9':platform==='TikTok'?'9:16':
+  platform==='LinkedIn'||platform==='Facebook'?'1:1':'4:5';
+ s.tab='photo';s.caption=Array.from(caption).slice(0,90).join('');
+ s.format=target;s.audit=null;
+ const match=readBrandProfiles().find(x=>x.name.toLocaleLowerCase('es-ES')===String(brand||'').trim().toLocaleLowerCase('es-ES'));
+ if(match){
+  s.brandSelection=match.id;s.brandName=match.name;s.brandPrimary=match.primary;
+  s.brandAccent=match.accent;s.brandTone=match.tone;s.brandCta=match.cta;s.brandActive=true;
+ }
+ return {format:target,brandApplied:Boolean(match)};
+}
 export function forgeTab(name,refresh){
  if(!tabNames[name])return false;
  s.tab=name;
