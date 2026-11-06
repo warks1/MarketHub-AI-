@@ -6,6 +6,14 @@ const initial=()=>({
  briefs:[], utms:[], seo:null, email:{subject:'',preheader:'',message:'',cta:'Descubre más',url:'https://example.com'},
  bio:{name:'',description:'',links:[]},repurpose:[],pulsePlan:null
 });
+const validStoredPlan=p=>p&&typeof p==='object'&&!Array.isArray(p)&&
+ typeof p.name==='string'&&p.name.length<=100&&
+ Array.isArray(p.items)&&p.items.length===7&&p.items.every(it=>
+ it&&typeof it==='object'&&!Array.isArray(it)&&typeof it.title==='string'&&it.title.length<=240&&
+ typeof it.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(it.date)&&
+ typeof it.platform==='string'&&it.platform.length<=40&&
+ typeof it.phase==='string'&&it.phase.length<=100&&
+ typeof it.format==='string'&&it.format.length<=100&&typeof it.check==='string'&&it.check.length<=240);
 let data=initial();
 try{
  const raw=JSON.parse(localStorage.getItem(STORE)||'null');
@@ -16,7 +24,7 @@ try{
    email:raw.email&&typeof raw.email==='object'?{...base.email,...raw.email}:base.email,
    bio:raw.bio&&typeof raw.bio==='object'?{...base.bio,...raw.bio}:base.bio,
    repurpose:Array.isArray(raw.repurpose)?raw.repurpose.slice(0,5):[],
-   pulsePlan:raw.pulsePlan&&Array.isArray(raw.pulsePlan.items)&&raw.pulsePlan.items.length===7?raw.pulsePlan:null};
+   pulsePlan:validStoredPlan(raw.pulsePlan)?raw.pulsePlan:null};
  }
 }catch{}
 let active='campanas';
