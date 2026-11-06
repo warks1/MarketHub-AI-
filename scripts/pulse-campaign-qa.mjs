@@ -60,6 +60,18 @@ for(const {name,engine,width,height} of variants){
     if(!ics.suggestedFilename().endsWith('.ics')||(icsText.match(/BEGIN:VEVENT/g)||[]).length!==7)
      errors.push('No se exportan siete eventos de calendario');
     if(width<=680)await page.screenshot({path:'visual-qa/pulse/'+name+'-'+oldCount+'-responsive.png'});
+    // Flujo sin programa externo: propuesta PULSE → editor real de Media Forge.
+    await page.locator('[data-growth-action="pulse-to-forge"][data-id="0"]').click();
+    await page.locator('[data-forge-input="caption"]').waitFor({state:'visible',timeout:12000});
+    const caption=await page.locator('[data-forge-input="caption"]').inputValue();
+    if(!caption.includes('Campaña editada'))errors.push('La propuesta no llegó al editor multimedia');
+    if(!['9:16','4:5','1:1','16:9'].includes(await page.locator('[data-forge-input="format"]').inputValue()))
+     errors.push('Media Forge no preparó un formato válido');
+    if(width<=680){
+     await page.locator('.mobile-bottom [data-action="show-mobile-menu"]').click();
+     await page.locator('.mobile-menu-drawer [data-page="laboratorio"]').click();
+    }else await page.locator('.sidebar [data-page="laboratorio"]').click();
+    await page.locator('.growth-pulse-day').first().waitFor({state:'visible'});
     await page.locator('[data-growth-action="pulse-to-drafts"]').click();
     await page.waitForTimeout(350);
     const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('markethub-ai-demo-v1')||'{}').posts||[]);
