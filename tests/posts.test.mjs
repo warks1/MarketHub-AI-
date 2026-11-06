@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
-import {draftLimit,findPost,validatePost,postsToCSV} from '../src/post-manager.js';
+import {draftLimit,findPost,validatePost,postsToCSV,filterLocalPosts} from '../src/post-manager.js';
 
 test('FREE y PRO tienen límites distintos solo para los borradores locales',()=>{
   assert.equal(draftLimit('free'),20);
@@ -50,4 +50,21 @@ test('La página conserva acciones de edición, duplicación, eliminación y exp
   assert.match(app,/No se envían a las redes sociales/);
   assert.match(app,/const todayLocal=/);
   assert.doesNotMatch(app,/toLocaleDateString\('en-CA'\)/);
+});
+
+test('Biblioteca: búsqueda flexible por acentos, múltiples palabras, plataforma, estado y fecha',()=>{
+ const posts=[
+  {id:1,title:'Presentación de otoño',platform:'Instagram',status:'Borrador',date:'2026-11-06'},
+  {id:2,title:'Campaña de invierno',platform:'TikTok',status:'Programada',date:'2026-12-01'},
+  null,
+  {id:3,title:'Niñez y promoción',platform:'YouTube',status:'Borrador',date:'2026-11-20'}
+ ];
+ assert.deepEqual(filterLocalPosts(posts,'PRESENTACION instagram').map(x=>x.id),[1]);
+ assert.deepEqual(filterLocalPosts(posts,'  campana   TIKTOK  ').map(x=>x.id),[2]);
+ assert.deepEqual(filterLocalPosts(posts,'ninez').map(x=>x.id),[3]);
+ assert.deepEqual(filterLocalPosts(posts,'2026-11-06').map(x=>x.id),[1]);
+ assert.deepEqual(filterLocalPosts(posts,'Borrador').map(x=>x.id),[1,3]);
+ assert.equal(filterLocalPosts(posts,'Inexistente').length,0);
+ assert.equal(filterLocalPosts(posts,'   ').length,3);
+ assert.deepEqual(filterLocalPosts(null,''),[]);
 });
