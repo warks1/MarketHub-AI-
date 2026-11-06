@@ -381,9 +381,13 @@ export async function playerClick(target,ctx){
      audioContext=context;analyser=meter;
     }catch(error){void context.close().catch(()=>{});throw error}
    }
-   await audioContext.resume();
+   // Safari iOS puede dejar pendiente resume() hasta que empiece play().
+   // No bloquear la interfaz ni perder el feedback del toque: se reintenta en el evento play.
    updatePlayerStatus('Visualizador activado. Reproduce el audio para ver datos reales.');
    target.textContent='✦ Visualizador activo';
+   void audioContext.resume().then(()=>startDrawing()).catch(()=>{
+    updatePlayerStatus('Visualización no disponible en esta sesión. Puedes seguir usando el reproductor de audio.');
+   });
    startDrawing();
   }else return false;
  }catch(error){ctx.toast('Visores: '+String(error.message||error).slice(0,115))}
