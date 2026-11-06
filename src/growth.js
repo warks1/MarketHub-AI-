@@ -61,8 +61,10 @@ function pulsePlanPanel(){
  '<div class="workspace-actions growth-pulse-actions">'+
  button('Guardar ajustes','pulse-save-edits')+button('Descargar CSV','pulse-export-csv')+
  button('Calendario .ics','pulse-export-ics')+
- '<button type="button" class="primary" data-growth-action="pulse-to-drafts">Crear 7 borradores locales</button></div>'+
- '<p class="tiny muted">Los borradores respetan el límite FREE/PRO. Todos deben caber para poder añadirlos sin pérdidas ni publicaciones parciales.</p></section>';
+ '<button type="button" class="primary" data-growth-action="pulse-to-drafts"'+(p.items.some(x=>!['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'].includes(x.platform))?' disabled title="Este canal no está habilitado en el módulo de borradores"':'')+'>Crear 7 borradores locales</button></div>'+
+ '<p class="tiny muted">'+(p.items.some(x=>!['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'].includes(x.platform))?
+ 'Los borradores de Email y Google Ads no están integrados en el editor social; usa las exportaciones CSV o ICS.':
+ 'Los borradores respetan el límite FREE/PRO. Todos deben caber para poder añadirlos sin pérdidas ni publicaciones parciales.')+'</p></section>';
 }
 function briefs(plan){
  const max=plan==='pro'?100:10;
@@ -235,6 +237,9 @@ export function growthClick(target,ctx){
    ctx.toast('Todos los días necesitan un texto antes de guardar el plan.');return true;
   }
   if(action==='pulse-to-drafts'){
+   if(updated.some(item=>!['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'].includes(item.platform))){
+    ctx.toast('Este canal no tiene borradores sociales; exporta el calendario o CSV.');return true;
+   }
    if(typeof ctx.newPosts!=='function'){ctx.toast('El editor de borradores no está disponible.');return true}
    if(ctx.newPosts(updated.map(item=>({title:item.title,date:item.date,platform:item.platform,status:'Borrador'})))){
     plan.items=updated;save();
