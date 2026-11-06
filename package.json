@@ -1,7 +1,7 @@
 {
   "name": "markethub-ai",
   "private": true,
-  "version": "0.7.5",
+  "version": "0.7.6",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
@@ -19,7 +19,11 @@
     "test:growth": "node --test tests/growth.test.mjs",
     "test:backup": "node --test tests/backup.test.mjs",
     "test:navigation": "node --test tests/navigation.test.mjs",
-    "check:pages": "node scripts/check-github-pages.mjs"
+    "check:pages": "node scripts/check-github-pages.mjs",
+    "generate:ios-launch": "node scripts/generate-ios-launch.mjs",
+    "prebuild": "npm run generate:ios-launch",
+    "predev": "npm run generate:ios-launch",
+    "pretest": "npm run generate:ios-launch"
   },
   "dependencies": {
     "@capacitor/core": "^8.5.0",
