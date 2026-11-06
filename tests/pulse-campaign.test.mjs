@@ -47,6 +47,9 @@ test('Calendario ICS utiliza eventos de día completo sin prometer horarios ni p
  assert.equal((ics.match(/BEGIN:VEVENT/g)||[]).length,7);
  assert.match(ics,/DTSTART;VALUE=DATE:20261128/);
  assert.match(ics,/DTSTART;VALUE=DATE:20261204/);
+ assert.match(ics,/DTEND;VALUE=DATE:20261205/);
+ assert.equal((ics.match(/DTSTAMP:\d{8}T\d{6}Z/g)||[]).length,7);
+ assert.equal((ics.match(/STATUS:TENTATIVE/g)||[]).length,7);
  assert.doesNotMatch(ics,/DTSTART;TZID|DTSTART:\d{8}T/);
  assert.match(ics,/No se publica automáticamente/);
  assert.ok(ics.includes('\\,'));
