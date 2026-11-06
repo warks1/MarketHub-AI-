@@ -21,7 +21,7 @@ const state={
  audio:null,audioUrl:'',rate:1,loop:false,mode:'spectrum',
 };
 let audioElement=null,audioContext=null,analyser=null,frame=0,observer=null;
-let pointers=new Map(),gesture=null;
+let pointers=new Map(),gesture=null,slideshowTimer=null;
 const getSelected=()=>state.images[state.selected]||null;
 const button=(label,action,disabled=false,aria='')=>'<button type="button" data-forge-action="'+action+'"'+(disabled?' disabled':'')+(aria?' aria-label="'+aria+'"':'')+'>'+label+'</button>';
 const fileInput=(label,type,accept,multiple=false)=>'<label class="forge-file">＋ '+label+'<input type="file" data-forge-file="'+type+'" accept="'+accept+'"'+(multiple?' multiple':'')+'></label>';
@@ -32,6 +32,7 @@ function imagePanel(){
  fileInput('Añadir imágenes a la galería','player-images','image/jpeg,image/png,image/webp,image/gif',true)+
  '<div class="forge-player-toolbar" role="group" aria-label="Controles de imagen">'+
  button('◀ Anterior','player-prev',!has,'Imagen anterior')+
+ button('▶ Presentación','player-slideshow',!has,'Reproducir presentación de imágenes')+
  button('Siguiente ▶','player-next',!has,'Imagen siguiente')+
  button('−','player-zoom-out',!has,'Reducir imagen')+
  '<output id="forgePlayerZoom" aria-live="polite">'+Math.round(state.zoom*100)+' %</output>'+
@@ -173,6 +174,7 @@ function destroyAudioGraph(){
  if(audioContext){const old=audioContext;audioContext=null;void old.close().catch(()=>{})}
 }
 export function playerTeardown(closeGallery=false){
+ if(slideshowTimer){clearInterval(slideshowTimer);slideshowTimer=null}
  destroyAudioGraph();
  if(observer){observer.disconnect();observer=null}
  pointers.clear();gesture=null;
@@ -265,9 +267,10 @@ export function playerMount(){
  listenAudio();bindGestures();bindKeyboard();updateImage();drawIdle();updateAudioTime();
  if(observer){observer.disconnect();observer=null}
  const app=document.getElementById('app');
- if(app&&audioElement&&typeof MutationObserver!=='undefined'){
+ if(app&&typeof MutationObserver!=='undefined'){
+  const gallery=document.getElementById('forgePlayerGallery');
   observer=new MutationObserver(()=>{
-   if(audioElement&&!audioElement.isConnected){destroyAudioGraph();observer?.disconnect();observer=null}
+   if(gallery&&!gallery.isConnected){playerTeardown(false)}
   });
   observer.observe(app,{childList:true});
  }
@@ -320,7 +323,11 @@ export async function playerClick(target,ctx){
  const action=target?.dataset?.forgeAction||'';
  if(!action.startsWith('player-'))return false;
  try{
-  if(action==='player-select'){
+  if(action==='player-slideshow'){
+   if(state.images.length<2){ctx.toast('Añade al menos dos imágenes para la presentación.');return true}
+   if(slideshowTimer){clearInterval(slideshowTimer);slideshowTimer=null;target.textContent='▶ Presentación'}
+   else{slideshowTimer=setInterval(()=>changeImage(1),3500);target.textContent='Ⅱ Detener presentación'}
+  }else if(action==='player-select'){
    const index=Number(target.dataset.id);
    if(Number.isInteger(index)&&index>=0&&index<state.images.length){state.selected=index;resetView();updateImage()}
   }else if(action==='player-prev')changeImage(-1);
