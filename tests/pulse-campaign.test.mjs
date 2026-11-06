@@ -105,3 +105,19 @@ test('Growth Lab ofrece plan editable, exportaciones y control por red',async()=
  const persisted=JSON.parse(backing.get('markethub-growth-local-v1'));
  assert.equal(persisted.pulsePlan.items.length,7);
 });
+
+test('El flujo PULSE prepara el diseño en Media Forge y recupera los colores del ADN de marca',async()=>{
+ const {saveBrandProfile}=await import('../src/brand-dna.js');
+ const {forgeCampaignDraft,forgePage}=await import('../src/media-forge.js');
+ saveBrandProfile({name:'Negocio local',primary:'#11AABB',accent:'#CC33DD',tone:'Cercano',cta:'Reserva'});
+ const ready=forgeCampaignDraft({text:'Campaña preparada por PULSE #2026',platform:'TikTok',brand:'Negocio local'});
+ assert.deepEqual(ready,{format:'9:16',brandApplied:true});
+ const photo=forgePage();
+ assert.match(photo,/Campaña preparada por PULSE/);
+ assert.match(photo,/data-forge-input="caption"/);
+ assert.match(photo,/value="#11AABB"/);
+ const wide=forgeCampaignDraft({text:'Vídeo del canal',platform:'YouTube'});
+ assert.equal(wide.format,'16:9');
+ const social=forgeCampaignDraft({text:'Contenido profesional',platform:'LinkedIn'});
+ assert.equal(social.format,'1:1');
+});
