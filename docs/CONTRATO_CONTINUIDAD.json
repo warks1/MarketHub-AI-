@@ -91,7 +91,10 @@
     "tests/unified-crypto.test.mjs",
     "tests/studio-draft-limit.test.mjs",
     "tests/service-worker-upgrade.test.mjs",
-    "scripts/studio-draft-qa.mjs"
+    "scripts/studio-draft-qa.mjs",
+    "src/date-label.js",
+    "tests/mobile-ux-fixes.test.mjs",
+    "scripts/mobile-ux-qa.mjs"
   ],
   "requiredScreens": [
     {
@@ -801,6 +804,48 @@
         "markethub-nexus-pulse-shell-v0.7.20",
         "self.skipWaiting()",
         "self.clients.claim()"
+      ]
+    },
+    {
+      "id": "UX-MOBILE-BACKUP",
+      "label": "Botón de copia cifrada refluye en el ancho móvil",
+      "file": "src/office.css",
+      "tokens": [
+        ".workspace-actions>[data-action=\"unified-backup-encrypted-export\"]",
+        "flex:1 1 100%",
+        "overflow-wrap:anywhere"
+      ]
+    },
+    {
+      "id": "UX-DIALOG-FOCUS",
+      "label": "Diálogos y menús atrapan el foco y dejan inerte el fondo",
+      "file": "src/app.js",
+      "tokens": [
+        "function dialogTabStops(",
+        "function activeAppDialog(",
+        "underlying.inert=mirrored||opened",
+        "classList.toggle('mh-overlay-open',opened)",
+        "document.activeElement===last"
+      ]
+    },
+    {
+      "id": "UX-LIBRARY-SEARCH",
+      "label": "Biblioteca tiene filtro funcional en smartphone y desktop",
+      "file": "src/app.js",
+      "tokens": [
+        "id=\"librarySearch\"",
+        "id=\"libraryResults\"",
+        "function updateLibraryResults()",
+        "e.target.id==='librarySearch'"
+      ]
+    },
+    {
+      "id": "UX-SPANISH-CALENDAR",
+      "label": "Meses con preposición de y versión v0.7.2",
+      "file": "src/app.js",
+      "tokens": [
+        "spanishMonthYear(now)",
+        "NEXUS × PULSE · v0.7.2"
       ]
     }
   ]
