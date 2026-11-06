@@ -161,3 +161,15 @@ de interrupciones y recuperación con contraseña incorrecta.
 La APK generada en CI es de depuración; no equivale a publicación en
 Google Play o App Store. Las copias sin cifrar siguen admitidas solo
 por compatibilidad.
+
+### Verificación responsive y búsqueda mejorada — 6 noviembre 2026
+La biblioteca de borradores admite búsqueda **local** sin distinguir acentos ni
+mayúsculas, con varios términos en cualquier orden y búsqueda por plataforma,
+estado y fecha. El teclado conserva el foco al filtrar en móviles.
+Se mantienen los bloqueos de fondo/foco de diálogos, los avisos de calendario,
+las etiquetas en castellano y los botones de copia cifrada sin desbordamiento.
+Los dos service workers están sincronizados en **v0.7.23** y el JS de arranque
+usa `20261106c` para forzar su actualización, sin borrar datos locales.
+Pruebas funcionales y de Chromium/WebKit automatizadas; el instalador Android
+es una APK de depuración, no una versión final de Play Store. Verificar en móvil
+físico que el teclado, los backups y los archivos siguen funcionando.
