@@ -47,7 +47,7 @@ for(const {label,browser:driver,width,height} of presets){
    if(!await page.locator('#engine-variant-0').inputValue().then(x=>x.includes('Texto corregido')))errors.push('Edición no persistida');
    // Embudo
    await page.locator('#growth-engine-forecast button[type="submit"]').click();
-   if(await page.locator('.engine-table tbody tr').count()!==3)errors.push('Faltan escenarios');
+   if(await page.locator('.engine-lab > .engine-grid .engine-table tbody tr').count()!==3)errors.push('Faltan escenarios');
    // AB
    await page.locator('#growth-engine-ab button[type="submit"]').click();
    if(!await page.locator('.engine-ab-metrics').count())errors.push('A/B sin salida');
