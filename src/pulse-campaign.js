@@ -1,7 +1,7 @@
 // PULSE Campaign Pilot · plan editorial local y verificable a partir de un brief.
 // No usa un modelo de IA, no publica, no envía datos ni promete resultados.
 const CHANNELS=['Instagram','TikTok','Facebook','Google Ads','YouTube','LinkedIn','Email','Multicanal'];
-const MULTI=['Instagram','TikTok','LinkedIn','Facebook','YouTube','Email','Instagram'];
+const MULTI=['Instagram','TikTok','LinkedIn','Facebook','YouTube','Instagram','TikTok'];
 const STEPS=[
  {label:'Presentación',format:'Presentación de la propuesta',angle:'Explica qué problema resuelve tu propuesta',check:'Revisa que la promesa sea demostrable'},
  {label:'Problema',format:'Problema y solución',angle:'Describe una dificultad habitual de tu público',check:'No inventes datos ni cifras'},
