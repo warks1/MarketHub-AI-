@@ -139,10 +139,16 @@ export function launchPresets(){
  }
  return items;
 }
-export async function generateLaunchImages(directory=resolve('public','ios-launch')){
- await mkdir(directory,{recursive:true});
+export async function generateLaunchImages(directory){
+ // GitHub Pages sirve la raíz del repositorio; Vite sirve el contenido de public/.
+ // Mantener los mismos PNG en ambos destinos evita 404 en cualquier distribución.
+ const targets=directory?[resolve(directory)]:[resolve('ios-launch'),resolve('public','ios-launch')];
+ for(const folder of targets)await mkdir(folder,{recursive:true});
  const items=launchPresets();
- for(const {width,height} of items)await writeFile(resolve(directory,'launch-'+width+'x'+height+'.png'),makeLaunchPNG(width,height));
+ for(const {width,height} of items){
+  const png=makeLaunchPNG(width,height),name='launch-'+width+'x'+height+'.png';
+  for(const folder of targets)await writeFile(resolve(folder,name),png);
+ }
  return items.length;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
