@@ -17,12 +17,12 @@ function stat(name,value,hint,ico,tint,route){
  '<span><i>'+ico+'</i>'+name+'</span><strong>'+value+'</strong><small>'+hint+'</small><b class="live-stat-light"></b></button>';
 }
 function post(p,i){
- return '<div class="live-row"><span class="live-thumb '+(i%2?'pink':'cyan')+'">'+socialBrandIcon(p.platform)+'</span><div><strong>'+esc(p.title||'Sin título')+'</strong>+
+ return '<div class="live-row"><span class="live-thumb '+(i%2?'pink':'cyan')+'">'+socialBrandIcon(p.platform)+'</span><div><strong>'+esc(p.title||'Sin título')+'</strong>'+
  '<small>'+esc(p.platform||'')+' · '+displayDate(p.date)+'</small></div><span class="live-state">'+esc(p.status||'Borrador')+'</span>'+
  action('✎','edit-post','live-pencil','data-id="'+esc(p.id)+'" aria-label="Editar publicación"')+'</div>';
 }
 function campaign(c,i){
- return '<div class="live-row"><span class="live-thumb '+(i%2?'pink':'lime')+'">'+(hasSocialBrand(c.channel)?socialBrandIcon(c.channel):'◎')+'</span><div><strong>'+esc(c.name||'Sin título')+'</strong>+
+ return '<div class="live-row"><span class="live-thumb '+(i%2?'pink':'lime')+'">'+(hasSocialBrand(c.channel)?socialBrandIcon(c.channel):'◎')+'</span><div><strong>'+esc(c.name||'Sin título')+'</strong>'+
  '<small>'+esc(c.channel||'')+' · '+esc(c.objective||'')+'</small></div><span class="live-state">'+esc(c.status||'Borrador')+'</span>'+
  action('✎','campaign-edit','live-pencil','data-id="'+esc(c.id)+'" aria-label="Editar campaña"')+'</div>';
 }
