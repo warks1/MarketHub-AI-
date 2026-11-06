@@ -143,7 +143,7 @@ function drawFrame(){
   c.beginPath();c.lineWidth=3;c.strokeStyle=gradient;
   const step=w/(bytes.length-1);
   for(let i=0;i<bytes.length;i++){
-   const y=h*(1.1-bytes[i]/128)/2;
+   const y=h/2+((bytes[i]-128)/128)*h*.42;
    if(i)c.lineTo(i*step,y);else c.moveTo(0,y);
   }
   c.stroke();
