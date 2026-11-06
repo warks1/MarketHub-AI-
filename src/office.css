@@ -37,3 +37,11 @@
 .workspace-landing-preview p,.workspace-brand-preview p,.landing-preview-button{
  min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:normal;
 }
+
+/* Copias integrales: los botones largos deben permanecer dentro del viewport móvil. */
+.workspace-actions{min-width:0;max-width:100%}
+.workspace-actions>button,.workspace-actions>label{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:normal;text-align:center}
+.workspace-actions>[data-action="unified-backup-encrypted-export"]{flex:1 1 250px}
+@media(max-width:680px){
+ .workspace-actions>button,.workspace-actions>label{flex:1 1 100%;width:100%;max-width:100%;min-height:44px;line-height:1.4}
+}
