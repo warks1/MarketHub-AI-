@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.7.4. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.7.5. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,9 +25,17 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.7.4 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.7.5 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
 
-## Motores de marketing locales (v0.7.4)
+## Reproductores y visualizadores de imagen y sonido (v0.7.5)
+
+- **Media Forge → Visores · imagen y sonido**: galería de hasta 10 fotografías, miniaturas, gestos táctiles, zoom 100–500 %, giro, descarga del original y presentación automática cada 3,5 segundos.
+- Reproductor de audio con controles nativos, saltos de 10 segundos, bucle, velocidad 0,75×–1,5× y visualizadores de **espectro en tiempo real y forma de onda**, utilizando Web Audio API tras una activación expresa.
+- Los archivos no se suben a servidores: son `blob:` de tu navegador, sin datos de ejemplo simulados. La compatibilidad de formatos y de Web Audio depende de cada navegador y sistema.
+- Se conservan los antiguos módulos Foto/Máscaras, WAV, Vídeo/Fotogramas, PDF, subtítulos, proyectos y biblioteca privada. La galería y el audio en reproducción son **temporales**, no se incluyen automáticamente en los backups: guarda los originales o en Mi biblioteca.
+- Interfaz adaptativa para PC, Mac, iPhone, Android y tablets; cobertura unitaria más navegador Chrome y Safari WebKit.
+
+## Motores de marketing locales (v0.7.5)
 
 En **Growth Lab → Motores inteligentes** funcionan cuatro módulos verificables, sin conexión a redes ni modelos de IA externos: auditor de copy basado en siete reglas editoriales, generador de variantes editables (FREE: dos; PRO demo: cinco), simulador de embudo con escenarios conservador/base/optimista y comparación estadística A/B con advertencias por muestra insuficiente. Los resultados se conservan en el mismo almacenamiento de Growth Lab y en las copias integrales `.mhubfull`/`.mhubsecure`. Se puede exportar el informe en TXT. Las cifras de escenario son simulaciones y no predicciones de rendimiento.
 
