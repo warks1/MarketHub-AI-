@@ -1,3 +1,11 @@
+## 2026-11-06 · MarketHub AI v0.7.4 — estrategia y analítica verificable
+
+- Incorporados el planificador de tamaño de muestra para test A/B (nivel de confianza, potencia, conversión de base y mejora mínima), un asignador de presupuestos para tres canales con tope de concentración, y una comparativa de métricas importadas en Analítica.
+- Los nuevos motores usan reglas y cálculos locales, sin IA generativa externa, sin publicar, sin cuentas de anuncios y sin predicciones verificadas.
+- Los resultados de planificación se guardan con los motores previos en Growth Lab, se incluyen en el respaldo existente y pueden exportarse como TXT. La analítica sigue vinculada a las filas CSV del módulo principal.
+- Formularios y tablas adaptativos sin ocultación de métricas en smartphones; cobertura funcional y QA con Playwright para escritorio, iPhone e iPad.
+- Conservados los cuatro motores v0.7.3 y el diseño NEXUS × PULSE.
+
 ## 2026-11-06 · MarketHub AI v0.7.3 — motores de marketing operativos
 
 - Cuatro motores locales: auditor de copy (7 reglas), variantes editables y exportables, simulación de embudo/ROAS y comparación estadística A/B con precauciones de muestra.
