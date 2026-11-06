@@ -14,6 +14,7 @@ on:
       - 'scripts/unified-backup-qa.mjs'
       - 'scripts/studio-draft-qa.mjs'
       - 'scripts/mobile-ux-qa.mjs'
+      - 'scripts/pulse-campaign-qa.mjs'
       - '.github/workflows/visual-qa.yml'
   pull_request:
     paths:
@@ -27,6 +28,7 @@ on:
       - 'scripts/unified-backup-qa.mjs'
       - 'scripts/studio-draft-qa.mjs'
       - 'scripts/mobile-ux-qa.mjs'
+      - 'scripts/pulse-campaign-qa.mjs'
       - '.github/workflows/visual-qa.yml'
 
 # Evita acumular pruebas lentas de revisiones ya sustituidas en main.
@@ -68,6 +70,8 @@ jobs:
         run: node scripts/cross-browser-qa.mjs
       - name: Comprobar diálogos buscador y ajustes responsive en Chromium y Safari
         run: node scripts/mobile-ux-qa.mjs
+      - name: Comprobar PULSE Campaign Pilot y siete borradores sin exceder FREE
+        run: node scripts/pulse-campaign-qa.mjs
       - name: Verificar límite FREE y PRO desde Estudio en Chromium y Safari
         run: node scripts/studio-draft-qa.mjs
       - name: Comprobar Media Forge y PULSE PACK en navegadores
