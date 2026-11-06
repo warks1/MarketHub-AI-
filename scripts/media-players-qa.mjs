@@ -43,8 +43,9 @@ for(const {label,driver,w,h} of presets){
   await page.locator('[data-forge-file="player-images"]').setInputFiles(images.map((base64,i)=>({
    name:['Primera.png','Segunda.png'][i],mimeType:'image/png',buffer:Buffer.from(base64,'base64')
   })));
-  await page.locator('#forgePlayerCount').waitFor({state:'visible'});
-  if((await page.locator('#forgePlayerCount').textContent()).trim()!=='1 / 2')errors.push('No se cargaron ambas fotografías');
+  // La decodificación de dos Blob puede completarse después de que el contador sea visible en WebKit.
+  await page.waitForFunction(()=>document.querySelector('#forgePlayerCount')?.textContent?.trim()==='1 / 2',null,{timeout:12000});
+  if((await page.locator('.forge-player-thumb').count())!==2)errors.push('No se cargaron ambas fotografías');
   await page.locator('[data-forge-action="player-next"]').click();
   if((await page.locator('#forgePlayerCaption').textContent()||'').indexOf('Segunda.png')===-1)errors.push('Siguiente imagen no cambia');
   await page.locator('[data-forge-action="player-prev"]').click();
