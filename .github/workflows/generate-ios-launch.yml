@@ -34,6 +34,7 @@ jobs:
       - name: Comprobar archivos antes del commit
         run: |
           test -s public/ios-launch/launch-1290x2796.png
+          test -s ios-launch/launch-1290x2796.png
           test -s public/ios-launch/launch-1320x2868.png
           test -s public/ios-launch/launch-1668x2388.png
           file public/ios-launch/launch-1290x2796.png
@@ -41,7 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f public/ios-launch/*.png
+          git add -f public/ios-launch/*.png ios-launch/*.png
           if git diff --cached --quiet; then
             echo "Imágenes de inicio ya incorporadas."
           else
