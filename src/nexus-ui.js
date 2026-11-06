@@ -1,6 +1,7 @@
 // MarketHub AI · Pantallas NEXUS × PULSE según bocetos elegidos (01 principal / 02 estudio / 03 móvil).
 // Los datos y acciones externas no conectados están marcados expresamente como demostración.
 import {spanishMonthYear} from './date-label.js';
+import {socialBrandIcon,PLATFORMS_DISPLAY,PLATFORMS_DRAFT} from './social-brand-icons.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const action=(name,label,css='nexus-link')=>'<button type="button" class="'+css+'" data-action="'+name+'">'+label+'</button>';
 const card=(title,body,more='',cls='')=>'<section class="nexus-panel '+cls+'"><div class="nexus-panel-title"><strong>'+title+'</strong>'+more+'</div>'+body+'</section>';
@@ -13,7 +14,7 @@ function postItem(p){
  const name=esc(p?.platform??'Instagram');
  const when=esc(p?.date??'');
  const status=p?.status==='Borrador'?'Borrador':'Planificada';
- return '<div class="nexus-post-item"><div class="nexus-post-thumb" aria-hidden="true">✦</div><div class="nexus-post-details"><b>'+title+'</b><small>'+name+' · '+when+'</small></div><span class="nexus-post-status">'+status+'</span></div>';
+ return '<div class="nexus-post-item"><div class="nexus-post-thumb" aria-hidden="true">'+socialBrandIcon(p?.platform)+'</div><div class="nexus-post-details"><b>'+title+'</b><small>'+name+' · '+when+'</small></div><span class="nexus-post-status">'+status+'</span></div>';
 }
 function monthCalendar(posts,offset=0){
  const now=new Date(),shown=new Date(now.getFullYear(),now.getMonth()+Math.min(12,Math.max(-12,offset)),1);
@@ -36,8 +37,10 @@ function monthCalendar(posts,offset=0){
  '<div class="nexus-calendar-grid">'+cells+'</div>'+
  '<p class="nexus-calendar-help">Toca un día para preparar una publicación local. No se publica automáticamente en redes.</p>';
 }
-function platform(name,symbol){
- return '<div class="nexus-platform"><span class="nexus-platform-symbol">'+symbol+'</span><b>'+name+'</b><small>Sin conectar</small></div>';
+function platform(name){
+ const content=socialBrandIcon(name)+'<b>'+name+'</b><small>Sin conectar</small>';
+ return PLATFORMS_DRAFT.includes(name)?'<button type="button" class="nexus-platform" data-action="start-platform-draft" data-platform="'+name+'" aria-label="Preparar borrador para '+name+'; cuenta sin conectar">'+content+'</button>':
+ '<div class="nexus-platform">'+content+'</div>';
 }
 function assistant(){
  const rows=[
@@ -54,7 +57,7 @@ function assistant(){
 }
 function performance(chart){
  return card('▥ Rendimiento por plataforma <small class="nexus-tag">DATOS DEMO</small>',chart+
- '<div class="nexus-platform-legend"><span>● Instagram</span><span>● TikTok</span><span>● YouTube</span><span>● LinkedIn</span><span>● Facebook</span></div>',
+ '<div class="nexus-platform-legend">'+['Instagram','TikTok','YouTube','LinkedIn','Facebook'].map(name=>'<span>'+socialBrandIcon(name)+name+'</span>').join('')+'</div>',
  action('goto-analitica','Ver analítica ↗'),'nexus-performance');
 }
 function latest(posts){
@@ -83,10 +86,7 @@ function inbox(){
 }
 function connections(){
  return card('♧ Plataformas conectadas',
- '<div class="nexus-platforms">'+[
- platform('Instagram','◎'),platform('TikTok','♪'),platform('YouTube','▶'),
- platform('LinkedIn','in'),platform('Facebook','f'),platform('X','𝕏'),platform('WhatsApp','◉')
- ].join('')+'</div><p class="nexus-muted nexus-footnote">Las conexiones reales requieren autorización oficial de cada red.</p>',
+ '<div class="nexus-platforms">'+PLATFORMS_DISPLAY.map(platform).join('')+'</div><p class="nexus-muted nexus-footnote">Las conexiones reales requieren autorización oficial de cada red.</p>',
  action('goto-ajustes','Gestionar ↗'),'nexus-connections');
 }
 export function nexusHome({posts=[],chart='',plan='free',calendarOffset=0}={}){
@@ -163,7 +163,7 @@ export function nexusStudio({mode='Video / Reels',format='9:16',posts=[]}={}){
  card('▥ Rendimiento estimado','<strong>+68,4%</strong><p>Valor ilustrativo; no es una predicción real.</p>','','nexus-smallstat')+
  card('▦ Publicaciones guardadas','<strong>'+posts.filter(p=>p&&typeof p==='object').length+'</strong><p>Biblioteca local</p>',action('goto-crear','Abrir ↗'),'nexus-smallstat')+
  card('✧ Campañas activas','<strong>3</strong><p>Ejemplos, sin inversión real</p>','','nexus-smallstat')+
- card('♧ Plataformas destino','<p>Instagram · TikTok · YouTube · LinkedIn · Facebook</p><small>Sin conectar</small>','','nexus-smallstat')+'</div>'+
+ card('♧ Plataformas destino','<div class="nexus-platform-legend">'+['Instagram','TikTok','YouTube','LinkedIn','Facebook'].map(name=>'<span>'+socialBrandIcon(name)+name+'</span>').join('')+'</div><small>Sin conectar</small>','','nexus-smallstat')+'</div>'+
  '<div class="nexus-templates"><strong>▧ Plantillas destacadas</strong><div>'+
  ['▶ Reel promocional','▣ Tutorial','✦ Testimonio','% Oferta flash'].map(t=>action('goto-diseño',t+' ↗','nexus-template')).join('')+'</div></div>'+
  '</div>';
