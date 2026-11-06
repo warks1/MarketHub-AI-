@@ -57,3 +57,15 @@
  .sidebar>.nav::-webkit-scrollbar-thumb{background:#6b55ac;border-radius:8px}
  .sidebar>.nav .nav-btn{min-height:43px}
 }
+
+/* Diálogos y menú móvil: la página inferior no debe desplazarse ni captar foco. */
+html.mh-overlay-open,body.mh-overlay-open{overflow:hidden;overscroll-behavior:none}
+.modal-backdrop{overflow-y:auto;overscroll-behavior:contain}
+.modal{min-width:0;max-width:min(490px,100%);max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain}
+.mobile-menu-drawer{overscroll-behavior:contain}
+.mobile-menu-backdrop{touch-action:none}
+@media(max-width:680px){
+ .modal{padding:clamp(14px,4vw,25px)}
+ .modal-actions{display:flex;flex-wrap:wrap;gap:9px}
+ .modal-actions>button{max-width:100%;min-width:0;overflow-wrap:anywhere;white-space:normal}
+}
