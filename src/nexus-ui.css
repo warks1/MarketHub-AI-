@@ -306,3 +306,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #08edff;outline-offset:3p
  .nexus-home,.nexus-globe,.nexus-globe:before,.nexus-globe:after,.nexus-spinner{animation:none!important}
  .nexus-splash-progress .progress-fill{transition:none}
 }
+
+/* El mes llega capitalizado correctamente desde es-ES: no transformar la preposición «de». */
+.nexus-cal-month{text-transform:none}
+.nexus-calendar-help{font-size:10px;line-height:1.4;color:#b9cbee;margin:6px 2px 0;overflow-wrap:break-word}
