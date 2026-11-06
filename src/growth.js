@@ -35,7 +35,7 @@ const https=value=>{
  try{const u=new URL(String(value).trim());if(u.protocol==='https:'&&!u.username&&!u.password)return u.href}catch{}
  return null;
 };
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
 const newId=()=>new Date().getTime().toString(36)+'-'+Math.random().toString(36).slice(2,8);
 const fmtMoney=v=>{const n=Number(v);return new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(Number.isFinite(n)?n:0)};
 function card(title,body){return '<div class="card"><div class="card-head"><h2>'+title+'</h2></div>'+body+'</div>'}
