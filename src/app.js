@@ -17,6 +17,7 @@ import {liveStudio,createScene,parseScene,STUDIO_THEMES} from './live-studio.js'
 import {imageFileToSceneData,canStoreSceneImage} from './studio-scene-media.js';
 import {exportEditorialICS} from './calendar-export.js';
 import {spanishMonthYear} from './date-label.js';
+import {socialBrandIcon,PLATFORMS_DRAFT} from './social-brand-icons.js';
 import {downloadScenePNG} from './studio-scene-export.js';
 import {renderStoryboardVideo,saveVideoDownload} from './studio-video-export.js';
 
@@ -37,7 +38,7 @@ let state={
   videoFormat:'9:16',search:'',menuMore:false,consent: saved.consent || 'pending'
 };
 state.toolsFilter='all';state.toolsQuery='';state.selectedTool=null;
-state.editPostId=null;state.pendingDeleteId=null;
+state.editPostId=null;state.pendingDeleteId=null;state.preferredPlatform='Instagram';
 state.editCampaignId=null;state.pendingDeleteCampaignId=null;
 state.editCompetitorId=null;state.pendingDeleteCompetitorId=null;
 state.calendarOffset=0;state.preselectedDate=null;
@@ -132,7 +133,7 @@ function postRow(p, managed=false){
   '<button type="button" class="secondary small-btn" data-action="edit-post" data-id="'+safe(p.id)+'" aria-label="Editar '+safe(p.title)+'">Editar</button>'+
   '<button type="button" class="secondary small-btn" data-action="duplicate-post" data-id="'+safe(p.id)+'" aria-label="Duplicar '+safe(p.title)+'">Duplicar</button>'+
   '<button type="button" class="secondary small-btn" data-action="delete-post" data-id="'+safe(p.id)+'" aria-label="Eliminar '+safe(p.title)+'">Eliminar</button></div>':'';
- return '<div class="list-row post-list-row"><div class="post-main"><b>'+safe(p.title)+'</b><p>'+safe(p.platform)+' · '+safe(p.date)+'</p></div><div class="post-right"><span class="tag '+(p.status==='Programada'?'green':'')+'">'+safe(p.status)+'</span>'+actions+'</div></div>';
+ return '<div class="list-row post-list-row"><div class="post-main"><b>'+safe(p.title)+'</b><p class="social-brand-inline">'+socialBrandIcon(p.platform)+'<span>'+safe(p.platform)+' · '+safe(p.date)+'</span></p></div><div class="post-right"><span class="tag '+(p.status==='Programada'?'green':'')+'">'+safe(p.status)+'</span>'+actions+'</div></div>';
 }
 function postsFiltered(){
  return filterLocalPosts(state.posts,state.search);
@@ -163,19 +164,31 @@ function studio(){
  // Boceto 02: editor de demostración con acceso a herramientas locales reales.
  return nexusStudio({mode:state.creativeMode,format:state.videoFormat,posts:state.posts});
 }
+function syncPostPlatform(platform){
+ if(!PLATFORMS_DRAFT.includes(platform))return false;
+ state.preferredPlatform=platform;
+ const field=document.getElementById('platform');if(field)field.value=platform;
+ for(const button of document.querySelectorAll('[data-action="select-post-platform"]')){
+  button.setAttribute('aria-pressed',String(button.dataset.platform===platform));
+ }
+ return true;
+}
 function create(){
  const editing=findPost(state.posts,state.editPostId);
  const status=editing?.status==='Borrador'?'Borrador':'Programada';
  const date=editing?.date||state.preselectedDate||todayLocal();
- const platform=editing?.platform||'Instagram';
- const platforms=['Instagram','TikTok','YouTube','Facebook','LinkedIn','X'];
+ const platform=editing?.platform||state.preferredPlatform||'Instagram';
+ const platforms=PLATFORMS_DRAFT;
  const selected=platforms.map(name=>'<option '+(platform===name?'selected':'')+'>'+name+'</option>').join('');
  return sectionHeader('Crear y programar','Prepara, edita y organiza publicaciones en tu dispositivo. No se envían a las redes sociales.',
   '<div class="workspace-actions">'+btn('Exportar biblioteca CSV','export-posts','secondary')+btn('Exportar calendario .ics','export-calendar','secondary')+'</div>')+
  '<div class="notice"><strong>Planificador local.</strong> Una fecha asignada sirve para organizarte: esta versión no publica automáticamente en Instagram, TikTok ni otras redes.</div>'+
  '<div class="two-cols"><div class="card"><div class="card-head"><h2>✦ '+(editing?'Editar publicación':'Nueva publicación')+'</h2><span class="tag">Local · demo</span></div>'+
  '<form id="postForm"><div class="form-field"><label for="title">Título o texto</label><textarea class="input" id="title" name="title" required maxlength="240" placeholder="Escribe el contenido de tu publicación">'+safe(editing?.title||'')+'</textarea></div>'+
- '<div class="form-field"><label for="platform">Plataforma</label><select class="input" name="platform" id="platform">'+selected+'</select></div>'+
+ '<div class="form-field"><label for="platform">Plataforma</label><select class="input" name="platform" id="platform">'+selected+'</select>'+
+ '<div class="social-post-choices" role="group" aria-label="Elegir red social para borrador local">'+PLATFORMS_DRAFT.map(name=>
+ '<button type="button" class="social-post-choice" data-action="select-post-platform" data-platform="'+name+'" aria-pressed="'+String(platform===name)+'">'+socialBrandIcon(name)+'<span>'+name+'</span></button>').join('')+'</div>'+
+ '<p class="social-post-note">Selecciona el icono o la lista. Se guarda como borrador local y no publica en ninguna red.</p></div>'+
  '<div class="form-field"><label for="date">Fecha prevista</label><input class="input" type="date" name="date" id="date" required value="'+safe(date)+'"></div>'+
  '<div class="form-field"><label for="postStatus">Estado local</label><select class="input" id="postStatus" name="status"><option value="Borrador" '+(status==='Borrador'?'selected':'')+'>Borrador</option><option value="Programada" '+(status==='Programada'?'selected':'')+'>Planificada (sin publicación automática)</option></select></div>'+
  '<div class="platforms" style="margin:0 0 16px"><span class="tag">✓ Archivo local</span><span class="tag pink">Sin publicar</span></div>'+
@@ -439,6 +452,14 @@ document.addEventListener('click',e=>{
  if(action.startsWith('goto-')){go(action.slice(5));return}
  if(state.storyboardPlaying && ['storyboard-add','storyboard-move-left','storyboard-move-right','storyboard-duplicate','storyboard-remove','confirm-storyboard-delete'].includes(action))stopStoryboardPlayback();
  switch(action){
+ case 'start-platform-draft':{
+  const platform=target.dataset.platform;
+  if(PLATFORMS_DRAFT.includes(platform)){
+   state.editPostId=null;state.preferredPlatform=platform;go('crear');
+  }
+  break;
+ }
+ case 'select-post-platform':{syncPostPlatform(target.dataset.platform);break}
  case 'catalogue-open-growth':{if(state.selectedTool?.growthTab){growthOpenTab(state.selectedTool.growthTab);go('laboratorio')}break}
  case 'catalogue-open-media':{if(state.selectedTool?.mediaTab){go('multimedia');forgeTab(state.selectedTool.mediaTab,render)}break}
  case 'catalogue-open-settings':{if(state.selectedTool?.settingsPage==='ajustes')go('ajustes');break}
@@ -833,6 +854,7 @@ if(e.target.id!=='postForm')return;
  save();render();toast(editing?'Publicación local actualizada.':'Borrador local guardado. No se ha publicado en ninguna red.');
 });
 document.addEventListener('change',e=>{
+ if(e.target.id==='platform'){syncPostPlatform(e.target.value);return}
  if(e.target.matches('[data-forge-file]')){void forgeFile(e.target,{refresh:render,toast});return}
  if(e.target.matches('[data-forge-input]')){forgeInput(e.target);return}
  if(e.target.matches('[data-scene-image]')){
