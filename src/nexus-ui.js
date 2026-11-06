@@ -1,5 +1,6 @@
 // MarketHub AI · Pantallas NEXUS × PULSE según bocetos elegidos (01 principal / 02 estudio / 03 móvil).
 // Los datos y acciones externas no conectados están marcados expresamente como demostración.
+import {spanishMonthYear} from './date-label.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const action=(name,label,css='nexus-link')=>'<button type="button" class="'+css+'" data-action="'+name+'">'+label+'</button>';
 const card=(title,body,more='',cls='')=>'<section class="nexus-panel '+cls+'"><div class="nexus-panel-title"><strong>'+title+'</strong>'+more+'</div>'+body+'</section>';
@@ -30,9 +31,10 @@ function monthCalendar(posts,offset=0){
  }
  return '<div class="nexus-cal-nav">'+
  '<button type="button" data-action="calendar-prev" aria-label="Mes anterior" '+(offset<=-12?'disabled':'')+'>‹</button>'+
- '<div class="nexus-cal-month">'+new Intl.DateTimeFormat('es-ES',{month:'long',year:'numeric'}).format(shown)+'</div>'+
+ '<div class="nexus-cal-month">'+spanishMonthYear(shown)+'</div>'+
  '<button type="button" data-action="calendar-next" aria-label="Mes siguiente" '+(offset>=12?'disabled':'')+'>›</button></div>'+
- '<div class="nexus-calendar-grid">'+cells+'</div>';
+ '<div class="nexus-calendar-grid">'+cells+'</div>'+
+ '<p class="nexus-calendar-help">Toca un día para preparar una publicación local. No se publica automáticamente en redes.</p>';
 }
 function platform(name,symbol){
  return '<div class="nexus-platform"><span class="nexus-platform-symbol">'+symbol+'</span><b>'+name+'</b><small>Sin conectar</small></div>';
