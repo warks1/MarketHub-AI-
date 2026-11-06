@@ -23,7 +23,7 @@ test('La actualización reemplaza el shell anterior pero conserva datos locales'
  assert.match(sw,/'\.\/src\/advanced-engine-lab\.js'/);
 });
 test('Se invalida la versión de carga del JS sin romper las rutas relativas',()=>{
- assert.match(html,/src="\.\/src\/app\.js\?v=20261106n"/);
- assert.match(html,/version: '20261106n'/);
- assert.match(html,/reparacion=20261106n/);
+ assert.match(html,/src="\.\/src\/app\.js\?v=20261106p"/);
+ assert.match(html,/version: '20261106p'/);
+ assert.match(html,/reparacion=20261106p/);
 });
