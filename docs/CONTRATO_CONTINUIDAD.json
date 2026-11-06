@@ -103,6 +103,7 @@
     "src/social-brand-icons.css",
     "tests/social-brand-icons.test.mjs",
     "scripts/social-brand-qa.mjs",
+    "docs/REDES_E_IDENTIDAD.md",
     "src/media-players.css",
     "tests/media-players.test.mjs",
     "scripts/media-players-qa.mjs"
