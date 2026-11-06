@@ -45,6 +45,14 @@ export const catalogueSections = [
         "description": "Brief de campaña manual y biblioteca local; no utiliza IA externa."
       },
       {
+        "id": "CAT-PULSE-01",
+        "name": "PULSE Campaign Pilot · de brief a 7 días",
+        "tier": "free",
+        "status": "local",
+        "growthTab": "campanas",
+        "description": "Crea siete textos y tareas editoriales editables desde un brief, exporta CSV o calendario ICS y envía borradores locales con cuotas. Funciona mediante plantillas, sin IA ni publicación automática."
+      },
+      {
         "id": "CAT-003",
         "name": "Agentes IA con aprobación",
         "tier": "pro",
