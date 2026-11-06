@@ -1,5 +1,6 @@
 // MEDIA FORGE · Herramientas multimedia locales originales de MarketHub AI.
 import {convertSubtitles,parseSubtitles} from './subtitle-tools.js';
+import {playerPage,playerMount,playerClick,playerFile,playerTeardown} from './media-players.js';
 import {listVaultAssets,getVaultAsset,saveVaultAsset,removeVaultAsset,vaultSupported,VAULT_MAX_ITEMS} from './media-vault.js';
 import {readBrandProfiles,saveBrandProfile,removeBrandProfile,normalizeBrandProfile,TONES} from './brand-dna.js';
 import {auditCreative} from './creative-audit.js';
@@ -12,7 +13,7 @@ export const SIZES={'9:16':[1080,1920],'4:5':[1080,1350],'1:1':[1080,1080],'16:9
 export const SAFEFRAME_GUIDES={'9:16':{top:.17,right:.12,bottom:.25,left:.09},'4:5':{top:.10,right:.08,bottom:.18,left:.08},'1:1':{top:.10,right:.08,bottom:.15,left:.08},'16:9':{top:.10,right:.11,bottom:.17,left:.11},'3:2':{top:.10,right:.10,bottom:.15,left:.10}};
 export const MASKS=['orbita','circulo','ovalada','redondeada','estrella','hexagono','pentagono','octagono','triangulo','diamante','corazon','banda-horizontal','banda-vertical','ventana','completa'];
 const looks={neon:['contrast(1.1) saturate(1.3)','#26e9fb','#eb4df5'],editorial:['contrast(1.06) saturate(.85)','#ffcfa2','#ef9bcd'],noir:['grayscale(1) contrast(1.25)','#f0f4ff','#8190dd'],natural:['none','#ffffff','#8acde9']};
-const tabNames={photo:'Foto y máscaras',audio:'Audio y WAV',video:'Vídeo y fotogramas',pdf:'Visor PDF',subs:'Subtítulos SRT / VTT',vault:'Mi biblioteca',projects:'Proyectos editables'};
+const tabNames={photo:'Foto y máscaras',players:'Visores · imagen y sonido',audio:'Audio y WAV',video:'Vídeo y fotogramas',pdf:'Visor PDF',subs:'Subtítulos SRT / VTT',vault:'Mi biblioteca',projects:'Proyectos editables'};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const btn=(label,action,disabled=false)=>'<button type="button" data-forge-action="'+action+'" '+(disabled?'disabled':'')+'>'+label+'</button>';
 const field=(label,key,opts)=>'<label>'+label+'<select data-forge-input="'+key+'">'+opts.map(([v,n])=>'<option value="'+v+'" '+(s[key]===v?'selected':'')+'>'+n+'</option>').join('')+'</select></label>';
@@ -112,6 +113,7 @@ function vaultPage(){
    '<div class="forge-vault-info"><strong title="'+esc(item.name)+'">'+esc(item.name)+'</strong>'+
    '<small>'+esc(item.type)+' · '+(item.size/1048576).toFixed(2)+' MB</small></div>'+
    '<div class="forge-vault-buttons"><button type="button" data-forge-action="vault-open" data-forge-id="'+esc(item.id)+'">Abrir</button>'+
+   (item.type.startsWith('image/')||item.type.startsWith('audio/')?'<button type="button" data-forge-action="vault-player" data-forge-id="'+esc(item.id)+'">Ver / reproducir</button>':'')+
    '<button type="button" data-forge-action="vault-download" data-forge-id="'+esc(item.id)+'">Descargar</button>'+
    '<button type="button" class="forge-vault-delete" data-forge-action="vault-delete" data-forge-id="'+esc(item.id)+'" aria-label="Eliminar '+esc(item.name)+'">Eliminar</button></div></article>';
  }).join('');
@@ -147,7 +149,7 @@ async function forgeVaultLoad(refresh){
 export function forgePage(){
  return '<section class="media-forge"><header class="forge-head"><div><span class="eyebrow">NEXUS + PULSE · HERRAMIENTAS INTEGRADAS</span><h1>MEDIA FORGE ✦</h1><p>Visualiza, edita y convierte sin salir de MarketHub AI.</p></div><span class="forge-private">◎ Sin subir archivos</span></header>'+
  '<nav class="forge-tabs" aria-label="Laboratorio multimedia">'+Object.entries(tabNames).map(([k,n])=>'<button type="button" data-forge-tab="'+k+'" aria-current="'+(s.tab===k?'page':'false')+'">'+n+'</button>').join('')+'</nav>'+
- (s.tab==='audio'?audio():s.tab==='video'?video():s.tab==='pdf'?pdf():s.tab==='subs'?subtitles():s.tab==='vault'?vaultPage():s.tab==='projects'?projectsPage():photo())+'</section>';
+ (s.tab==='players'?playerPage():s.tab==='audio'?audio():s.tab==='video'?video():s.tab==='pdf'?pdf():s.tab==='subs'?subtitles():s.tab==='vault'?vaultPage():s.tab==='projects'?projectsPage():photo())+'</section>';
 }
 // Flujo PULSE Campaign Pilot → Media Forge: propuesta editable, nunca publicación automática.
 export function forgeCampaignDraft({text,platform,brand}={}){
@@ -167,6 +169,7 @@ export function forgeCampaignDraft({text,platform,brand}={}){
 }
 export function forgeTab(name,refresh){
  if(!tabNames[name])return false;
+ if(s.tab==='players'&&name!=='players')playerTeardown();
  s.tab=name;
  // Evitar reemplazar el selector de archivos mientras el usuario importa una copia.
  // Solo mostrar la pestaña con formularios tras concluir la carga de IndexedDB.
@@ -226,6 +229,7 @@ export function composeImage(canvas,image,opts={}){
  return canvas;
 }
 export function forgeMount(){
+ if(s.tab==='players'){playerMount();return}
  if(s.tab!=='photo')return;
  const canvas=document.getElementById('forgeCanvas');if(!canvas)return;
  if(s.image){composeImage(canvas,s.image,{preview:true});return}
@@ -258,6 +262,7 @@ export function forgeInput(target){
 }
 export async function forgeFile(target,ctx){
  const type=target?.dataset?.forgeFile;
+ if(type==='player-images'||type==='player-audio')return playerFile(target,ctx);
  if(type==='portfolio'){
   const file=target.files?.[0];if(!file)return true;
   // Permite seleccionar la misma copia otra vez y no conserva el archivo en el formulario.
@@ -351,6 +356,7 @@ export function encodeWav(buffer,begin=0,finish=0){
 export function canRecordWebM(video){return !!(video&&video.captureStream&&typeof MediaRecorder!=='undefined'&&MediaRecorder.isTypeSupported('video/webm'))}
 export async function forgeClick(target,ctx){
  const action=target?.dataset?.forgeAction;if(!action)return false;
+ if(action.startsWith('player-'))return playerClick(target,ctx);
  try{
   if(action.startsWith('project-')){
    if(action==='project-save'){
@@ -442,7 +448,13 @@ export async function forgeClick(target,ctx){
     ctx.toast('Archivo guardado en Mi biblioteca.');
    }else{
     const asset=await getVaultAsset(target.dataset.forgeId);
-    if(action==='vault-download'){
+    if(action==='vault-player'){
+     const kind=asset.type.startsWith('image/')?'player-images':asset.type.startsWith('audio/')?'player-audio':null;
+     if(!kind)throw Error('Este archivo no tiene un reproductor de imagen o sonido');
+     forgeTab('players',ctx.refresh);
+     const file=new File([asset.blob],asset.name,{type:asset.type});
+     await playerFile({dataset:{forgeFile:kind},files:[file],value:''},ctx);
+    }else if(action==='vault-download'){
      send(asset.blob,asset.name);ctx.toast('Archivo descargado.');
     }else if(action==='vault-delete'){
      if(window.confirm('¿Eliminar definitivamente «'+asset.name+'» de la biblioteca local?')){

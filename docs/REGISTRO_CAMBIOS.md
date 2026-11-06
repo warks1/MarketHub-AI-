@@ -1,3 +1,11 @@
+## 2026-11-06 · MarketHub AI v0.7.5 — visores y reproductores reales
+
+- Nueva pestaña «Visores · imagen y sonido» dentro de Media Forge: galería multiimagen con miniaturas, flechas, zoom 1–5×, giro, swipe, pantalla completa adaptable y presentación automática.
+- Reproductor local de audio con controles HTML nativos, reproducción/pausa, velocidad, búsqueda ±10 s, bucle y forma de onda/espectro Web Audio API sin simulación.
+- Se revocan URLs temporales de galería/audio al sustituirlos; el analizador se desconecta al salir. Se preservan las pestañas multimedia anteriores, la biblioteca, los proyectos y el contrato de continuidad.
+- Pruebas unitarias, CI y navegador Chromium PC + Safari WebKit iPhone/iPad; interfaz NEXUS × PULSE con controles visibles en tamaños pequeños.
+- Límites honestos: sin IA externa, subida de medios ni publicación real; formatos sujetos a compatibilidad de navegador, archivos locales temporales no respaldados automáticamente.
+
 ## 2026-11-06 · MarketHub AI v0.7.4 — estrategia y analítica verificable
 
 - Incorporados el planificador de tamaño de muestra para test A/B (nivel de confianza, potencia, conversión de base y mejora mínima), un asignador de presupuestos para tres canales con tope de concentración, y una comparativa de métricas importadas en Analítica.
