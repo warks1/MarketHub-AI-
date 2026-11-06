@@ -105,7 +105,7 @@ const nav=[
  ['laboratorio','Growth Lab','chart'],['herramientas','Herramientas','bolt'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
 function sectionHeader(title,subtitle,action){
- return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.7.3</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
+ return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.7.4</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
 }
 function btn(text,action,klass='secondary',extra=''){return '<button class="'+klass+'" data-action="'+action+'" '+extra+'>'+text+'</button>'}
 function kpi(title,value,delta,symbol,glow){
@@ -252,7 +252,7 @@ function content(){
  case 'multimedia':return forgePage();
  case 'crear':return create();
  case 'oficina':return officePage(state.plan)+adUnit('mobile')+adUnit('desktop');
- case 'laboratorio':return growthPage(state.plan)+adUnit('mobile')+adUnit('desktop');
+ case 'laboratorio':return growthPage(state.plan,state.analyticsRows)+adUnit('mobile')+adUnit('desktop');
  case 'herramientas':return toolsCatalogue();
  case 'campanas':return campaigns();
  case 'analitica':return analytics();
@@ -406,7 +406,7 @@ document.addEventListener('click',e=>{
   }});return;
  }
  const growthTarget=e.target.closest('[data-growth-action]');
- if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPosts:addPulseDrafts,
+ if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,analyticsRows:state.analyticsRows,newPosts:addPulseDrafts,
   editCreative:item=>{
    try{
     const draft=forgeCampaignDraft(item);
