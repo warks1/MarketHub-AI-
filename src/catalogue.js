@@ -30,6 +30,10 @@ export const catalogueSections = [
     "name": "IA estratégica y copilotos",
     "icon": "✦",
     "tools": [
+      {"id":"CAT-ENG-01","name":"Motor auditor de copy PULSE","tier":"free","status":"local","growthTab":"motores","description":"Evalúa siete reglas editoriales, explica puntuaciones y permite repetir el diagnóstico con textos propios. No utiliza IA externa."},
+      {"id":"CAT-ENG-02","name":"Motor de variantes multicanal","tier":"free","status":"local","growthTab":"motores","description":"Genera variantes por plantillas editables y exportables. FREE 2 opciones, PRO demo hasta 5."},
+      {"id":"CAT-ENG-03","name":"Motor de escenarios de inversión","tier":"free","status":"local","growthTab":"motores","description":"Simula impresiones, clics, conversiones, rentabilidad y tres escenarios con supuestos aportados por el usuario; no son predicciones."},
+      {"id":"CAT-ENG-04","name":"Motor estadístico de experimentos A/B","tier":"free","status":"local","growthTab":"motores","description":"Compara tasas de conversión con p-valor e intervalo al 95 % y detecta muestras insuficientes."},
       {
         "id": "CAT-001",
         "name": "Asistente de marketing por chat",

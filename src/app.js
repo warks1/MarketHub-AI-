@@ -105,7 +105,7 @@ const nav=[
  ['laboratorio','Growth Lab','chart'],['herramientas','Herramientas','bolt'],['planes','Suscripción','crown'],['ajustes','Ajustes','gear']
 ];
 function sectionHeader(title,subtitle,action){
- return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.7.2</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
+ return '<div class="page-head"><div><span class="eyebrow">NEXUS × PULSE · v0.7.3</span><h1>'+title+'</h1><p>'+subtitle+'</p></div><div class="page-head-actions">'+(action||'')+'<span class="demo-pill">Datos demo</span></div></div>';
 }
 function btn(text,action,klass='secondary',extra=''){return '<button class="'+klass+'" data-action="'+action+'" '+extra+'>'+text+'</button>'}
 function kpi(title,value,delta,symbol,glow){

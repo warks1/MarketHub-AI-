@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.7.2. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.7.3. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,7 +25,13 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.6.1 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.7.3 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+
+## Motores de marketing locales (v0.7.3)
+
+En **Growth Lab → Motores inteligentes** funcionan cuatro módulos verificables, sin conexión a redes ni modelos de IA externos: auditor de copy basado en siete reglas editoriales, generador de variantes editables (FREE: dos; PRO demo: cinco), simulador de embudo con escenarios conservador/base/optimista y comparación estadística A/B con advertencias por muestra insuficiente. Los resultados se conservan en el mismo almacenamiento de Growth Lab y en las copias integrales `.mhubfull`/`.mhubsecure`. Se puede exportar el informe en TXT. Las cifras de escenario son simulaciones y no predicciones de rendimiento.
+
+Pruebas: `node --test tests/marketing-engines.test.mjs tests/growth-engines-integration.test.mjs` y `node scripts/marketing-engines-qa.mjs` (con Playwright, servido por Vite).
 
 ## Inicio rápido
 

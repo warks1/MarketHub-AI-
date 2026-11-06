@@ -45,3 +45,57 @@
 
 /* El acceso creativo de cada día sigue siendo legible y táctil en móviles. */
 .growth-pulse-day>[data-growth-action="pulse-to-forge"]{width:100%;min-width:0;min-height:44px;white-space:normal;overflow-wrap:anywhere;text-align:center}
+
+
+/* Growth Lab v0.4 · cuatro motores operativos, sin cambiar las pantallas originales. */
+.engine-lab,.engine-grid,.engine-panel,.engine-form,.engine-result{min-width:0;max-width:100%}
+.engine-lab{display:grid;gap:16px}
+.engine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,410px),1fr));gap:16px;align-items:start}
+.engine-panel{display:grid;gap:14px;align-content:start}
+.engine-panel .card-head{flex-wrap:wrap;align-items:flex-start;gap:8px}
+.engine-panel .card-head h2{overflow-wrap:anywhere;line-height:1.2}
+.engine-form{display:grid;gap:12px;margin:8px 0}
+.engine-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.engine-field{display:grid;min-width:0;gap:6px;font-size:12px;font-weight:650}
+.engine-field .input{width:100%;min-width:0;max-width:100%}
+.engine-field textarea{resize:vertical;min-height:95px;line-height:1.5}
+.engine-form>.primary{width:100%;min-height:44px;white-space:normal}
+.engine-result{display:grid;gap:12px}
+.engine-result p{overflow-wrap:anywhere}
+.engine-score{display:flex;flex-wrap:wrap;align-items:center;gap:8px 15px;border:1px solid #47669b;border-radius:14px;padding:13px;background:linear-gradient(110deg,#142b53,#251947)}
+.engine-score strong{font-size:clamp(22px,3vw,36px);color:#5fe1eb;line-height:1.1;overflow-wrap:anywhere}
+.engine-score span{font-size:12px;color:#c5d7f6}
+.engine-checks{margin:0;padding:0;display:grid;gap:7px;list-style:none}
+.engine-checks li{border:1px solid #385887;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.engine-checks .pass{border-color:#286f72;background:#13374a}
+.engine-checks .review{border-color:#8a6083;background:#39264a}
+.engine-variants{display:grid;gap:10px}
+.engine-variant{display:grid;gap:8px;min-width:0;border:1px solid #3f5b91;border-radius:13px;padding:11px}
+.engine-variant label{font-size:12px;font-weight:750}
+.engine-variant textarea{display:block;width:100%;min-width:0;max-width:100%;min-height:130px;resize:vertical;font-size:16px;line-height:1.4}
+.engine-actions{display:flex;flex-wrap:wrap;gap:10px}
+.engine-actions button{min-width:0;flex:1 1 170px;min-height:44px;white-space:normal;overflow-wrap:anywhere;text-align:center}
+.engine-table-wrap{min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;border:1px solid #3e5784;border-radius:12px}
+.engine-table{width:100%;min-width:670px;border-collapse:collapse;font-size:12px}
+.engine-table th,.engine-table td{padding:10px 8px;border-bottom:1px solid #344a73;text-align:right;white-space:nowrap}
+.engine-table th:first-child{text-align:left}
+.engine-table thead{background:#1a3156}
+.engine-table tbody tr:last-child td,.engine-table tbody tr:last-child th{border-bottom:0}
+.engine-ab-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.engine-ab-metrics>div{display:grid;gap:4px;min-width:0;padding:12px;background:#182a4e;border:1px solid #3f5987;border-radius:11px;font-size:12px}
+.engine-ab-metrics strong{font-size:clamp(15px,2.1vw,23px);overflow-wrap:anywhere}
+@media(max-width:680px){.engine-grid,.engine-fields{grid-template-columns:minmax(0,1fr)}.engine-panel{padding:14px}.engine-score{align-items:flex-start}.engine-panel .input,.engine-variant textarea{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.engine-lab *{scroll-behavior:auto}}
+
+/* Escenarios: en pantallas estrechas se muestran TODAS las métricas como fichas,
+   sin ocultar columnas ni obligar al desplazamiento horizontal. */
+@media(max-width:760px){
+ .engine-table-wrap{overflow:visible}
+ .engine-table{display:block;width:100%;min-width:0}
+ .engine-table thead{display:none}
+ .engine-table tbody{display:grid;gap:10px;padding:8px}
+ .engine-table tbody tr{display:grid;gap:0;border:1px solid #415d8e;border-radius:12px;padding:8px;min-width:0}
+ .engine-table tbody th{display:block;font-size:16px;font-weight:800;text-align:left;padding:10px 8px;white-space:normal}
+ .engine-table tbody td{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;min-width:0;padding:9px 8px;text-align:right;white-space:normal;overflow-wrap:anywhere}
+ .engine-table tbody td::before{content:attr(data-label);flex:0 0 48%;text-align:left;font-size:12px;font-weight:650;white-space:normal}
+}
