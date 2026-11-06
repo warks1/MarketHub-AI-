@@ -49,8 +49,8 @@ test('Calendario ICS utiliza eventos de día completo sin prometer horarios ni p
  assert.match(ics,/DTSTART;VALUE=DATE:20261204/);
  assert.doesNotMatch(ics,/DTSTART;TZID|DTSTART:\d{8}T/);
  assert.match(ics,/No se publica automáticamente/);
- assert.match(ics,/\\\\,/);
- assert.match(ics,/\\\\;/);
+ assert.ok(ics.includes('\\,'));
+ assert.ok(ics.includes('\\;'));
  assert.ok(ics.split('\r\n').every(line=>new TextEncoder().encode(line).length<=75));
 });
 test('La transferencia de 7 borradores valida todos antes de guardarlos y no crea lotes parciales',()=>{
