@@ -33,7 +33,7 @@ test('Biblioteca tiene buscador móvil y filtra en vivo sin reiniciar el input',
  assert.match(app,/id="libraryResults"/);
  assert.match(app,/function updateLibraryResults\(\)/);
  assert.match(app,/if\(e\.target\.id==='librarySearch'\)\{state\.search=e\.target\.value;updateLibraryResults\(\);return\}/);
- assert.match(app,/state\.search\.toLowerCase\(\)/);
+ assert.match(app,/filterLocalPosts\(state\.posts,state\.search\)/);
 });
 test('Los meses en castellano capitalizan solo la primera letra y respetan la preposición',()=>{
  assert.equal(spanishMonthYear(new Date(2026,10,6)),'Noviembre de 2026');
