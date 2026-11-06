@@ -26,3 +26,19 @@
 .growth-bio-preview h2,.growth-bio-button{
  min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:normal;
 }
+
+/* PULSE Campaign Pilot: calendario editable y controles accesibles sin romper NEXUS × PULSE. */
+.growth-pulse{margin-top:16px;min-width:0}
+.growth-pulse>.card-head{flex-wrap:wrap;align-items:start}
+.growth-pulse>.card-head h2{font-size:clamp(17px,2vw,24px);line-height:1.25;overflow-wrap:anywhere;margin:4px 0}
+.growth-pulse-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,255px),1fr));gap:12px;margin:17px 0}
+.growth-pulse-day{min-width:0;padding:14px;border:1px solid #49669c;border-radius:14px;background:linear-gradient(145deg,rgba(11,30,68,.94),rgba(35,20,65,.86));display:grid;gap:9px}
+.growth-pulse-day-head{min-width:0;display:grid;gap:4px}
+.growth-pulse-day-head strong{font-size:14px;overflow-wrap:anywhere}
+.growth-pulse-day-head small{font-size:12px;color:#b6daf5}
+.growth-pulse-day>p,.growth-pulse-day .growth-pulse-check{font-size:12px;line-height:1.5;overflow-wrap:anywhere;color:#c5d7f2}
+.growth-pulse-day label{font-size:12px;font-weight:700}
+.growth-pulse-day textarea{width:100%;min-width:0;max-width:100%;min-height:110px;resize:vertical;overflow-wrap:anywhere;line-height:1.45}
+.growth-pulse-actions{display:flex;flex-wrap:wrap;gap:10px}
+.growth-pulse-actions>button{flex:1 1 160px;min-width:0;min-height:45px;white-space:normal;overflow-wrap:anywhere;text-align:center}
+@media(max-width:680px){.growth-pulse-grid{grid-template-columns:1fr}.growth-pulse-day textarea{font-size:16px;min-height:100px}.growth-pulse-actions>button{flex-basis:100%}}
