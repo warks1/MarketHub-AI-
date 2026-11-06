@@ -6,7 +6,7 @@ import {exportUnifiedBackup,restoreUnifiedBackup,MAX_UNIFIED_BYTES,unifiedBackup
 import {encryptUnifiedBlob,decryptUnifiedBlob,SECURE_UNIFIED_MAX_CIPHERTEXT} from './unified-crypto.js';
 import {visualPage,visualMount,visualClick,visualInput,visualFile} from './visual.js';
 import {forgePage,forgeMount,forgeTab,forgeClick,forgeInput,forgeFile} from './media-forge.js';
-import {draftLimit,findPost,validatePost,postsToCSV} from './post-manager.js';
+import {draftLimit,findPost,validatePost,postsToCSV,filterLocalPosts} from './post-manager.js';
 import {nexusHome,nexusStudio} from './nexus-ui.js';
 import {campaignManagerHTML,campaignLimit,validateCampaign,campaignById,campaignsToCSV} from './campaign-manager.js';
 import {analyticsLocalHTML,analyticsCsvTemplate,parseAnalyticsCSV} from './analytics-local.js';
@@ -135,8 +135,7 @@ function postRow(p, managed=false){
  return '<div class="list-row post-list-row"><div class="post-main"><b>'+safe(p.title)+'</b><p>'+safe(p.platform)+' · '+safe(p.date)+'</p></div><div class="post-right"><span class="tag '+(p.status==='Programada'?'green':'')+'">'+safe(p.status)+'</span>'+actions+'</div></div>';
 }
 function postsFiltered(){
- const query=state.search.toLowerCase();
- return state.posts.filter(p=>p && typeof p==='object' && (String(p.title??'')+' '+String(p.platform??'')+' '+String(p.status??'')).toLowerCase().includes(query));
+ return filterLocalPosts(state.posts,state.search);
 }
 function adUnit(placement){
  if(state.plan==='pro')return '';
