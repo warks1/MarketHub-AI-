@@ -51,7 +51,8 @@ test('El detector de errores arranca, avisa y respeta el estado ready',()=>{
 test('La recuperación evita borrar borradores y tolera datos malformados',()=>{
   assert.doesNotMatch(html,/localStorage\.clear\s*\(/);
   assert.match(app,/state\.posts\.some\(p=>p && typeof p==='object'/);
-  assert.match(app,/state\.posts\.filter\(p=>p && typeof p==='object'/);
+  assert.match(app,/filterLocalPosts\(state\.posts,state\.search\)/);
+  assert.match(readFileSync(path.join(root,'src/post-manager.js'),'utf8'),/if\(!p\|\|typeof p!=='object'\)return false/);
   assert.match(app,/__MARKETHUB_BOOT__\.ready = true/);
 });
 
