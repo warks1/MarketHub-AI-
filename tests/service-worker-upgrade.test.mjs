@@ -6,7 +6,7 @@ const publicSw=readFileSync(new URL('../public/sw.js',import.meta.url),'utf8');
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 test('Los dos service workers usan la misma revisión posterior a v0.7.4',()=>{
  assert.equal(sw,publicSw,'La copia del public/ debe ser idéntica a sw.js');
- assert.match(sw,/const CACHE = 'markethub-nexus-pulse-shell-v0\.7\.24'/);
+ assert.match(sw,/const CACHE = 'markethub-nexus-pulse-shell-v0\.7\.25'/);
  assert.doesNotMatch(sw,/shell-v0\.7\.4['"]/);
 });
 test('La actualización reemplaza el shell anterior pero conserva datos locales',()=>{
@@ -19,7 +19,7 @@ test('La actualización reemplaza el shell anterior pero conserva datos locales'
  assert.match(sw,/'\.\/src\/visual\.js'/);
 });
 test('Se invalida la versión de carga del JS sin romper las rutas relativas',()=>{
- assert.match(html,/src="\.\/src\/app\.js\?v=20261106d"/);
- assert.match(html,/version: '20261106d'/);
- assert.match(html,/reparacion=20261106d/);
+ assert.match(html,/src="\.\/src\/app\.js\?v=20261106e"/);
+ assert.match(html,/version: '20261106e'/);
+ assert.match(html,/reparacion=20261106e/);
 });
