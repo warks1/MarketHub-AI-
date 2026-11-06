@@ -12,6 +12,7 @@ on:
       - 'scripts/splash-responsive-qa.mjs'
       - 'scripts/media-forge-qa.mjs'
       - 'scripts/media-players-qa.mjs'
+      - 'scripts/social-brand-qa.mjs'
       - 'scripts/unified-backup-qa.mjs'
       - 'scripts/studio-draft-qa.mjs'
       - 'scripts/mobile-ux-qa.mjs'
@@ -28,6 +29,7 @@ on:
       - 'scripts/splash-responsive-qa.mjs'
       - 'scripts/media-forge-qa.mjs'
       - 'scripts/media-players-qa.mjs'
+      - 'scripts/social-brand-qa.mjs'
       - 'scripts/unified-backup-qa.mjs'
       - 'scripts/studio-draft-qa.mjs'
       - 'scripts/mobile-ux-qa.mjs'
@@ -84,6 +86,8 @@ jobs:
         run: node scripts/media-forge-qa.mjs
       - name: Comprobar visor de imágenes y reproductor/visualizador de audio en PC, iPhone e iPad
         run: node scripts/media-players-qa.mjs
+      - name: Validar iconos sociales originales y borradores en Chrome y Safari iPhone/iPad
+        run: node scripts/social-brand-qa.mjs
       - name: Verificar copia integral y recuperación no destructiva en Chromium y Safari
         run: node scripts/unified-backup-qa.mjs
       - name: Guardar capturas y resultados incluso si hay diferencias
