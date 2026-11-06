@@ -362,6 +362,25 @@ function toast(msg){
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>elem.remove(),3300);
 }
 function go(page){if(activeVideoExport){activeVideoExport.abort();activeVideoExport=null;}stopStoryboardPlayback();if(page!=='crear')state.preselectedDate=null;state.page=page;state.modal=null;state.menuMore=false;state.mirrorMenu=false;state.mirrorLive=true;state.search='';render();window.scrollTo({top:0,behavior:'auto'})}
+// PULSE Pilot: alta atómica de siete borradores, con validación y cuota del plan.
+function addPulseDrafts(items){
+ if(!Array.isArray(items)||items.length!==7){toast('El plan PULSE no contiene siete días válidos.');return false}
+ const limit=draftLimit(state.plan);
+ if(state.posts.length+items.length>limit){
+  toast('Tu plan admite '+limit+' borradores. Libera espacio antes de añadir los siete días.');return false;
+ }
+ const validated=items.map(x=>validatePost(x));
+ const firstError=validated.find(x=>x.error);
+ if(firstError){toast(firstError.error);return false}
+ const previous=state.posts;
+ const stamp=Date.now();
+ const added=validated.map((x,i)=>({id:'pulse-'+stamp+'-'+i+'-'+Math.random().toString(36).slice(2,8),...x.value}));
+ state.posts=[...added,...previous];
+ if(!save()){state.posts=previous;return false}
+ go('crear');
+ toast('Siete borradores PULSE guardados para revisar. No se han publicado.');
+ return true;
+}
 document.addEventListener('click',e=>{
  const existingDialog=activeAppDialog();
  if(existingDialog&&!e.target.closest('[role="dialog"][aria-modal="true"]')&&!e.target.closest('.mobile-menu-backdrop')){
@@ -387,7 +406,7 @@ document.addEventListener('click',e=>{
   }});return;
  }
  const growthTarget=e.target.closest('[data-growth-action]');
- if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPost:text=>{if(state.posts.length>=draftLimit(state.plan)){toast('Límite de '+draftLimit(state.plan)+' borradores locales alcanzado.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
+ if(growthTarget&&growthClick(growthTarget,{refresh:render,toast,newPosts:addPulseDrafts,newPost:text=>{if(state.posts.length>=draftLimit(state.plan)){toast('Límite de '+draftLimit(state.plan)+' borradores locales alcanzado.');return}state.posts.unshift({id:Date.now(),title:String(text).slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto enviado a borradores locales, sin publicar.')}}))return;
  const visualTarget=e.target.closest('[data-visual-action]');
  if(visualTarget&&visualClick(visualTarget,{refresh:render,toast,newPost:text=>{if(state.posts.length>=draftLimit(state.plan)){toast('Límite de '+draftLimit(state.plan)+' borradores locales alcanzado.');return}state.posts.unshift({id:Date.now(),title:text.slice(0,240),platform:'Instagram',date:todayLocal(),status:'Borrador'});save();go('crear');toast('Texto añadido a borradores locales; exporta la imagen PNG por separado.')}}))return;
  const officeTarget=e.target.closest('[data-office-action]');
