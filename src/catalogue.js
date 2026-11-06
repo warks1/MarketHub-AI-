@@ -5,6 +5,10 @@ export const catalogueSections = [
     tools:[
       {id:'MF-001',name:'Órbita NEXUS · máscara propia',tier:'free',status:'local',mediaTab:'photo',description:'Máscara orbital, estilos y exportación para publicaciones; funciona sin conexión externa.'},
       {id:'MF-002',name:'Conversor de fotografías PNG/JPG/WebP',tier:'free',status:'local',mediaTab:'photo',description:'Conversión local con cinco formatos sociales. La compatibilidad WebP depende del navegador.'},
+      
+      {id:'MF-021',name:'Visor de imágenes con galería y zoom',tier:'free',status:'local',mediaTab:'players',description:'Abre hasta 10 imágenes locales con zoom hasta 5×, rotación, navegación y pantalla completa adaptable a móvil, tablet y PC.'},
+      {id:'MF-022',name:'Reproductor musical de sonido',tier:'free',status:'local',mediaTab:'players',description:'Reproduce audio propio con controles de velocidad, salto de 10 segundos, bucle y reproductor nativo; según códecs del dispositivo.'},
+      {id:'MF-023',name:'Visualizador de espectro y forma de onda',tier:'free',status:'local',mediaTab:'players',description:'Dibuja datos reales de Web Audio API del archivo cargado en el navegador. No utiliza señales inventadas ni servidores.'},
       {id:'MF-003',name:'Reproductor y conversor WAV',tier:'free',status:'local',mediaTab:'audio',description:'Reproduce audio y exporta WAV PCM recortado hasta 10 minutos si el navegador decodifica el original.'},
       {id:'MF-004',name:'Reproductor de vídeo y fotogramas',tier:'free',status:'local',mediaTab:'video',description:'Reproducción local y captura PNG del fotograma seleccionado.'},
       {id:'MF-005',name:'Conversor WebM compatible',tier:'free',status:'local',mediaTab:'video',description:'Solo en navegadores con MediaRecorder y captura de flujo soportados; máximo 90 segundos.'},
