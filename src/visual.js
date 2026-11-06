@@ -56,6 +56,40 @@ function wrap(ctx,text,maxWidth,maxLines){
  if(line&&lines.length<maxLines)lines.push(line);
  return lines;
 }
+// Safari anterior no admite CanvasRenderingContext2D.filter en algunas versiones.
+// Se dibuja un resplandor con gradiente radial, sin depender de filtros Canvas.
+function drawGlow(ctx,x,y,r,color,useNativeFilter){
+ ctx.beginPath();
+ if(!useNativeFilter&&typeof ctx.createRadialGradient==='function'){
+  const gradient=ctx.createRadialGradient(x,y,0,x,y,r);
+  const components=color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+  if(components){
+   const rgb=components.slice(1).map(part=>parseInt(part,16)).join(',');
+   gradient.addColorStop(0,'rgba('+rgb+',0.65)');
+   gradient.addColorStop(.45,'rgba('+rgb+',0.3)');
+   gradient.addColorStop(1,'rgba('+rgb+',0)');
+   ctx.fillStyle=gradient;
+  }else ctx.fillStyle=color;
+ }else ctx.fillStyle=color;
+ ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+}
+// Safari antiguo no dispone de ctx.roundRect; trazado equivalente con curvas.
+function roundButtonPath(ctx,x,y,w,h,r){
+ const radius=Math.max(0,Math.min(r,w/2,h/2));
+ if(typeof ctx.roundRect==='function'){
+  try{ctx.roundRect(x,y,w,h,radius);return}catch{}
+ }
+ ctx.moveTo(x+radius,y);
+ ctx.lineTo(x+w-radius,y);
+ ctx.quadraticCurveTo(x+w,y,x+w,y+radius);
+ ctx.lineTo(x+w,y+h-radius);
+ ctx.quadraticCurveTo(x+w,y+h,x+w-radius,y+h);
+ ctx.lineTo(x+radius,y+h);
+ ctx.quadraticCurveTo(x,y+h,x,y+h-radius);
+ ctx.lineTo(x,y+radius);
+ ctx.quadraticCurveTo(x,y,x+radius,y);
+ ctx.closePath();
+}
 export function drawVisual(canvas){
  if(!canvas||typeof canvas.getContext!=='function')return false;
  const [w,h]=dimensions(draft.format);
@@ -76,9 +110,13 @@ export function drawVisual(canvas){
  }
  // Soft radial gradients and rings produce an original abstract visual, with no external imagery.
  if(!minimal){
-  ctx.save();ctx.globalAlpha=premium?.55:.8;ctx.filter='blur('+Math.round(w*.08)+'px)';
+  ctx.save();ctx.globalAlpha=premium?.55:.8;
+  let nativeBlur=false;
+  if(typeof ctx.filter==='string'){
+   try{ctx.filter='blur('+Math.round(w*.08)+'px)';nativeBlur=ctx.filter.startsWith('blur(')}catch{}
+  }
   for(const [x,y,r,c] of [[w*.15,h*.18,w*.38,primary],[w*.82,h*.69,w*.4,accent],[w*.76,h*.06,w*.18,primary]]){
-   ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,2*Math.PI);ctx.fill();
+   drawGlow(ctx,x,y,r,c,nativeBlur);
   }ctx.restore();
   ctx.save();ctx.translate(w*.68,h*.35);ctx.rotate(-.43);ctx.strokeStyle=primary;ctx.lineWidth=Math.max(5,w*.006);
   for(let i=0;i<3;i++){ctx.globalAlpha=.6-i*.14;ctx.beginPath();ctx.ellipse(0,0,w*(.31+i*.05),h*(.15+i*.01),0,0,2*Math.PI);ctx.stroke()}ctx.restore();
@@ -106,7 +144,7 @@ export function drawVisual(canvas){
  ctx.font='800 '+buttonFont+'px system-ui,Arial,sans-serif';
  const label=String(draft.button||'DESCÚBRELO').toLocaleUpperCase('es').slice(0,45);
  const labelWidth=Math.min(ctx.measureText(label).width,w-margin*2-padX*2);
- ctx.fillStyle=primary;ctx.beginPath();ctx.roundRect(margin,buttonTop,labelWidth+padX*2,buttonHeight,buttonHeight*.25);ctx.fill();
+ ctx.fillStyle=primary;ctx.beginPath();roundButtonPath(ctx,margin,buttonTop,labelWidth+padX*2,buttonHeight,buttonHeight*.25);ctx.fill();
  ctx.fillStyle='#07142f';ctx.fillText(label,margin+padX,buttonTop+buttonFont*.6,labelWidth);
  ctx.fillStyle=minimal?'#425276':'#b6ccf4';ctx.font='600 '+Math.round(w*.018)+'px system-ui,Arial,sans-serif';
  ctx.fillText('CREADO CON MARKETHUB AI · DISEÑO LOCAL',margin,h*.966,w-margin*2);
