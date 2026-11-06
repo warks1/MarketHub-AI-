@@ -173,3 +173,9 @@ usa `20261106c` para forzar su actualización, sin borrar datos locales.
 Pruebas funcionales y de Chromium/WebKit automatizadas; el instalador Android
 es una APK de depuración, no una versión final de Play Store. Verificar en móvil
 físico que el teclado, los backups y los archivos siguen funcionando.
+
+### PULSE Campaign Pilot — paquete Android de validación (6 noviembre 2026)
+- Growth Lab incorpora un flujo **brief → siete días de planificación → textos editables → CSV/ICS → borradores locales**, con control de cuota FREE/PRO de demostración.
+- Cada día puede enviar texto directamente al editor Media Forge para preparar una creatividad y, si coincide una marca local, reutilizar sus colores. No descarga automáticamente fotografías ni genera vídeo por IA.
+- Se mantiene el funcionamiento offline de plantillas, editor, biblioteca y respaldo, sujeto a los límites de almacenamiento del dispositivo. No conecta redes externas, no programa publicaciones reales y no realiza cargos.
+- Es necesario instalar la APK de depuración y probar específicamente los flujos de ficheros CSV/ICS, selector de fotografías, teclado táctil, persistencia local y uso en Android de gama baja. En iPhone/iPad se necesitan pruebas WebKit y posteriormente una compilación firmada con Xcode.
