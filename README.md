@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.7.6. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.7.7. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,7 +25,17 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.7.6 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.7.7 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+
+## Iconos originales de redes sociales (v0.7.7)
+
+MarketHub AI muestra ahora **13 siluetas vectoriales de redes reales** (Instagram, TikTok, YouTube, Facebook, LinkedIn, X, WhatsApp, Threads, Pinterest, Snapchat, Bluesky, Twitch y Telegram), integradas como vectores SVG locales y con colores reconocibles: **sin CDN y con soporte sin conexión**.
+
+En el panel principal se muestran las siete plataformas existentes con sus marcas correspondientes y el aviso visible **Sin conectar**. Las seis plataformas admitidas para publicaciones locales (Instagram, TikTok, YouTube, Facebook, LinkedIn y X) tienen ahora tarjetas pulsables que abren directamente el formulario de un borrador preseleccionado. El planificador incorpora los mismos iconos como opciones táctiles sincronizadas con el desplegable sin perder el texto en curso. Los iconos se muestran también junto a publicaciones, campañas y leyendas de gráficos importados.
+
+Las marcas son propiedad de sus titulares; su presencia **no implica patrocinio, conexión de cuentas ni publicación real**. Lee [origen de iconos y directrices de marca](docs/REDES_E_IDENTIDAD.md) antes de distribuir comercialmente la aplicación, especialmente por las restricciones de LinkedIn.
+
+Pruebas: `node --test tests/social-brand-icons.test.mjs` y `node scripts/social-brand-qa.mjs` con Chrome y WebKit en cuatro tamaños de pantalla.
 
 ## Solución del arranque blanco en iPhone/iPad (v0.7.6)
 

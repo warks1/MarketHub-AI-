@@ -1,3 +1,12 @@
+## 2026-11-06 · MarketHub AI v0.7.7 — iconos auténticos y redacción por red
+
+- Sustituidas las marcas provisionales (◎, ♪, ▶, «in», «f», «𝕏») por siluetas SVG identificables, incluidos Instagram, TikTok, YouTube, LinkedIn, Facebook, X y WhatsApp.
+- Los vectores originales se empaquetan en código local y se usan en el panel activo, el diseño NEXUS, las próximas publicaciones, la analítica importada, el estudio y la biblioteca de borradores. Catálogo ampliado a 13 marcas.
+- Las seis tarjetas de plataformas que admiten borradores son botones reales para abrir el planificador con la red ya seleccionada. Se conserva explícitamente «Sin conectar» y no hay integración de cuentas ni publicaciones automáticas.
+- Nuevos selectores con iconos de plataformas en el planificador, coordinados con el desplegable y sin borrar el texto al cambiar la selección; botones accesibles y adaptativos.
+- Nueva revisión PWA y tests de seguridad de SVG, integración y Chromium/WebKit iPhone/iPad sin eliminar funcionalidades anteriores.
+- Revisión legal de marcas pendiente antes de explotación comercial, en particular la marca LinkedIn; véase docs/REDES_E_IDENTIDAD.md.
+
 ## 2026-11-06 · MarketHub AI v0.7.6 — transición blanca del lanzamiento iOS
 
 - El vídeo grabado desde la pantalla de inicio de iPhone confirma un intervalo blanco entre el lanzamiento nativo y la pantalla de carga NEXUS × PULSE. No se trata de una pantalla blanca permanente ni de un fallo del módulo de reproductores.
