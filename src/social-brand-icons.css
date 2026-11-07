@@ -1,4 +1,4 @@
-/* MarketHub AI v0.7.7 · marcas de plataformas locales NEXUS × PULSE.
+/* MarketHub AI v0.7.8 · marcas de plataformas locales NEXUS × PULSE.
    Las figuras corresponden a los iconos de las redes. Nunca implican conexión ni patrocinio.
    Las superficies de la aplicación mantienen su apariencia aprobada. */
 .social-brand-icon{
@@ -73,3 +73,50 @@
  .live-platforms>button,.live-platforms>div{padding:8px 3px;min-height:85px}
 }
 @media(prefers-reduced-motion:reduce){.social-post-choice,.live-platforms>button{transition:none!important}}
+
+
+/* v0.7.8 · catálogo visible COMPLETO: jamás recortar los iconos adicionales.
+   Grid flexible; todas las 25 tarjetas están presentes, sin carrusel, botones ocultos ni scroll lateral. */
+.social-brand-icon--reddit{--social-bg:#ff4500}
+.social-brand-icon--discord{--social-bg:#5865f2}
+.social-brand-icon--mastodon{--social-bg:#6364ff}
+.social-brand-icon--tumblr{--social-bg:#36465d}
+.social-brand-icon--spotify{--social-bg:#1db954}
+.social-brand-icon--vimeo{--social-bg:#1ab7ea}
+.social-brand-icon--behance{--social-bg:#1769ff}
+.social-brand-icon--dribbble{--social-bg:#ea4c89}
+.social-brand-icon--messenger{--social-bg:linear-gradient(140deg,#00b2ff,#006aff 48%,#a033ff 78%,#ff5280)}
+.social-brand-icon--wechat{--social-bg:#07c160}
+.social-brand-icon--line{--social-bg:#06c755}
+.social-brand-icon--vk{--social-bg:#0077ff}
+.live-home .live-platforms,.nexus-home .nexus-platforms{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,minmax(0,1fr)));
+ align-items:stretch;align-content:start;gap:9px;
+ width:100%;min-width:0;max-width:100%;height:auto;max-height:none;overflow:visible;
+}
+.live-home .live-platforms>button,.live-home .live-platforms>div,
+.nexus-home .nexus-platforms>button,.nexus-home .nexus-platforms>div{
+ display:grid;align-content:start;justify-items:center;gap:5px;min-height:91px;
+ max-width:100%;min-width:0;padding:9px 4px;border-radius:11px;text-align:center;
+ box-sizing:border-box;
+}
+.nexus-home .nexus-platforms>button,.nexus-home .nexus-platforms>div{
+ background:#13244c;border:1px solid #485d9b;color:#f5f7ff;
+}
+.nexus-home .nexus-platforms>button{cursor:pointer;touch-action:manipulation}
+.nexus-home .nexus-platforms>button:hover,.live-home .live-platforms>button:hover{border-color:#42dff5}
+.nexus-home .nexus-platforms>button:focus-visible{outline:2px solid #c58bff;outline-offset:2px}
+.nexus-home .nexus-platforms .social-brand-icon,.live-home .live-platforms .social-brand-icon{
+ width:36px;height:36px;border-radius:9px;background:var(--social-bg,#162650);
+}
+.nexus-home .nexus-platforms b,.live-home .live-platforms b{
+ font-size:11px;line-height:1.25;max-width:100%;white-space:normal;overflow:visible;
+ text-overflow:clip;overflow-wrap:anywhere;
+}
+.nexus-home .nexus-platforms small,.live-home .live-platforms small{
+ font-size:9px;line-height:1.25;max-width:100%;white-space:normal;overflow-wrap:anywhere;color:#e9c0f2;
+}
+.social-network-summary{margin:0 0 10px;color:#bad0ed;font-size:11px;line-height:1.5}
+@media(max-width:359px){
+ .live-home .live-platforms,.nexus-home .nexus-platforms{grid-template-columns:repeat(auto-fit,minmax(74px,minmax(0,1fr)));gap:7px}
+}
