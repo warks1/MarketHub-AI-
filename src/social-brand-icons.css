@@ -90,7 +90,7 @@
 .social-brand-icon--line{--social-bg:#06c755}
 .social-brand-icon--vk{--social-bg:#0077ff}
 .live-home .live-platforms,.nexus-home .nexus-platforms{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,minmax(0,1fr)));
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));
  align-items:stretch;align-content:start;gap:9px;
  width:100%;min-width:0;max-width:100%;height:auto;max-height:none;overflow:visible;
 }
@@ -118,5 +118,5 @@
 }
 .social-network-summary{margin:0 0 10px;color:#bad0ed;font-size:11px;line-height:1.5}
 @media(max-width:359px){
- .live-home .live-platforms,.nexus-home .nexus-platforms{grid-template-columns:repeat(auto-fit,minmax(74px,minmax(0,1fr)));gap:7px}
+ .live-home .live-platforms,.nexus-home .nexus-platforms{grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:7px}
 }
