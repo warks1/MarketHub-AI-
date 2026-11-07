@@ -1,6 +1,6 @@
 /* MarketHub AI · service worker PWA para modo básico sin conexión.
    La estrategia de navegación es network-first: no inmovilizar versiones antiguas ni ocultar fallos de publicación. */
-const CACHE = 'markethub-nexus-pulse-shell-v0.7.31';
+const CACHE = 'markethub-nexus-pulse-shell-v0.7.32';
 const SHELL = [
  './','./index.html','./logo.svg','./manifest.webmanifest',
  './ios-launch/launch-1320x2868.png','./ios-launch/launch-1260x2736.png','./ios-launch/launch-1206x2622.png','./ios-launch/launch-1290x2796.png','./ios-launch/launch-1179x2556.png','./ios-launch/launch-1284x2778.png','./ios-launch/launch-1170x2532.png','./ios-launch/launch-1125x2436.png','./ios-launch/launch-750x1334.png','./ios-launch/launch-1536x2048.png','./ios-launch/launch-2048x1536.png','./ios-launch/launch-1488x2266.png','./ios-launch/launch-2266x1488.png','./ios-launch/launch-1640x2360.png','./ios-launch/launch-2360x1640.png','./ios-launch/launch-1668x2388.png','./ios-launch/launch-2388x1668.png',
