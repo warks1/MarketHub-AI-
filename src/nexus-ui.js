@@ -86,7 +86,7 @@ function inbox(){
 }
 function connections(){
  return card('♧ Plataformas conectadas',
- '<div class="nexus-platforms">'+PLATFORMS_DISPLAY.map(platform).join('')+'</div><p class="nexus-muted nexus-footnote">Las conexiones reales requieren autorización oficial de cada red.</p>',
+ '<p class="social-network-summary">'+PLATFORMS_DISPLAY.length+' redes visibles · '+PLATFORMS_DRAFT.length+' destinos para borradores locales. Sin cuentas conectadas.</p><div class="nexus-platforms" aria-label="Todas las redes sociales disponibles">'+PLATFORMS_DISPLAY.map(platform).join('')+'</div><p class="nexus-muted nexus-footnote">Las conexiones reales requieren autorización oficial de cada red.</p>',
  action('goto-ajustes','Gestionar ↗'),'nexus-connections');
 }
 export function nexusHome({posts=[],chart='',plan='free',calendarOffset=0}={}){

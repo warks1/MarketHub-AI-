@@ -1,6 +1,6 @@
 # MarketHub AI · NEXUS × PULSE
 
-**Estado actual: prototipo v0.7.7. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
+**Estado actual: prototipo v0.7.8. No hay redes conectadas, IA comercial, suscripciones cobradas ni anuncios reales.**
 
 **Documentación maestra que debe consultarse antes de cualquier modificación:**
 
@@ -25,7 +25,15 @@ Este control se ejecuta en CI antes de compilar. No sustituye pruebas funcionale
 
 Base de una aplicación **mobile-first** de marketing digital para iPhone, iPad, Android, tablets Android y navegadores de ordenador.
 
-**Estado: v0.7.7 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+**Estado: v0.7.8 · PROTOTIPO INTERACTIVO CON HERRAMIENTAS LOCALES · NO PRODUCCIÓN.**
+
+## Restitución de redes sociales visibles (v0.7.8)
+
+**Corregido el recorte del panel principal:** la versión anterior tenía 13 logotipos en el código, pero solo mostraba **7**. La nueva versión **muestra los 25 iconos disponibles**, con 12 incorporaciones: Reddit, Discord, Mastodon, Tumblr, Spotify, Vimeo, Behance, Dribbble, Messenger, WeChat, LINE y VK. Se conservan los 13 anteriores.
+
+Las **25 tarjetas se dibujan simultáneamente**, sin carruseles ni pestañas que oculten redes; la cuadrícula cambia de columnas según el ancho del móvil, tablet o PC, admite desplazamiento vertical y utiliza iconos SVG legibles de 36 px y nombres completos sin puntos suspensivos. Las seis plataformas del editor mantienen el botón para preparar borradores locales; el resto se identifica como «Sin conectar», sin prometer publicación. La misma lista aparece en la variante visual NEXUS y en Inicio funcional.
+
+La prueba de navegador comprueba las **25 marcas**, tamaños mínimos, accesibilidad de las últimas tarjetas, ausencia de recortes laterales y creación/guardado de borradores en Chrome, iPhone SE, iPhone y iPad. Las pruebas no implican conexión real de redes.
 
 ## Iconos originales de redes sociales (v0.7.7)
 

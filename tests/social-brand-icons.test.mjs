@@ -6,8 +6,8 @@ import {liveHome,liveInbox} from '../src/live-ui.js';
 import {nexusHome,nexusStudio} from '../src/nexus-ui.js';
 
 test('Se renderizan siluetas SVG vectoriales de 13 redes sin peticiones externas',()=>{
- assert.ok(PLATFORMS_ALL.length>=13);
- for(const name of ['Instagram','TikTok','YouTube','Facebook','LinkedIn','X','WhatsApp','Threads','Pinterest','Snapchat','Bluesky','Twitch','Telegram']){
+ assert.equal(PLATFORMS_ALL.length,25,'Ningún logotipo del catálogo debe desaparecer');
+ for(const name of ["Instagram","TikTok","YouTube","Facebook","LinkedIn","X","WhatsApp","Threads","Pinterest","Snapchat","Bluesky","Twitch","Telegram","Reddit","Discord","Mastodon","Tumblr","Spotify","Vimeo","Behance","Dribbble","Messenger","WeChat","LINE","VK"]){
   assert.equal(hasSocialBrand(name),true,name);
   const badge=socialBrandIcon(name,{decorative:false});
   assert.match(badge,/social-brand-icon/);
@@ -21,7 +21,8 @@ test('Se renderizan siluetas SVG vectoriales de 13 redes sin peticiones externas
 });
 test('Los tamaños accesibles no interrumpen el flujo y los seis destinos siguen siendo válidos',()=>{
  assert.deepEqual(PLATFORMS_DRAFT,['Instagram','TikTok','YouTube','Facebook','LinkedIn','X']);
- assert.equal(PLATFORMS_DISPLAY.length,7);
+ assert.equal(PLATFORMS_DISPLAY.length,25,'Todas las redes del catálogo deben ser visibles en Inicio');
+ assert.deepEqual([...new Set(PLATFORMS_DISPLAY)].sort(),[...PLATFORMS_ALL].sort());
  assert.match(socialBrandIcon('TikTok',{size:'tiny'}),/social-brand-icon--tiny/);
  assert.match(socialBrandIcon('YouTube',{size:'large'}),/social-brand-icon--large/);
  assert.match(socialBrandIcon('X'),/aria-hidden="true"/);
@@ -33,6 +34,8 @@ test('Panel activo: iconos y acciones para borradores locales, sin fingir una cu
   assert.ok(content.includes('social-brand-icon--'+name.toLowerCase().replace(' ','-')),name);
  }
  for(const name of PLATFORMS_DRAFT)assert.ok(content.includes('data-platform="'+name+'"'),name);
+ assert.equal((content.match(/class="social-brand-icon social-brand-icon--/g)||[]).length>=25,true);
+ assert.match(content,/25 redes visibles/);
  assert.match(content,/Sin conectar/);
  assert.match(content,/social-brand-icon--tiktok/);
  assert.match(content,/social-brand-icon--youtube/);
@@ -48,6 +51,8 @@ test('Los layouts NEXUS e Inbox conservan módulos y muestran logotipos',()=>{
  assert.match(studio,/social-brand-icon--youtube/);
  assert.match(inbox,/social-brand-icon--instagram/);
  assert.match(home,/data-action="start-platform-draft"/);
+ assert.match(home,/25 redes visibles/);
+ for(const name of PLATFORMS_DISPLAY)assert.ok(home.includes('social-brand-icon--'+name.toLowerCase()),'NEXUS debe mostrar '+name);
 });
 test('Responsive, navegación real y cache PWA mantienen iconos nativos sin CDN',()=>{
  const app=readFileSync(new URL('../src/app.js',import.meta.url),'utf8');
@@ -60,7 +65,9 @@ test('Responsive, navegación real y cache PWA mantienen iconos nativos sin CDN'
  assert.match(app,/data-action="select-post-platform"/);
  assert.match(app,/aria-pressed/);
  assert.match(stylesheet,/@media\(max-width:460px\)/);
- assert.match(index,/social-brand-icons\.css\?v=20261106r/);
+ assert.match(stylesheet,/grid-template-columns:repeat\(auto-fit,minmax\(78px,1fr\)\)/);
+ assert.match(stylesheet,/height:auto;max-height:none;overflow:visible/);
+ assert.match(index,/social-brand-icons\.css\?v=20261107a/);
  assert.match(worker,/\.\/src\/social-brand-icons\.js/);
  assert.match(worker,/\.\/src\/social-brand-icons\.css/);
  assert.doesNotMatch(app,/cdn\..*instagram/);

@@ -1,3 +1,11 @@
+## 2026-11-07 · MarketHub AI v0.7.8 — recuperación de todos los iconos sociales visibles
+
+- Identificado el recorte: 13 logos registrados, solo siete en las tarjetas de Inicio y NEXUS. Se elimina la lista reducida y se muestran todas las marcas disponibles sin ocultarlas.
+- Ampliación de 13 a **25 iconos SVG locales**: Reddit, Discord, Mastodon, Tumblr, Spotify, Vimeo, Behance, Dribbble, Messenger, WeChat, LINE y VK. Se mantienen los trece anteriores.
+- Grid responsive sin scroll horizontal, sin carrusel ni secciones colapsadas, con iconos de 36 px y textos legibles; usuarios de móviles pueden llegar a todas las redes desplazándose verticalmente.
+- Se mantienen los seis accesos funcionales a borradores locales; las otras redes muestran claramente «Sin conectar». No se fabrican conexiones con APIs.
+- Nuevas pruebas de cobertura de catálogo y de geometría de tarjetas en PC, iPhone SE, iPhone e iPad; revisión de caché PWA para propagar los cambios sin borrar datos.
+
 ## 2026-11-06 · MarketHub AI v0.7.7 — iconos auténticos y redacción por red
 
 - Sustituidas las marcas provisionales (◎, ♪, ▶, «in», «f», «𝕏») por siluetas SVG identificables, incluidos Instagram, TikTok, YouTube, LinkedIn, Facebook, X y WhatsApp.

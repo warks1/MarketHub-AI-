@@ -98,7 +98,7 @@ export function liveHome({posts=[],campaigns=[],analyticsRows=[],messages=[],men
  '<div class="live-inbox-summary"><div><strong>'+m.filter(x=>x.status!=='Resuelto').length+'</strong><small>Pendientes</small></div>'+
  '<div><strong>'+m.length+'</strong><small>Guardadas</small></div><div><strong>0</strong><small>Cuentas conectadas</small></div></div>','live-inbox');
  const platformPanel=panel('♧ Plataformas',page('Gestionar','ajustes'),
- '<div class="live-platforms">'+PLATFORMS_DISPLAY.map(n=>PLATFORMS_DRAFT.includes(n)?
+ '<p class="social-network-summary">'+PLATFORMS_DISPLAY.length+' redes visibles · '+PLATFORMS_DRAFT.length+' permiten preparar borradores locales. Ninguna cuenta conectada.</p>'+ '<div class="live-platforms" aria-label="Todas las redes sociales disponibles">'+PLATFORMS_DISPLAY.map(n=>PLATFORMS_DRAFT.includes(n)?
  '<button type="button" data-action="start-platform-draft" data-platform="'+n+'" aria-label="Crear borrador local para '+n+'. Sin cuenta conectada">'+socialBrandIcon(n)+'<b>'+n+'</b><small>Sin conectar</small></button>':
  '<div>'+socialBrandIcon(n)+'<b>'+n+'</b><small>Sin conectar</small></div>').join('')+'</div>','live-platform-panel');
  return '<div class="live-home"><div class="live-heading"><div><span class="live-eyebrow">PANEL PRINCIPAL · NEXUS + PULSE</span>'+
