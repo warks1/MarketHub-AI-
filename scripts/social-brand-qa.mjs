@@ -2,6 +2,7 @@
 import {chromium,webkit} from 'playwright';
 import {mkdir,writeFile} from 'node:fs/promises';
 const site=process.env.MARKETHUB_URL||'http://127.0.0.1:5173/';
+const networks=['instagram','tiktok','youtube','facebook','linkedin','x','whatsapp','threads','pinterest','snapchat','bluesky','twitch','telegram','reddit','discord','mastodon','tumblr','spotify','vimeo','behance','dribbble','messenger','wechat','line','vk'];
 const devices=[
  {name:'chromium-desktop',driver:chromium,width:1440,height:900},
  {name:'webkit-iphone',driver:webkit,width:390,height:844},
@@ -21,11 +22,35 @@ for(const {name,driver,width,height} of devices){
   await page.locator('#skipSplash').click({timeout:5000}).catch(()=>{});
   await page.locator('.live-home .live-platforms').waitFor({state:'visible',timeout:12000});
   const icons=await page.locator('.live-platforms .social-brand-icon svg path').count();
-  if(icons!==7)issues.push('La pantalla principal no muestra los siete logotipos: '+icons);
-  for(const brand of ['instagram','tiktok','youtube','facebook','linkedin','x','whatsapp']){
+  if(icons!==networks.length)issues.push('La pantalla principal no muestra todos los '+networks.length+' logotipos: '+icons);
+  for(const brand of networks){
    if(!(await page.locator('.live-platforms .social-brand-icon--'+brand).count()))issues.push('Falta logotipo '+brand);
   }
   if((await page.locator('.live-platforms [data-platform]').count())!==6)issues.push('Las seis redes válidas no pueden iniciar borradores');
+  const geometry=await page.locator('.live-platforms').evaluate(el=>{
+   const rect=el.getBoundingClientRect(),cards=[...el.children].map(card=>{
+    const box=card.getBoundingClientRect(),badge=card.querySelector('.social-brand-icon').getBoundingClientRect();
+    const style=getComputedStyle(card),title=card.querySelector('b');
+    return {name:title?.textContent||'',x:box.left,w:box.width,right:box.right,h:box.height,
+     badgeWidth:badge.width,display:style.display,visibility:style.visibility,
+     textClipped:!!title&&title.scrollWidth>title.clientWidth+2};
+   });
+   return {left:rect.left,right:rect.right,width:rect.width,scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,
+    scrollHeight:el.scrollHeight,clientHeight:el.clientHeight,cards}
+  });
+  if(geometry.cards.length!==networks.length)issues.push('Hay tarjetas escondidas en la cuadrícula: '+geometry.cards.length);
+  if(geometry.scrollWidth>geometry.clientWidth+2)issues.push('El catálogo genera scroll horizontal: '+JSON.stringify(geometry).slice(0,250));
+  for(const tile of geometry.cards){
+   if(tile.display==='none'||tile.visibility==='hidden')issues.push('Tarjeta oculta: '+tile.name);
+   if(tile.w<73||tile.h<80||tile.badgeWidth<31)issues.push('Icono o tarjeta demasiado pequeña: '+JSON.stringify(tile));
+   if(tile.x<geometry.left-1||tile.right>geometry.right+1)issues.push('Tarjeta cortada lateralmente: '+tile.name);
+   if(tile.textClipped)issues.push('Nombre del icono cortado: '+tile.name);
+  }
+  const last=page.locator('.live-platforms > *').last();
+  await last.scrollIntoViewIfNeeded();
+  if(!(await last.isVisible()))issues.push('Los últimos iconos no son accesibles al desplazarse');
+  await page.locator('.live-platforms [data-platform="TikTok"]').scrollIntoViewIfNeeded();
+
   if(!(await page.locator('.live-platforms').textContent()).includes('Sin conectar'))issues.push('Falta aviso honesto de estado desconectado');
   await page.screenshot({path:'visual-qa/social/'+name+'-inicio.png',fullPage:true});
   await page.locator('.live-platforms [data-platform="TikTok"]').click();
